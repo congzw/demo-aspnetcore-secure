@@ -6,15 +6,17 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using NbSites.Web.Demos;
 
 namespace NbSites.Web.Controllers
 {
     [AllowAnonymous]
     public class AccountController : Controller
     {
-        public IActionResult Login()
+        public IActionResult Login(bool redirected = true)
         {
-            ViewBag.Message = "Enter Login 401";
+            ViewBag.Message = redirected ? "Enter Login 401" : "Enter Login";
             return View();
         }
 
@@ -58,22 +60,50 @@ namespace NbSites.Web.Controllers
             return RedirectToLocal(returnUrl);
         }
 
-        public IActionResult Forbidden()
+        public IActionResult Forbidden(bool redirected = true)
         {
-            ViewBag.Message = "Enter Forbidden 403";
+            ViewBag.Message = redirected ? "Enter Forbidden 403" : "Enter Forbidden";
             return View("Empty");
         }
-        
+
+        public IActionResult ChangeUnsure()
+        {
+            ViewBag.Message = "Enter ChangeUnsure";
+            return View();
+        }
+
+        public IActionResult ChangeUnsureSave([FromServices] ICheckFeatureRuleRepository checkFeatureRuleRepository, string mode = null)
+        {
+            var checkFeatureRules = checkFeatureRuleRepository.GetCheckFeatureRules();
+
+            var checkFeatureRule = checkFeatureRules.GetRule(ConstFeatureIds.UnsureActionId, false);
+            if (checkFeatureRule != null)
+            {
+                if ("guestAllowed".Equals(mode, StringComparison.OrdinalIgnoreCase))
+                {
+                    checkFeatureRule.SetNeedGuest();
+                }
+                if ("loginAllowed".Equals(mode, StringComparison.OrdinalIgnoreCase))
+                {
+                    checkFeatureRule.SetNeedLogin();
+                }
+                if ("adminAllowed".Equals(mode, StringComparison.OrdinalIgnoreCase))
+                {
+                    checkFeatureRule.SetNeedUsersOrRoles(SimpleRuleExpression.None, SimpleRuleExpression.Create("Admin"));
+                }
+                checkFeatureRuleRepository.Save();
+            }
+            return RedirectToAction("Unsure", "Home");
+        }
+
         private IActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))
             {
                 return Redirect(returnUrl);
             }
-            else
-            {
-                return RedirectToAction("Index", "Home");
-            }
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

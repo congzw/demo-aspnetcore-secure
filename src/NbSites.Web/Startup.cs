@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NbSites.Web.Demos;
 
 namespace NbSites.Web
 {
@@ -30,18 +31,27 @@ namespace NbSites.Web
                 //添加声明策略，主动使用。
                 options.AddPolicy("RequireManageRole", policy => policy.RequireRole("Administrator"));
 
-                //除非显示指定，否则全局都被安全控制（建议采用）
-                //备用策略：有类似声明则不应用：[AllowAnonymous],[Authorize(PolicyName="MyPolicy")]
-                options.FallbackPolicy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
+                //var dynamicCheckPolicy = new AuthorizationPolicyBuilder()
+                //    .AddRequirements(new DynamicCheckFeatureRequirement())
+                //    .Build();
 
-                //策略过滤器: 有以下声明则不应用：[AllowAnonymous]
-                //var policy = new AuthorizationPolicyBuilder()
+                //var defaultPolicy = new AuthorizationPolicyBuilder()
+                //    .AddRequirements(new DynamicCheckFeatureRequirement())
                 //    .RequireAuthenticatedUser()
                 //    .Build();
-                //config.Filters.Add(new AuthorizeFilter(policy));
+
+                //options.DefaultPolicy = defaultPolicy;
+                //options.FallbackPolicy = dynamicCheckPolicy;
+
+
+                ////除非显示指定，否则全局都被安全控制（建议采用）
+                ////备用策略：有类似声明则不应用：[AllowAnonymous],[Authorize(PolicyName="MyPolicy")]
+                //options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                //    .RequireAuthenticatedUser()
+                //    .Build();
             });
+
+            services.AddDynamicCheckPolicy();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

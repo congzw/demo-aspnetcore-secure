@@ -12,6 +12,7 @@
         <hr />
         <h2>@ViewBag.Message</h2>
         <p style="color: red">FROM --> @this.ViewContext.ActionDescriptor.DisplayName</p>
+        <partial name="_Rules" />
         @RenderBody()
     </div>
 </body>

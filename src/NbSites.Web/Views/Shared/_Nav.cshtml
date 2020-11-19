@@ -9,6 +9,9 @@
                 <a asp-controller="Home" asp-action="Default">Home Default</a>
             </li>
             <li>
+                <a asp-controller="Home" asp-action="Unsure">Home Unsure</a>
+            </li>
+            <li>
                 <a asp-controller="Home" asp-action="Member">Home Member</a>
             </li>
             <li>
@@ -19,10 +22,47 @@
     <div class="col-sm-4">
         <ul>
             <li>
-                <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@this.Context.Request.GetEncodedPathAndQuery()">Account Login</a>
+                <a asp-controller="Manage" asp-action="Escape">Manage Escape</a>
+            </li>
+            <li>
+                <a asp-controller="Manage" asp-action="AdminOp">Manage AdminOp</a>
+            </li>
+            <li>
+                <a asp-controller="Manage" asp-action="SuperAndAdminOp">Manage SuperAndAdminOp</a>
+            </li>
+            <li>
+                <a asp-controller="Manage" asp-action="SuperOp">Manage SuperOp</a>
+            </li>
+            <li>
+                <a asp-controller="Simple" asp-action="Escape">Simple Escape</a>
+            </li>
+            <li>
+                <a asp-controller="Simple" asp-action="GuestOp">Simple GuestOp</a>
+            </li>
+            <li>
+                <a asp-controller="Simple" asp-action="LoginOp">Simple LoginOp</a>
+            </li>
+            <li>
+                <a asp-controller="Simple" asp-action="VodOp">Simple VodOp</a>
+            </li>
+            <li>
+                <a asp-controller="Simple" asp-action="LiveOp">Simple LiveOp</a>
+            </li>
+            <li>
+                <a asp-controller="Simple" asp-action="PortalEntry">Simple PortalEntry</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-sm-4">
+        <ul>
+            <li>
+                <a asp-controller="Account" asp-action="Login" asp-route-redirected="false" asp-route-returnUrl="@this.Context.Request.GetEncodedPathAndQuery()">Account Login</a>
             </li>
             <li>
                 <a asp-controller="Account" asp-action="Logout">Account Logout</a>
+            </li>
+            <li>
+                <a asp-controller="Account" asp-action="ChangeUnsure">Account ChangeUnsure</a>
             </li>
         </ul>
     </div>

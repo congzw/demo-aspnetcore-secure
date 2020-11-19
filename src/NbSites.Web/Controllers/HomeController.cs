@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NbSites.Web.Demos;
 
 namespace NbSites.Web.Controllers
 {
@@ -11,13 +12,20 @@ namespace NbSites.Web.Controllers
             ViewBag.Message = "Enter Index";
             return View("Empty");
         }
-        
+
         public IActionResult Default()
         {
             ViewBag.Message = "Enter Default";
             return View("Empty");
         }
-        
+
+        public IActionResult Unsure()
+        {
+            ViewBag.Message = "Enter Unsure";
+            return View("Empty");
+        }
+
+        [CheckFeature(Id = ConstFeatureIds.LoginOp)]
         [Authorize]
         public IActionResult Member()
         {
