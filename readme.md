@@ -1,3 +1,5 @@
-# todo
+# demo-aspnetcore-secure
 
-## todo list
+## change list
+
+- 20201119 add authorize policy demo

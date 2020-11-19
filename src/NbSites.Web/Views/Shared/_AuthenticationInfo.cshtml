@@ -1,0 +1,21 @@
+﻿@using Microsoft.AspNetCore.Authentication
+@inject IAuthenticationSchemeProvider AuthenticationSchemeProvider
+@{
+    var defaultScheme = await AuthenticationSchemeProvider.GetDefaultAuthenticateSchemeAsync();
+    var schemes = await AuthenticationSchemeProvider.GetAllSchemesAsync();
+}
+<p>User.Identity.IsAuthenticated: @User.Identity.IsAuthenticated</p>
+<p>User.Identity.Name: @User.Identity.Name</p>
+@foreach (var scheme in schemes)
+{
+    var authenticateResult = await this.Context.AuthenticateAsync(scheme.Name);
+    var style = scheme.Name == defaultScheme.Name ? "color:red" : "";
+    <div>
+        <p style="@style">
+            @scheme.Name @(string.IsNullOrWhiteSpace(style) ? "" : " <-- Default Scheme!")
+        </p>
+        <p>HandlerType: @scheme.HandlerType</p>
+        <p>IsAuthenticated: @authenticateResult.Principal?.Identity?.IsAuthenticated</p>
+        <p>Identity Name: @authenticateResult.Principal?.Identity?.Name</p>
+    </div>
+}
