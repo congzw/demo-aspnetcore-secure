@@ -1,16 +1,23 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace NbSites.Web.Demos
 {
     public static class DynamicCheckPolicyExtensions
     {
-        public static void AddDynamicCheckPolicy(this IServiceCollection services)
+        public static void AddDynamicCheckPolicy(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddHttpContextAccessor();
             services.AddTransient<IAuthorizationHandler, DynamicCheckFeatureHandler>();
             services.AddTransient<DynamicCheckFeatureService>();
             services.AddSingleton<ICheckFeatureRuleRepository, CheckFeatureRuleRepository>();
+            
+            //An alternative approach is using the options pattern: bind the options section and add it to the dependency injection service container.
+            services.Configure<DynamicCheckPolicyOptions>(configuration.GetSection(DynamicCheckPolicyOptions.SectionName));
+            services.AddTransient(sp => sp.GetService<IOptionsSnapshot<DynamicCheckPolicyOptions>>().Value); //ok => use "IOptionsSnapshot<>" instead of "IOptions<>" will auto load after changed
+            services.AddTransient<IAuthorizationHandler, DynamicCheckFeatureNakedHandler>();
 
             ////An alternative way for MVC controllers and Razor Pages
             //services.AddControllers(config =>
