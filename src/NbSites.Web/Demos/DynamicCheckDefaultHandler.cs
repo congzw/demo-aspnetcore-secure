@@ -11,17 +11,19 @@ using Microsoft.Extensions.Logging;
 
 namespace NbSites.Web.Demos
 {
-    public class DynamicCheckDefaultHandler : AuthorizationHandler<DynamicCheckRequirement>
+    public class DynamicCheckHandlerDefault : AuthorizationHandler<DynamicCheckRequirement>
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly ILogger<DynamicCheckDefaultHandler> _logger;
-        private readonly DynamicCheckService _dynamicCheckFeatureService;
+        private readonly ILogger<DynamicCheckHandlerDefault> _logger;
+        private readonly DynamicCheckRulePool _dynamicCheckFeatureService;
+        private readonly CurrentUserContext _dynamicCheckContext;
 
-        public DynamicCheckDefaultHandler(IHttpContextAccessor httpContextAccessor, ILogger<DynamicCheckDefaultHandler> logger, DynamicCheckService dynamicCheckFeatureService)
+        public DynamicCheckHandlerDefault(IHttpContextAccessor httpContextAccessor, ILogger<DynamicCheckHandlerDefault> logger, DynamicCheckRulePool dynamicCheckFeatureService, CurrentUserContext dynamicCheckContext)
         {
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
             _dynamicCheckFeatureService = dynamicCheckFeatureService;
+            _dynamicCheckContext = dynamicCheckContext;
         }
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, DynamicCheckRequirement requirement)
@@ -33,39 +35,38 @@ namespace NbSites.Web.Demos
             }
 
             _logger.LogInformation("actionDescriptor >>>>>>>>> " + actionDescriptor.DisplayName);
-            var roleClaims = context.User.Claims.Where(x => x.Type == ClaimTypes.Role).ToList();
-            var userName = context.User.Identity.Name;
-
             var results = new List<MessageResult>();
-            var checkFeatureContext = new DynamicCheckContext();
-            checkFeatureContext.User = userName;
-            checkFeatureContext.Roles = roleClaims.Select(x => x.Value).ToList();
 
             var checkFeatureAttributes = GetCheckFeatureAttributes(context);
             if (checkFeatureAttributes.Count == 0)
             {
-                //todo: try to find by Namespace.Controller.Action as Id
-                //NbSites.Web.Controllers.SimpleController.LoginOp (NbSites.Web)
                 var actionId = actionDescriptor.DisplayName.Split().FirstOrDefault();
-                if (!string.IsNullOrWhiteSpace(actionId))
+                var checkRule = _dynamicCheckFeatureService.TryGetRuleByActionId(actionId);
+                if (checkRule == null)
                 {
-                    var checkResult = _dynamicCheckFeatureService.IsAllowed(actionId, checkFeatureContext);
-                    checkResult.Data = actionId;
-                    results.Add(checkResult);
-                    DynamicCheckDebugHelper.Instance.CheckRuleResults = results;
-                    _logger.LogInformation(checkResult.Message);
-                    if (checkResult.Success)
-                    {
-                        context.Succeed(requirement);
-                    }
+                    //不需要控制的点，放行
+                    context.Succeed(requirement);
+                    return Task.CompletedTask;
                 }
+
+                var checkResult = _dynamicCheckFeatureService.IsAllowed(checkRule.CheckFeatureId, _dynamicCheckContext);
+                checkResult.Data = checkRule.CheckFeatureId;
+                results.Add(checkResult);
+                DynamicCheckDebugHelper.Instance.CheckRuleResults = results;
+                _logger.LogInformation(checkResult.Message);
+                if (checkResult.Success)
+                {
+                    context.Succeed(requirement);
+                    return Task.CompletedTask;
+                }
+
                 return Task.CompletedTask;
             }
 
             foreach (var checkFeatureAttribute in checkFeatureAttributes)
             {
                 var id = checkFeatureAttribute.Id;
-                var checkResult = _dynamicCheckFeatureService.IsAllowed(id, checkFeatureContext);
+                var checkResult = _dynamicCheckFeatureService.IsAllowed(id, _dynamicCheckContext);
                 checkResult.Data = id;
                 results.Add(checkResult);
                 _logger.LogInformation(checkResult.Message);
@@ -78,13 +79,14 @@ namespace NbSites.Web.Demos
                 context.Succeed(requirement);
             }
 
-            //todo: check permission by setting: op:[roles]
             return Task.CompletedTask;
         }
 
         private ActionDescriptor GetControllerActionDescriptor(AuthorizationHandlerContext context)
         {
-            //another impl: not use IHttpContextAccessor
+            #region another impl: not use IHttpContextAccessor
+
+
             //if (context == null)
             //    throw new ArgumentNullException(nameof(context));
             //if (context.Resource is Endpoint endpoint)
@@ -99,6 +101,8 @@ namespace NbSites.Web.Demos
             //    _logger.LogInformation("mvcContext >>>>>>>>> " + mvcContext.ActionDescriptor.DisplayName);
             //    return mvcContext.ActionDescriptor;
             //}
+
+            #endregion
 
             var httpContext = _httpContextAccessor.HttpContext;
             var endpoint = httpContext.GetEndpoint();

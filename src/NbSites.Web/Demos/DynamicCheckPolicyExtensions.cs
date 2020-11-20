@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -10,10 +14,13 @@ namespace NbSites.Web.Demos
         public static void AddDynamicCheckPolicy(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddHttpContextAccessor();
-            services.AddTransient<IAuthorizationHandler, DynamicCheckDefaultHandler>();
-            services.AddTransient<DynamicCheckService>();
+            services.AddTransient<IAuthorizationHandler, DynamicCheckHandlerDefault>();
+            services.AddTransient<DynamicCheckRulePool>();
             services.AddSingleton<IDynamicCheckRuleRepository, DynamicCheckRuleRepository>();
-            
+            services.AddSingleton<IDynamicCheckActionRepository, DynamicCheckActionRepository>();
+            services.AddTransient<ICurrentUserContextProvider, CurrentUserContextProvider>();
+            services.AddScoped(sp => sp.GetRequiredService<ICurrentUserContextProvider>().GetDynamicCheckContext());
+
             //An alternative approach is using the options pattern: bind the options section and add it to the dependency injection service container.
             services.Configure<DynamicCheckOptions>(configuration.GetSection(DynamicCheckOptions.SectionName));
             services.AddTransient(sp => sp.GetService<IOptionsSnapshot<DynamicCheckOptions>>().Value); //ok => use "IOptionsSnapshot<>" instead of "IOptions<>" will auto load after changed

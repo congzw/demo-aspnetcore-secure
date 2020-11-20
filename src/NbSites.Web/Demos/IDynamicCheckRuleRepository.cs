@@ -27,7 +27,7 @@ namespace NbSites.Web.Demos
             CheckFeatureRules.AddOrUpdate(id: ConstFeatureIds.VodOp, allowedUsers: "", allowedRoles: "*");
             CheckFeatureRules.AddOrUpdate(id: ConstFeatureIds.LiveOp, allowedUsers: "*", allowedRoles: "*");
 
-            CheckFeatureRules.AddOrUpdate(id: ConstFeatureIds.UnsureActionId, allowedUsers: "", allowedRoles: "*");
+            CheckFeatureRules.AddOrUpdate(id: ConstFeatureIds.UnsureActionA, allowedUsers: "*", allowedRoles: "*");
         }
 
         public IDictionary<string, DynamicCheckRule> GetRules()

@@ -36,7 +36,7 @@ namespace NbSites.Web.Demos
             return theRule;
         }
 
-        public static MessageResult CheckAllowed(this IDictionary<string, DynamicCheckRule> rules, string checkFeatureId, DynamicCheckContext ctx)
+        public static MessageResult CheckAllowed(this IDictionary<string, DynamicCheckRule> rules, string checkFeatureId, CurrentUserContext ctx)
         {
             if (checkFeatureId == null) throw new ArgumentNullException(nameof(checkFeatureId));
             if (ctx == null) throw new ArgumentNullException(nameof(ctx));
@@ -48,9 +48,10 @@ namespace NbSites.Web.Demos
             //"bob", "Admin"  => allowed bob, or Admin Role only    
             //"", "Admin"  => allowed Admin Role only
             //"", "Admin,Super"  => allowed Admin,Super only
-
-
+            
             var result = new MessageResult();
+            result.Data = checkFeatureId;
+
             var checkFeatureRule = rules.GetRule(checkFeatureId, false);
             if (checkFeatureRule == null)
             {
@@ -122,7 +123,7 @@ namespace NbSites.Web.Demos
             return theRule;
         }
 
-        private static bool CheckAllowedUsers(this DynamicCheckRule checkFeatureRule, DynamicCheckContext ctx)
+        private static bool CheckAllowedUsers(this DynamicCheckRule checkFeatureRule, CurrentUserContext ctx)
         {
             if (DynamicCheckRuleExpression.Create(checkFeatureRule.AllowedUsers).AllowAny())
             {
@@ -137,7 +138,7 @@ namespace NbSites.Web.Demos
             return DynamicCheckRuleExpression.Create(checkFeatureRule.AllowedUsers).MatchRule(ctx.User);
         }
 
-        private static bool CheckMember(this DynamicCheckRule checkFeatureRule, DynamicCheckContext ctx)
+        private static bool CheckMember(this DynamicCheckRule checkFeatureRule, CurrentUserContext ctx)
         {
             if (DynamicCheckRuleExpression.Create(checkFeatureRule.AllowedUsers).DenyAll() && DynamicCheckRuleExpression.Create(checkFeatureRule.AllowedRoles).AllowAny())
             {
@@ -147,7 +148,7 @@ namespace NbSites.Web.Demos
             return false;
         }
 
-        private static bool CheckAllowedRoles(this DynamicCheckRule checkFeatureRule, DynamicCheckContext ctx)
+        private static bool CheckAllowedRoles(this DynamicCheckRule checkFeatureRule, CurrentUserContext ctx)
         {
             if (DynamicCheckRuleExpression.Create(checkFeatureRule.AllowedRoles).AllowAny())
             {

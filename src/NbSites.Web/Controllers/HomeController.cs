@@ -25,6 +25,13 @@ namespace NbSites.Web.Controllers
             return View("Empty");
         }
 
+        public IActionResult Unsure2()
+        {
+            ViewBag.Message = "Enter Unsure2";
+            return View("Empty");
+        }
+
+
         [DynamicCheckFeature(Id = ConstFeatureIds.LoginOp)]
         [Authorize]
         public IActionResult Member()

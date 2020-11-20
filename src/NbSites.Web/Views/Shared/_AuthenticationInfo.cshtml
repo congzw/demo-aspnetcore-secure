@@ -1,11 +1,16 @@
 ﻿@using Microsoft.AspNetCore.Authentication
+@using NbSites.Web.Demos
 @inject IAuthenticationSchemeProvider AuthenticationSchemeProvider
+@inject CurrentUserContext DynamicCheckContext
 @{
     var defaultScheme = await AuthenticationSchemeProvider.GetDefaultAuthenticateSchemeAsync();
     var schemes = await AuthenticationSchemeProvider.GetAllSchemesAsync();
 }
 <p>User.Identity.IsAuthenticated: @User.Identity.IsAuthenticated</p>
 <p>User.Identity.Name: @User.Identity.Name</p>
+<p>IsLogin: @DynamicCheckContext.IsLogin</p>
+<p>User: @DynamicCheckContext.User</p>
+<p>Roles: @DynamicCheckContext.RolesAsString</p>
 @foreach (var scheme in schemes)
 {
     var authenticateResult = await this.Context.AuthenticateAsync(scheme.Name);
