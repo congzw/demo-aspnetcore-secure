@@ -1,6 +1,5 @@
 ﻿namespace NbSites.Web.Demos
 {
-
     public class ConstFeatureIds
     {
         //for demo purpose!

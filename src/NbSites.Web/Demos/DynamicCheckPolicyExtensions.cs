@@ -10,14 +10,14 @@ namespace NbSites.Web.Demos
         public static void AddDynamicCheckPolicy(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddHttpContextAccessor();
-            services.AddTransient<IAuthorizationHandler, DynamicCheckFeatureHandler>();
-            services.AddTransient<DynamicCheckFeatureService>();
-            services.AddSingleton<ICheckFeatureRuleRepository, CheckFeatureRuleRepository>();
+            services.AddTransient<IAuthorizationHandler, DynamicCheckDefaultHandler>();
+            services.AddTransient<DynamicCheckService>();
+            services.AddSingleton<IDynamicCheckRuleRepository, DynamicCheckRuleRepository>();
             
             //An alternative approach is using the options pattern: bind the options section and add it to the dependency injection service container.
-            services.Configure<DynamicCheckPolicyOptions>(configuration.GetSection(DynamicCheckPolicyOptions.SectionName));
-            services.AddTransient(sp => sp.GetService<IOptionsSnapshot<DynamicCheckPolicyOptions>>().Value); //ok => use "IOptionsSnapshot<>" instead of "IOptions<>" will auto load after changed
-            services.AddTransient<IAuthorizationHandler, DynamicCheckFeatureNakedHandler>();
+            services.Configure<DynamicCheckOptions>(configuration.GetSection(DynamicCheckOptions.SectionName));
+            services.AddTransient(sp => sp.GetService<IOptionsSnapshot<DynamicCheckOptions>>().Value); //ok => use "IOptionsSnapshot<>" instead of "IOptions<>" will auto load after changed
+            services.AddTransient<IAuthorizationHandler, DynamicCheckNakedHandler>();
 
             ////An alternative way for MVC controllers and Razor Pages
             //services.AddControllers(config =>
@@ -31,7 +31,7 @@ namespace NbSites.Web.Demos
             services.AddAuthorization(options =>
             {
                 var dynamicCheckPolicy = new AuthorizationPolicyBuilder()
-                    .AddRequirements(new DynamicCheckFeatureRequirement())
+                    .AddRequirements(new DynamicCheckRequirement())
                     .Build();
 
                 //var defaultPolicy = new AuthorizationPolicyBuilder()

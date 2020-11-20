@@ -25,7 +25,7 @@ namespace NbSites.Web.Controllers
             return View("Empty");
         }
 
-        [CheckFeature(Id = ConstFeatureIds.LoginOp)]
+        [DynamicCheckFeature(Id = ConstFeatureIds.LoginOp)]
         [Authorize]
         public IActionResult Member()
         {

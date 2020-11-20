@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using NbSites.Web.Demos;
 
 namespace NbSites.Web.Controllers
@@ -72,9 +71,9 @@ namespace NbSites.Web.Controllers
             return View();
         }
 
-        public IActionResult ChangeUnsureSave([FromServices] ICheckFeatureRuleRepository checkFeatureRuleRepository, string mode = null)
+        public IActionResult ChangeUnsureSave([FromServices] IDynamicCheckRuleRepository checkFeatureRuleRepository, string mode = null)
         {
-            var checkFeatureRules = checkFeatureRuleRepository.GetCheckFeatureRules();
+            var checkFeatureRules = checkFeatureRuleRepository.GetRules();
 
             var checkFeatureRule = checkFeatureRules.GetRule(ConstFeatureIds.UnsureActionId, false);
             if (checkFeatureRule != null)
@@ -89,7 +88,7 @@ namespace NbSites.Web.Controllers
                 }
                 if ("adminAllowed".Equals(mode, StringComparison.OrdinalIgnoreCase))
                 {
-                    checkFeatureRule.SetNeedUsersOrRoles(SimpleRuleExpression.None, SimpleRuleExpression.Create("Admin"));
+                    checkFeatureRule.SetNeedUsersOrRoles(DynamicCheckRuleExpression.None, DynamicCheckRuleExpression.Create("Admin"));
                 }
                 checkFeatureRuleRepository.Save();
             }

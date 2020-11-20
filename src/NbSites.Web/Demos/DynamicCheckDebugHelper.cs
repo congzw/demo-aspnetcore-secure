@@ -2,10 +2,10 @@
 
 namespace NbSites.Web.Demos
 {
-    public class DemoHelper
+    public class DynamicCheckDebugHelper
     {
         public List<MessageResult> CheckRuleResults { get; set; } = new List<MessageResult>();
-        
-        public static DemoHelper Instance = new DemoHelper();
+
+        public static DynamicCheckDebugHelper Instance = new DynamicCheckDebugHelper();
     }
 }

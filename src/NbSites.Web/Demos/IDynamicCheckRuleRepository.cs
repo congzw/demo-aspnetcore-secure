@@ -3,18 +3,18 @@ using System.Collections.Generic;
 
 namespace NbSites.Web.Demos
 {
-    public interface ICheckFeatureRuleRepository
+    public interface IDynamicCheckRuleRepository
     {
-        IDictionary<string, CheckFeatureRule> GetCheckFeatureRules();
+        IDictionary<string, DynamicCheckRule> GetRules();
 
         void Save();
     }
 
-    public class CheckFeatureRuleRepository : ICheckFeatureRuleRepository
+    public class DynamicCheckRuleRepository : IDynamicCheckRuleRepository
     {
-        public IDictionary<string, CheckFeatureRule> CheckFeatureRules { get; set; } = new Dictionary<string, CheckFeatureRule>(StringComparer.OrdinalIgnoreCase);
+        public IDictionary<string, DynamicCheckRule> CheckFeatureRules { get; set; } = new Dictionary<string, DynamicCheckRule>(StringComparer.OrdinalIgnoreCase);
 
-        public CheckFeatureRuleRepository()
+        public DynamicCheckRuleRepository()
         {
             //todo: read from source
             CheckFeatureRules.AddOrUpdate(id: ConstFeatureIds.PortalEntry, allowedUsers: "*", allowedRoles: "*");
@@ -30,7 +30,7 @@ namespace NbSites.Web.Demos
             CheckFeatureRules.AddOrUpdate(id: ConstFeatureIds.UnsureActionId, allowedUsers: "", allowedRoles: "*");
         }
 
-        public IDictionary<string, CheckFeatureRule> GetCheckFeatureRules()
+        public IDictionary<string, DynamicCheckRule> GetRules()
         {
             return CheckFeatureRules;
         }

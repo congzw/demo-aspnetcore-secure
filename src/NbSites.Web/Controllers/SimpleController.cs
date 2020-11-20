@@ -13,35 +13,35 @@ namespace NbSites.Web.Controllers
             return View("Empty");
         }
 
-        [CheckFeature(Id = ConstFeatureIds.GuestOp)]
+        [DynamicCheckFeature(Id = ConstFeatureIds.GuestOp)]
         public IActionResult GuestOp()
         {
             ViewBag.Message = "Enter GuestOp";
             return View("Empty");
         }
 
-        [CheckFeature(Id = ConstFeatureIds.LoginOp)]
+        [DynamicCheckFeature(Id = ConstFeatureIds.LoginOp)]
         public IActionResult LoginOp()
         {
             ViewBag.Message = "Enter LoginOp";
             return View("Empty");
         }
 
-        [CheckFeature(Id = ConstFeatureIds.VodOp)]
+        [DynamicCheckFeature(Id = ConstFeatureIds.VodOp)]
         public IActionResult VodOp()
         {
             ViewBag.Message = "Enter VodOp";
             return View("Empty");
         }
 
-        [CheckFeature(Id = ConstFeatureIds.LiveOp)]
+        [DynamicCheckFeature(Id = ConstFeatureIds.LiveOp)]
         public IActionResult LiveOp()
         {
             ViewBag.Message = "Enter LiveOp";
             return View("Empty");
         }
 
-        [CheckFeature(Id = ConstFeatureIds.PortalEntry)]
+        [DynamicCheckFeature(Id = ConstFeatureIds.PortalEntry)]
         public IActionResult PortalEntry()
         {
             ViewBag.Message = "Enter PortalEntry";

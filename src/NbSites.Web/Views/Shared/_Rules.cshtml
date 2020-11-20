@@ -1,10 +1,10 @@
 ﻿@using NbSites.Web.Demos
-@inject ICheckFeatureRuleRepository CheckFeatureRuleRepository
+@inject IDynamicCheckRuleRepository CheckFeatureRuleRepository
 @{
-    var checkResults = DemoHelper.Instance.CheckRuleResults;
-    var checkFeatureRules = CheckFeatureRuleRepository.GetCheckFeatureRules();
+    var checkResults = DynamicCheckDebugHelper.Instance.CheckRuleResults;
+    var checkFeatureRules = CheckFeatureRuleRepository.GetRules();
 
-    DemoHelper.Instance.CheckRuleResults = new List<MessageResult>();
+    DynamicCheckDebugHelper.Instance.CheckRuleResults = new List<MessageResult>();
 }
 <div class="row">
     <table class="table-striped table-bordered">

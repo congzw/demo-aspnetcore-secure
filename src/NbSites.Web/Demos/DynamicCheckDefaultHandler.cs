@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -12,24 +11,20 @@ using Microsoft.Extensions.Logging;
 
 namespace NbSites.Web.Demos
 {
-    public class DynamicCheckFeatureRequirement : IAuthorizationRequirement
-    {
-    }
-
-    public class DynamicCheckFeatureHandler : AuthorizationHandler<DynamicCheckFeatureRequirement>
+    public class DynamicCheckDefaultHandler : AuthorizationHandler<DynamicCheckRequirement>
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly ILogger<DynamicCheckFeatureHandler> _logger;
-        private readonly DynamicCheckFeatureService _dynamicCheckFeatureService;
+        private readonly ILogger<DynamicCheckDefaultHandler> _logger;
+        private readonly DynamicCheckService _dynamicCheckFeatureService;
 
-        public DynamicCheckFeatureHandler(IHttpContextAccessor httpContextAccessor, ILogger<DynamicCheckFeatureHandler> logger, DynamicCheckFeatureService dynamicCheckFeatureService)
+        public DynamicCheckDefaultHandler(IHttpContextAccessor httpContextAccessor, ILogger<DynamicCheckDefaultHandler> logger, DynamicCheckService dynamicCheckFeatureService)
         {
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
             _dynamicCheckFeatureService = dynamicCheckFeatureService;
         }
 
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, DynamicCheckFeatureRequirement requirement)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, DynamicCheckRequirement requirement)
         {
             var actionDescriptor = GetControllerActionDescriptor(context);
             if (actionDescriptor == null)
@@ -42,7 +37,7 @@ namespace NbSites.Web.Demos
             var userName = context.User.Identity.Name;
 
             var results = new List<MessageResult>();
-            var checkFeatureContext = new CheckFeatureContext();
+            var checkFeatureContext = new DynamicCheckContext();
             checkFeatureContext.User = userName;
             checkFeatureContext.Roles = roleClaims.Select(x => x.Value).ToList();
 
@@ -57,7 +52,7 @@ namespace NbSites.Web.Demos
                     var checkResult = _dynamicCheckFeatureService.IsAllowed(actionId, checkFeatureContext);
                     checkResult.Data = actionId;
                     results.Add(checkResult);
-                    DemoHelper.Instance.CheckRuleResults = results;
+                    DynamicCheckDebugHelper.Instance.CheckRuleResults = results;
                     _logger.LogInformation(checkResult.Message);
                     if (checkResult.Success)
                     {
@@ -76,7 +71,7 @@ namespace NbSites.Web.Demos
                 _logger.LogInformation(checkResult.Message);
             }
 
-            DemoHelper.Instance.CheckRuleResults = results;
+            DynamicCheckDebugHelper.Instance.CheckRuleResults = results;
 
             if (results.All(x => x.Success))
             {
@@ -110,13 +105,12 @@ namespace NbSites.Web.Demos
             return endpoint?.Metadata.GetMetadata<ControllerActionDescriptor>();
         }
 
-        private IList<CheckFeatureAttribute> GetCheckFeatureAttributes(AuthorizationHandlerContext context)
+        private IList<DynamicCheckFeatureAttribute> GetCheckFeatureAttributes(AuthorizationHandlerContext context)
         {
             var httpContext = _httpContextAccessor.HttpContext;
-
             var endpoint = httpContext.GetEndpoint();
 
-            var checkFeatureAttributes = endpoint.Metadata.Where(x => x is CheckFeatureAttribute).Cast<CheckFeatureAttribute>().ToList();
+            var checkFeatureAttributes = endpoint.Metadata.Where(x => x is DynamicCheckFeatureAttribute).Cast<DynamicCheckFeatureAttribute>().ToList();
             var overrideIdValueList = checkFeatureAttributes.Select(x => x.OverrideIds).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
             if (overrideIdValueList.Count == 0)
             {
@@ -132,34 +126,5 @@ namespace NbSites.Web.Demos
 
             return featureAttributes;
         }
-
-        //private CheckFeatureAttribute GetCheckFeatureAttribute(AuthorizationHandlerContext context)
-        //{
-        //    var httpContext = _httpContextAccessor.HttpContext;
-
-        //    var endpoint = httpContext.GetEndpoint();
-        //    var metadata = endpoint.Metadata.ToList();
-
-        //    return endpoint?.Metadata.GetMetadata<CheckFeatureAttribute>();
-        //}
-    }
-
-    public class CheckFeatureRule
-    {
-        public string CheckFeatureId { get; set; }
-        public string AllowedUsers { get; set; }
-        public string AllowedRoles { get; set; }
-
-        public static CheckFeatureRule Create(string id)
-        {
-            return new CheckFeatureRule() { CheckFeatureId = id };
-        }
-    }
-
-    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
-    public class CheckFeatureAttribute : Attribute
-    {
-        public string Id { get; set; }
-        public string OverrideIds { get; set; }
     }
 }
