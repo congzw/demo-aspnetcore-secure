@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 
 namespace NbSites.Web.Demos
@@ -26,11 +25,8 @@ namespace NbSites.Web.Demos
                 return CurrentUserContext.Empty;
             }
 
-            var roleClaims = context.User.Claims.Where(x => x.Type == ClaimTypes.Role).ToList();
-            var userName = context.User.Identity.Name;
             var checkFeatureContext = new CurrentUserContext();
-            checkFeatureContext.User = userName;
-            checkFeatureContext.Roles = roleClaims.Select(x => x.Value).ToList();
+            checkFeatureContext.Claims = context.User.Claims.ToList();
             return checkFeatureContext;
         }
     }
