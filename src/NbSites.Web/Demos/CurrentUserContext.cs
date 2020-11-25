@@ -46,4 +46,12 @@ namespace NbSites.Web.Demos
 
         public static CurrentUserContext Empty = new CurrentUserContext();
     }
+
+    public static class CurrentUserContextExtensions
+    {
+        public static bool IsLogin(this ICurrentUserContext userContext)
+        {
+            return !string.IsNullOrWhiteSpace(userContext.User);
+        }
+    }
 }

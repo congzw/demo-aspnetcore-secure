@@ -14,8 +14,9 @@ namespace NbSites.Web.Demos
 
         public DynamicCheckActionRepository()
         {
-            Actions.Add(DynamicCheckAction.Create(ConstActionIds.UnsureActionId, ConstFeatureIds.UnsureActionA, "某个迟决定的Action"));
-            Actions.Add(DynamicCheckAction.Create(ConstActionIds.UnsureActionId2, ConstFeatureIds.UnsureActionA, "某个迟决定的Action2"));
+            Actions.Add(DynamicCheckAction.Create(ConstActionIds.UnsureActionId, KnownFeatureIds.UnsureActionA, "某个迟决定的Action"));
+            Actions.Add(DynamicCheckAction.Create(ConstActionIds.UnsureActionId2, KnownFeatureIds.UnsureActionA, "某个迟决定的Action2"));
+            Actions.Add(DynamicCheckAction.Create(ConstActionIds.SpecialAction, KnownFeatureIds.DemoOp, "演示用的Action"));
         }
 
         public IList<DynamicCheckAction> GetActions()

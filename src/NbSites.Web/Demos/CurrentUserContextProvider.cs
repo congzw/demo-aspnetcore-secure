@@ -5,7 +5,7 @@ namespace NbSites.Web.Demos
 {
     public interface ICurrentUserContextProvider
     {
-        CurrentUserContext GetDynamicCheckContext();
+        ICurrentUserContext GetDynamicCheckContext();
     }
 
     public class CurrentUserContextProvider : ICurrentUserContextProvider
@@ -17,7 +17,7 @@ namespace NbSites.Web.Demos
             _accessor = accessor;
         }
 
-        public CurrentUserContext GetDynamicCheckContext()
+        public ICurrentUserContext GetDynamicCheckContext()
         {
             var context = _accessor.HttpContext;
             if (context == null)

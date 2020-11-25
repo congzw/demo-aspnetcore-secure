@@ -13,7 +13,7 @@ namespace NbSites.Web.Demos
             _ruleRepository = ruleRepository;
         }
         
-        public MessageResult IsAllowed(string checkFeatureId, CurrentUserContext ctx)
+        public MessageResult IsAllowed(string checkFeatureId, ICurrentUserContext ctx)
         {
             var checkFeatureRules = _ruleRepository.GetRules();
             var messageResult = checkFeatureRules.CheckAllowed(checkFeatureId, ctx);

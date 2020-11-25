@@ -4,7 +4,7 @@ using NbSites.Web.Demos;
 
 namespace NbSites.Web.Controllers
 {
-    [DynamicCheckFeature(Id = ConstFeatureIds.AdminOp)]
+    [DynamicCheckFeature(Id = KnownFeatureIds.AdminOp)]
     public class ManageController : Controller
     {
         [AllowAnonymous]
@@ -20,14 +20,14 @@ namespace NbSites.Web.Controllers
             return View("Empty");
         }
 
-        [DynamicCheckFeature(Id = ConstFeatureIds.SuperOp)]
+        [DynamicCheckFeature(Id = KnownFeatureIds.SuperOp)]
         public IActionResult SuperAndAdminOp()
         {
             ViewBag.Message = "Enter SuperAndAdminOp";
             return View("Empty");
         }
         
-        [DynamicCheckFeature(Id = ConstFeatureIds.SuperOp, OverrideIds = ConstFeatureIds.AdminOp)]
+        [DynamicCheckFeature(Id = KnownFeatureIds.SuperOp, OverrideIds = KnownFeatureIds.AdminOp)]
         public IActionResult SuperOp()
         {
             ViewBag.Message = "Enter SuperOp";

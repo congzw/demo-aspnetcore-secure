@@ -75,7 +75,7 @@ namespace NbSites.Web.Controllers
         {
             var checkFeatureRules = checkFeatureRuleRepository.GetRules();
 
-            var checkFeatureRule = checkFeatureRules.GetRule(ConstFeatureIds.UnsureActionA, false);
+            var checkFeatureRule = checkFeatureRules.GetRule(KnownFeatureIds.UnsureActionA, false);
             if (checkFeatureRule != null)
             {
                 if ("guestAllowed".Equals(mode, StringComparison.OrdinalIgnoreCase))

@@ -17,17 +17,18 @@ namespace NbSites.Web.Demos
         public DynamicCheckRuleRepository()
         {
             //todo: read from source
-            CheckFeatureRules.AddOrUpdate(id: ConstFeatureIds.PortalEntry, allowedUsers: "*", allowedRoles: "*");
+            CheckFeatureRules.AddOrUpdate(id: KnownFeatureIds.PortalEntry, allowedUsers: "*", allowedRoles: "*");
 
-            CheckFeatureRules.AddOrUpdate(id: ConstFeatureIds.GuestOp, allowedUsers: "*", allowedRoles: "*");
-            CheckFeatureRules.AddOrUpdate(id: ConstFeatureIds.LoginOp, allowedUsers: "", allowedRoles: "*");
-            CheckFeatureRules.AddOrUpdate(id: ConstFeatureIds.AdminOp, allowedUsers: "", allowedRoles: "Admin,Super");
-            CheckFeatureRules.AddOrUpdate(id: ConstFeatureIds.SuperOp, allowedUsers: "", allowedRoles: "Super");
+            CheckFeatureRules.AddOrUpdate(id: KnownFeatureIds.GuestOp, allowedUsers: "*", allowedRoles: "*");
+            CheckFeatureRules.AddOrUpdate(id: KnownFeatureIds.LoginOp, allowedUsers: "", allowedRoles: "*");
+            CheckFeatureRules.AddOrUpdate(id: KnownFeatureIds.AdminOp, allowedUsers: "", allowedRoles: "Admin,Super");
+            CheckFeatureRules.AddOrUpdate(id: KnownFeatureIds.SuperOp, allowedUsers: "", allowedRoles: "Super");
 
-            CheckFeatureRules.AddOrUpdate(id: ConstFeatureIds.VodOp, allowedUsers: "", allowedRoles: "*");
-            CheckFeatureRules.AddOrUpdate(id: ConstFeatureIds.LiveOp, allowedUsers: "*", allowedRoles: "*");
+            CheckFeatureRules.AddOrUpdate(id: KnownFeatureIds.VodOp, allowedUsers: "", allowedRoles: "*");
+            CheckFeatureRules.AddOrUpdate(id: KnownFeatureIds.LiveOp, allowedUsers: "*", allowedRoles: "*");
 
-            CheckFeatureRules.AddOrUpdate(id: ConstFeatureIds.UnsureActionA, allowedUsers: "*", allowedRoles: "*");
+            CheckFeatureRules.AddOrUpdate(id: KnownFeatureIds.UnsureActionA, allowedUsers: "*", allowedRoles: "*");
+            CheckFeatureRules.AddOrUpdate(id: KnownFeatureIds.DemoOp, allowedUsers: "", allowedRoles: "Admin,Super");
         }
 
         public IDictionary<string, DynamicCheckRule> GetRules()

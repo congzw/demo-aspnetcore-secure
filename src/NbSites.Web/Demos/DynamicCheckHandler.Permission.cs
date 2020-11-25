@@ -11,56 +11,67 @@ using NbSites.Web.Demos.Permissions;
 
 namespace NbSites.Web.Demos
 {
-    public class DynamicCheckHandlerDefault : AuthorizationHandler<DynamicCheckRequirement>
+    public class DynamicCheckPermissionHandler : AuthorizationHandler<DynamicCheckRequirement>
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger<DynamicCheckHandlerDefault> _logger;
         private readonly DynamicCheckRulePool _rbacCheckPool;
+        private readonly IPermissionCheckService _permissionCheckService;
         private readonly ICurrentUserContext _currentUserContext;
 
-        public DynamicCheckHandlerDefault(IHttpContextAccessor httpContextAccessor, 
+        public DynamicCheckPermissionHandler(IHttpContextAccessor httpContextAccessor, 
             ILogger<DynamicCheckHandlerDefault> logger, 
             DynamicCheckRulePool dynamicCheckFeatureService, 
+            IPermissionCheckService permissionCheckService,
             ICurrentUserContext currentUserContext)
         {
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
             _rbacCheckPool = dynamicCheckFeatureService;
+            _permissionCheckService = permissionCheckService;
             _currentUserContext = currentUserContext;
         }
 
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, DynamicCheckRequirement requirement)
         {
+            if (!context.User.Identity.IsAuthenticated)
+            {
+                return;
+            }
+
+
             var actionDescriptor = GetControllerActionDescriptor(context);
             if (actionDescriptor == null)
             {
                 return;
             }
             
-            _logger.LogInformation("HandleRequirementAsync >>>>>>>>> " + actionDescriptor.DisplayName);
-            
-            var results = new List<MessageResult>();
+            _logger.LogInformation("HandleRequirementAsync for permission >>>>>>>>> " + actionDescriptor.DisplayName);
             var checkFeatureIds = TryGetCheckFeatureIds(context, actionDescriptor);
-            if (checkFeatureIds.Count == 0)
-            {
-                //不需要控制的点，放行
-                context.Succeed(requirement);
-                return;
-            }
-            //<<<RBAC CHECK BEGIN
+            var permissionCheckResults = new List<PermissionCheckResult>();
             foreach (var checkFeatureId in checkFeatureIds)
             {
-                var checkResult = _rbacCheckPool.IsAllowed(checkFeatureId, _currentUserContext);
-                checkResult.Data = checkFeatureId;
-                results.Add(checkResult);
-                _logger.LogInformation(checkResult.Message);
+                var permissionCheckContext = PermissionCheckContext.Create(actionDescriptor, _httpContextAccessor.HttpContext, checkFeatureId);
+                var permissionCheckResult = await _permissionCheckService.PermissionCheckAsync(_currentUserContext, permissionCheckContext);
+                permissionCheckResults.Add(permissionCheckResult);
             }
-            if (results.Any(x => !x.Success))
+            
+            var combine = PermissionCheckResult.Combine(permissionCheckResults.ToArray());
+            if (combine == PermissionCheckResultCategory.NoCare)
             {
                 return;
             }
 
-            context.Succeed(requirement);
+            if (combine == PermissionCheckResultCategory.Allowed)
+            {
+                context.Succeed(requirement);
+                return;
+            }
+
+            if (combine == PermissionCheckResultCategory.Forbidden)
+            {
+                context.Fail();
+            }
         }
 
         private List<string> TryGetCheckFeatureIds(AuthorizationHandlerContext context, ActionDescriptor actionDescriptor)
@@ -82,6 +93,7 @@ namespace NbSites.Web.Demos
             return featureIds;
         }
 
+        //todo: move to extensions helper
         private ActionDescriptor GetControllerActionDescriptor(AuthorizationHandlerContext context)
         {
             #region another impl: not use IHttpContextAccessor

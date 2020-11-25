@@ -1,6 +1,6 @@
 ﻿namespace NbSites.Web.Demos
 {
-    public class ConstFeatureIds
+    public class KnownFeatureIds
     {
         //for demo purpose!
         public const string PortalEntry = "PortalEntry";
@@ -10,6 +10,7 @@
         public const string GuestOp = "GuestOp";
         public const string VodOp = "VodOp";
         public const string LiveOp = "LiveOp";
+        public const string DemoOp = "DemoOp";
         public const string UnsureActionA = "UnsureActionA";
     }
 
@@ -17,5 +18,6 @@
     {
         public const string UnsureActionId = "NbSites.Web.Controllers.HomeController.Unsure";
         public const string UnsureActionId2 = "NbSites.Web.Controllers.HomeController.Unsure2";
+        public const string SpecialAction = "NbSites.Web.Controllers.SimpleController.SpecialAction";
     }
 }

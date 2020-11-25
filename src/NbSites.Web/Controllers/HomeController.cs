@@ -32,7 +32,7 @@ namespace NbSites.Web.Controllers
         }
 
 
-        [DynamicCheckFeature(Id = ConstFeatureIds.LoginOp)]
+        [DynamicCheckFeature(Id = KnownFeatureIds.LoginOp)]
         [Authorize]
         public IActionResult Member()
         {
