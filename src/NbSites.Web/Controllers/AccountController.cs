@@ -29,7 +29,7 @@ namespace NbSites.Web.Controllers
         
         public async Task<IActionResult> AutoLogin(string returnUrl = null, string role = null)
         {
-            const string issuer = "https://nbsites.com";
+            const string issuer = "https://mysites.com";
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, "bob", ClaimValueTypes.String, issuer),

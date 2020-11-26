@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Http.Extensions
 <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         <ul>
             <li>
                 <a asp-controller="Home" asp-action="Index">Home Index</a>
@@ -8,21 +8,9 @@
             <li>
                 <a asp-controller="Home" asp-action="Default">Home Default</a>
             </li>
-            <li>
-                <a asp-controller="Home" asp-action="Member">Home Member</a>
-            </li>
-            <li>
-                <a asp-controller="Home" asp-action="Admin">Home Admin</a>
-            </li>
-            <li>
-                <a asp-controller="Home" asp-action="Unsure">Home Unsure</a>
-            </li>
-            <li>
-                <a asp-controller="Home" asp-action="Unsure2">Home Unsure2</a>
-            </li>
         </ul>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         <ul>
             <li>
                 <a asp-controller="Manage" asp-action="Escape">Manage Escape</a>
@@ -36,6 +24,10 @@
             <li>
                 <a asp-controller="Manage" asp-action="SuperOp">Manage SuperOp</a>
             </li>
+        </ul>
+    </div>
+    <div class="col-sm-3">
+        <ul>
             <li>
                 <a asp-controller="Simple" asp-action="Escape">Simple Escape</a>
             </li>
@@ -52,6 +44,12 @@
                 <a asp-controller="Simple" asp-action="LiveOp">Simple LiveOp</a>
             </li>
             <li>
+                <a asp-controller="Simple" asp-action="Unsure">Home Unsure</a>
+            </li>
+            <li>
+                <a asp-controller="Simple" asp-action="Unsure2">Home Unsure2</a>
+            </li>
+            <li>
                 <a asp-controller="Simple" asp-action="SpecialAction">Simple SpecialAction</a>
             </li>
             <li>
@@ -59,7 +57,7 @@
             </li>
         </ul>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         <ul>
             <li>
                 <a asp-controller="Account" asp-action="Login" asp-route-redirected="false" asp-route-returnUrl="@this.Context.Request.GetEncodedPathAndQuery()">Account Login</a>

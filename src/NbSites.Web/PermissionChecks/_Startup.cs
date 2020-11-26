@@ -24,7 +24,8 @@ namespace NbSites.Web.PermissionChecks
             });
             services.AddHttpContextAccessor();
 
-            services.AddScoped<ICurrentUserContext, CurrentUserContext>();
+            services.AddScoped<ICurrentUserContextProvider, CurrentUserContextProvider>();
+            services.AddScoped(sp => sp.GetRequiredService<ICurrentUserContextProvider>().GetCurrentUserContext());
             services.AddSingleton<IDynamicCheckActionRepository, DynamicCheckActionRepository>(); //todo: replace with real scope impl
             services.Configure<DynamicCheckOptions>(configuration.GetSection(DynamicCheckOptions.SectionName));
             services.AddTransient(sp => sp.GetService<IOptionsSnapshot<DynamicCheckOptions>>().Value); //ok => use "IOptionsSnapshot<>" instead of "IOptions<>" will auto load after changed
