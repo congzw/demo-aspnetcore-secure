@@ -11,7 +11,7 @@
         /// add or update by need
         /// </summary>
         /// <param name="ruleActionPool"></param>
-        void SetRuleActions(PermissionRuleActionPool ruleActionPool);
+        void SetRuleActions(IPermissionRuleActionPool ruleActionPool);
     }
 
     public class PermissionRuleActionProvider : IPermissionRuleActionProvider
@@ -27,7 +27,7 @@
         
         public int Order { get; set; }
 
-        public void SetRuleActions(PermissionRuleActionPool ruleActionPool)
+        public void SetRuleActions(IPermissionRuleActionPool ruleActionPool)
         {
             var rules = _ruleRepository.GetRules();
             var actions = _actionRepository.GetActions();

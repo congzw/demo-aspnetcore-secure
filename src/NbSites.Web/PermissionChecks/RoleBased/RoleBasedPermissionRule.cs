@@ -5,8 +5,28 @@ namespace NbSites.Web.PermissionChecks.RoleBased
     public class RoleBasedPermissionRule
     {
         public string PermissionId { get; set; }
-        public string AllowedUsers { get; set; }
-        public string AllowedRoles { get; set; }
+
+        private string _allowedUsers;
+        public string AllowedUsers
+        {
+            get => _allowedUsers;
+            set
+            {
+                _allowedUsersExpression = null;
+                _allowedUsers = value;
+            }
+        }
+
+        private string _allowedRoles;
+        public string AllowedRoles
+        {
+            get => _allowedRoles;
+            set
+            {
+                _allowedRolesExpression = null;
+                _allowedRoles = value;
+            }
+        }
 
         private PermissionRuleExpression _allowedUsersExpression;
         public PermissionRuleExpression AllowedUsersExpression
@@ -18,6 +38,7 @@ namespace NbSites.Web.PermissionChecks.RoleBased
         }
         
         private PermissionRuleExpression _allowedRolesExpression;
+
         public PermissionRuleExpression AllowedRolesExpression
         {
             get
@@ -135,12 +156,10 @@ namespace NbSites.Web.PermissionChecks.RoleBased
         {
             return NeedUsers(usersValue) || NeedRoles(rolesValue);
         }
-        
+
         public RoleBasedPermissionRule SetNeedGuest()
         {
             var newRule = CreateGuestRule(this.PermissionId);
-            this._allowedUsersExpression = null;
-            this._allowedRolesExpression = null;
             this.AllowedUsers = newRule.AllowedUsers;
             this.AllowedRoles = newRule.AllowedRoles;
             return this;
@@ -148,8 +167,6 @@ namespace NbSites.Web.PermissionChecks.RoleBased
         public RoleBasedPermissionRule SetNeedLogin()
         {
             var newRule = CreateLoginRule(this.PermissionId);
-            this._allowedUsersExpression = null;
-            this._allowedRolesExpression = null;
             this.AllowedUsers = newRule.AllowedUsers;
             this.AllowedRoles = newRule.AllowedRoles;
             return this;
@@ -157,8 +174,6 @@ namespace NbSites.Web.PermissionChecks.RoleBased
         public RoleBasedPermissionRule SetNeedUsersOrRoles(string allowedUsers, string allowedRoles)
         {
             var newRule = Create(this.PermissionId, allowedUsers, allowedRoles);
-            this._allowedUsersExpression = null;
-            this._allowedRolesExpression = null;
             this.AllowedUsers = newRule.AllowedUsers;
             this.AllowedRoles = newRule.AllowedRoles;
             return this;

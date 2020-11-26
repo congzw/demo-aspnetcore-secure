@@ -121,7 +121,7 @@ namespace NbSites.Web.PermissionChecks.RoleBased
         }
         
         [TestMethod]
-        public void CheckUserRoleRules_Should_Ok()
+        public void CheckRulesAsOne_Should_Ok()
         {
             var logic = new RoleBasedPermissionRuleLogic();
             var theRule = RoleBasedPermissionRule.Create("MockPermission", "bob, john", "Admin, super");
@@ -129,19 +129,19 @@ namespace NbSites.Web.PermissionChecks.RoleBased
             var theRules = new List<RoleBasedPermissionRule>(){ theRule, theRule2 };
 
             var bobContext = MockHelper.CreatePermissionCheckContext("A, B, MockPermission", "bob");
-            logic.CheckRules(theRules, bobContext).LogJson().Category.ShouldEqual(PermissionCheckResultCategory.Allowed);
+            logic.CheckRulesAsOne(theRules, bobContext).LogJson().Category.ShouldEqual(PermissionCheckResultCategory.Allowed);
 
             var johnContext = MockHelper.CreatePermissionCheckContext("A, B, MockPermission", "john", "FooRole");
-            logic.CheckRules(theRules, johnContext).LogJson().Category.ShouldEqual(PermissionCheckResultCategory.Allowed);
+            logic.CheckRulesAsOne(theRules, johnContext).LogJson().Category.ShouldEqual(PermissionCheckResultCategory.Allowed);
 
             var marryContext = MockHelper.CreatePermissionCheckContext("A, B, MockPermission", "marry", "Admin", "Super");
-            logic.CheckRules(theRules, marryContext).LogJson().Category.ShouldEqual(PermissionCheckResultCategory.Allowed);
+            logic.CheckRulesAsOne(theRules, marryContext).LogJson().Category.ShouldEqual(PermissionCheckResultCategory.Allowed);
 
             var jackContext = MockHelper.CreatePermissionCheckContext("A, B, MockPermission", "jack", "FooRole");
-            logic.CheckRules(theRules, jackContext).LogJson().Category.ShouldEqual(PermissionCheckResultCategory.Forbidden);
+            logic.CheckRulesAsOne(theRules, jackContext).LogJson().Category.ShouldEqual(PermissionCheckResultCategory.Forbidden);
             
             var tomContext = MockHelper.CreatePermissionCheckContext("A, B, MockPermission", "tom", "Leader");
-            logic.CheckRules(theRules, tomContext).LogJson().Category.ShouldEqual(PermissionCheckResultCategory.Allowed);
+            logic.CheckRulesAsOne(theRules, tomContext).LogJson().Category.ShouldEqual(PermissionCheckResultCategory.Allowed);
         }
     }
 }

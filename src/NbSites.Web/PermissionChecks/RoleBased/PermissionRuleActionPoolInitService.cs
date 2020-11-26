@@ -5,23 +5,25 @@ namespace NbSites.Web.PermissionChecks.RoleBased
 {
     public interface IPermissionRuleActionPoolInitService
     {
-        void Refresh(PermissionRuleActionPool pool);
+        void Refresh();
     }
 
     public class PermissionRuleActionPoolInitService : IPermissionRuleActionPoolInitService
     {
+        private readonly IPermissionRuleActionPool _pool;
         private readonly IList<IPermissionRuleActionProvider> _providers;
 
-        public PermissionRuleActionPoolInitService(IEnumerable<IPermissionRuleActionProvider> providers)
+        public PermissionRuleActionPoolInitService(IEnumerable<IPermissionRuleActionProvider> providers, IPermissionRuleActionPool pool)
         {
+            _pool = pool;
             _providers = providers.OrderBy(x => x.Order).ToList();
         }
 
-        public void Refresh(PermissionRuleActionPool pool)
+        public void Refresh()
         {
             foreach (var provider in _providers)
             {
-                provider.SetRuleActions(pool);
+                provider.SetRuleActions(_pool);
             }
         }
     }

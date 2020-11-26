@@ -7,6 +7,13 @@ namespace NbSites.Web.PermissionChecks
 {
     public class PermissionCheckContext
     {
+        public PermissionCheckContext(ActionDescriptor actionDescriptor, HttpContext httpContext, ICurrentUserContext currentUserContext)
+        {
+            ActionDescriptor = actionDescriptor;
+            HttpContext = httpContext;
+            CurrentUserContext = currentUserContext;
+        }
+
         public ActionDescriptor ActionDescriptor { get; set; }
         public HttpContext HttpContext { get; set; }
         public ICurrentUserContext CurrentUserContext { get; set; }

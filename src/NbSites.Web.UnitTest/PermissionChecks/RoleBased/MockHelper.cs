@@ -14,9 +14,8 @@ namespace NbSites.Web.PermissionChecks.RoleBased
 
         public static PermissionCheckContext CreatePermissionCheckContext(string permissionIdsValue, string user, params string[] roles)
         {
-            var context = new PermissionCheckContext();
+            var context = new PermissionCheckContext(null, null, CreateUserContext(user, roles));
             context.AddCheckPermissionIdsValue(permissionIdsValue);
-            context.CurrentUserContext = CreateUserContext(user, roles);
             return context;
         }
     }

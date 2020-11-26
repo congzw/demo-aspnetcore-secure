@@ -8,14 +8,15 @@ namespace NbSites.Web.PermissionChecks.RoleBased
     {
         void SetRoleBasedPermissionRules(IEnumerable<RoleBasedPermissionRule> rules, bool replaceExist = true);
         void SetDynamicCheckActions(IEnumerable<DynamicCheckAction> actions, bool replaceExist = true);
-        IList<RoleBasedPermissionRule> TryGetRoleBasedPermissionRulesByActionId(string actionId);
+        IList<string> TryGetPermissionIdsByActionId(string actionId);
+        IList<RoleBasedPermissionRule> TryGetRoleBasedPermissionRules(params string[] permissionIds);
     }
 
     public class PermissionRuleActionPool : IPermissionRuleActionPool
     {
         public IDictionary<string, RoleBasedPermissionRule> RoleBasedPermissionRules { get; set; } = new ConcurrentDictionary<string, RoleBasedPermissionRule>();
         public List<DynamicCheckAction> DynamicCheckActions { get; set; } = new List<DynamicCheckAction>();
-        public IDictionary<string, List<RoleBasedPermissionRule>> CachedActionRules { get; set; } = new ConcurrentDictionary<string, List<RoleBasedPermissionRule>>();
+        public IDictionary<string, List<string>> CachedActionRules { get; set; } = new ConcurrentDictionary<string, List<string>>();
 
         public void SetRoleBasedPermissionRules(IEnumerable<RoleBasedPermissionRule> rules, bool replaceExist = true)
         {
@@ -31,6 +32,10 @@ namespace NbSites.Web.PermissionChecks.RoleBased
                     {
                         RoleBasedPermissionRules.AddOrUpdate(rule);
                     }
+                }
+                else
+                {
+                    RoleBasedPermissionRules.AddOrUpdate(rule);
                 }
             }
         }
@@ -64,15 +69,32 @@ namespace NbSites.Web.PermissionChecks.RoleBased
             }
         }
 
-        public IList<RoleBasedPermissionRule> TryGetRoleBasedPermissionRulesByActionId(string actionId)
+        public IList<string> TryGetPermissionIdsByActionId(string actionId)
         {
             if (CachedActionRules.TryGetValue(actionId, out var rules))
             {
                 return rules;
             }
 
-            rules = new List<RoleBasedPermissionRule>();
+            rules = new List<string>();
             var permissionIds = DynamicCheckActions.Where(x => x.ActionId.MyEquals(actionId)).Select(x => x.PermissionId).ToList();
+            foreach (var permissionId in permissionIds)
+            {
+                rules.Add(permissionId);
+            }
+
+            CachedActionRules[actionId] = rules;
+            return rules;
+        }
+
+        public IList<RoleBasedPermissionRule> TryGetRoleBasedPermissionRules(params string[] permissionIds)
+        {
+            var rules = new List<RoleBasedPermissionRule>();
+            if (permissionIds == null)
+            {
+                return rules;
+            }
+
             foreach (var permissionId in permissionIds)
             {
                 if (RoleBasedPermissionRules.TryGetValue(permissionId, out var theRule))
@@ -80,8 +102,6 @@ namespace NbSites.Web.PermissionChecks.RoleBased
                     rules.Add(theRule);
                 }
             }
-
-            CachedActionRules[actionId] = rules;
             return rules;
         }
     }

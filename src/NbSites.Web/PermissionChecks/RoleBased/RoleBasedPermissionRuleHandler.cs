@@ -10,12 +10,17 @@ namespace NbSites.Web.PermissionChecks.RoleBased
     public class RoleBasedPermissionRuleHandler : AuthorizationHandler<PermissionCheckRequirement>
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ICurrentUserContext _currentUserContext;
         private readonly IPermissionRuleActionPool _ruleActionPool;
         private readonly IRoleBasedPermissionRuleLogic _roleBasedPermissionRuleLogic;
 
-        public RoleBasedPermissionRuleHandler(IHttpContextAccessor httpContextAccessor, IPermissionRuleActionPool ruleActionPool, IRoleBasedPermissionRuleLogic roleBasedPermissionRuleLogic)
+        public RoleBasedPermissionRuleHandler(IHttpContextAccessor httpContextAccessor, 
+            ICurrentUserContext currentUserContext,
+            IPermissionRuleActionPool ruleActionPool, 
+            IRoleBasedPermissionRuleLogic roleBasedPermissionRuleLogic)
         {
             _httpContextAccessor = httpContextAccessor;
+            _currentUserContext = currentUserContext;
             _ruleActionPool = ruleActionPool;
             _roleBasedPermissionRuleLogic = roleBasedPermissionRuleLogic;
         }
@@ -34,29 +39,41 @@ namespace NbSites.Web.PermissionChecks.RoleBased
             logHelper.LogInformation(actionDescriptor.DisplayName);
 
             var actionId = actionDescriptor.DisplayName.Split().FirstOrDefault();
-            var roleBasedPermissionRules = _ruleActionPool.TryGetRoleBasedPermissionRulesByActionId(actionId);
-
-            var permissionIds = roleBasedPermissionRules.Count > 0 ?
-                //如果找到ActionId的配置，以此为准
-                roleBasedPermissionRules.Select(x => x.PermissionId).ToArray() : 
-                context.GetPermissionAttributes(httpContext).Select(x => x.PermissionId).ToArray();
+            var permissionIds = _ruleActionPool.TryGetPermissionIdsByActionId(actionId);
+            if (permissionIds.Count == 0)
+            {
+                //如果找到ActionId的配置，以此为准，否则以Attribute为准
+                permissionIds = context.GetPermissionAttributes(httpContext).Select(x => x.PermissionId).ToList();
+            }
 
             var permissionCheckContext = CreatePermissionCheckContext(context, httpContext, actionDescriptor, permissionIds);
-            var checkResult = _roleBasedPermissionRuleLogic.CheckRules(roleBasedPermissionRules, permissionCheckContext);
+            var permissionRules = _ruleActionPool.TryGetRoleBasedPermissionRules(permissionIds.ToArray());
+            var checkResults = _roleBasedPermissionRuleLogic.CheckRules(permissionRules, permissionCheckContext);
 
+            foreach (var permissionCheckResult in checkResults)
+            {
+                logHelper.LogInformation(permissionCheckResult.Message);
+            }
+
+            var checkResult = checkResults.Combine();
             if (checkResult.Category == PermissionCheckResultCategory.Allowed)
             {
                 context.Succeed(requirement);
             }
-        }
-        
-        private PermissionCheckContext CreatePermissionCheckContext(AuthorizationHandlerContext context, HttpContext httpContext, ActionDescriptor actionDescriptor, IEnumerable<string> permissionIds)
-        {
-            var permissionCheckContext = new PermissionCheckContext();
-            permissionCheckContext.HttpContext = httpContext;
-            permissionCheckContext.ActionDescriptor = actionDescriptor;
-            permissionCheckContext.AddCheckPermissionIds(permissionIds?.ToArray());
 
+            if (checkResult.Category == PermissionCheckResultCategory.Forbidden)
+            {
+                context.Fail();
+            }
+        }
+
+        private PermissionCheckContext CreatePermissionCheckContext(AuthorizationHandlerContext context, 
+            HttpContext httpContext, 
+            ActionDescriptor actionDescriptor, 
+            IEnumerable<string> permissionIds)
+        {
+            var permissionCheckContext = new PermissionCheckContext(actionDescriptor, httpContext, _currentUserContext);
+            permissionCheckContext.AddCheckPermissionIds(permissionIds?.ToArray());
             return permissionCheckContext;
         }
     }

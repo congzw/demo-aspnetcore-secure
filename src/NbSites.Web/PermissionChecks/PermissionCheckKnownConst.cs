@@ -1,9 +1,5 @@
 ﻿namespace NbSites.Web.PermissionChecks
 {
-    public class PermissionCheckKnownConst
-    {
-    }
-
     //todo： refactor
     public class KnownPermissionIds
     {
@@ -21,8 +17,8 @@
 
     public class KnownActionIds
     {
-        public const string UnsureActionId = "NbSites.Web.Controllers.HomeController.Unsure";
-        public const string UnsureActionId2 = "NbSites.Web.Controllers.HomeController.Unsure2";
+        public const string UnsureActionId = "NbSites.Web.Controllers.SimpleController.Unsure";
+        public const string UnsureActionId2 = "NbSites.Web.Controllers.SimpleController.Unsure2";
         public const string SpecialAction = "NbSites.Web.Controllers.SimpleController.SpecialAction";
     }
 }

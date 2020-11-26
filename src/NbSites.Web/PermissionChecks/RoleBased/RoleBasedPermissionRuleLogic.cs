@@ -11,44 +11,43 @@
         {
             if (rule == null)
             {
-                return PermissionCheckResult.NoCare.WithMessage("不认识的规则");
+                return PermissionCheckResult.Allowed.WithMessage("没有定义规则 => 放行");
             }
 
             if (checkContext.CheckPermissionIds == null || checkContext.CheckPermissionIds.Count == 0)
             {
-                return PermissionCheckResult.NoCare.WithMessage("没有指定需要检测的PermissionId");
+                return PermissionCheckResult.Allowed.WithMessage("没有指定需要检测的PermissionId => 放行");
             }
 
             if (!checkContext.MatchPermissionId(rule.PermissionId))
             {
-                return PermissionCheckResult.NoCare.WithMessage($"规则不匹配: {rule.PermissionId} not in [{string.Join(',', checkContext.CheckPermissionIds)}]");
+                return PermissionCheckResult.NoCare.WithMessage($"规则不匹配 => 无法判断: {rule.PermissionId} ? [{string.Join(',', checkContext.CheckPermissionIds)}]");
             }
 
             var userContext = checkContext.CurrentUserContext;
-
             if (rule.NeedGuest())
             {
-                return PermissionCheckResult.Allowed.WithMessage("访客规则");
+                return PermissionCheckResult.Allowed.WithMessage("访客规则 => 满足");
             }
 
             var hasLogin = userContext.IsLogin();
             if (!hasLogin)
             {
-                return PermissionCheckResult.Forbidden.WithMessage("需要登录");
+                return PermissionCheckResult.Forbidden.WithMessage("需要登录 => 不满足");
             }
 
             if (rule.NeedLogin())
             {
-                return PermissionCheckResult.Allowed.WithMessage("登录即可");
+                return PermissionCheckResult.Allowed.WithMessage("需要登录 => 满足");
             }
 
-            var msg = $"指定用户或角色满足: ctx:[{userContext.User}],[{userContext.Roles.MyJoin()}] + rule:[{rule.AllowedUsers}],[{rule.AllowedRoles}]";
+            var msg = $"指定用户或角色: ctx:[{userContext.User}],[{userContext.Roles.MyJoin()}] + rule:[{rule.AllowedUsers}],[{rule.AllowedRoles}]";
             if (rule.NeedUsersOrRoles(userContext.User, userContext.Roles.MyJoin()))
             {
-                return PermissionCheckResult.Allowed.WithMessage(msg + " => OK");
+                return PermissionCheckResult.Allowed.WithMessage(msg + " => 满足");
             }
 
-            return PermissionCheckResult.Forbidden.WithMessage(msg + " => K.O.");
+            return PermissionCheckResult.Forbidden.WithMessage(msg + " => 不满足");
         }
     }
 }

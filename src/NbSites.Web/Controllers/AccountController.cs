@@ -72,7 +72,7 @@ namespace NbSites.Web.Controllers
             return View();
         }
 
-        public IActionResult ChangeUnsureSave([FromServices] IRoleBasedPermissionRuleRepository checkFeatureRuleRepository, string mode = null)
+        public IActionResult ChangeUnsureSave([FromServices] IRoleBasedPermissionRuleRepository checkFeatureRuleRepository, [FromServices] IPermissionRuleActionPoolInitService poolInitService, string mode = null)
         {
             var checkFeatureRules = checkFeatureRuleRepository.GetRules();
 
@@ -92,6 +92,7 @@ namespace NbSites.Web.Controllers
                     checkFeatureRule.SetNeedUsersOrRoles("", "Admin");
                 }
                 checkFeatureRuleRepository.Save();
+                poolInitService.Refresh();
             }
             return RedirectToAction("Unsure", "Simple");
         }

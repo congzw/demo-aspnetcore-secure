@@ -30,6 +30,8 @@ namespace NbSites.Web.PermissionChecks
             services.Configure<DynamicCheckOptions>(configuration.GetSection(DynamicCheckOptions.SectionName));
             services.AddTransient(sp => sp.GetService<IOptionsSnapshot<DynamicCheckOptions>>().Value); //ok => use "IOptionsSnapshot<>" instead of "IOptions<>" will auto load after changed
 
+            services.AddSingleton<IPermissionCheckLogHelper, PermissionCheckLogHelper>();
+
             //config based
             services.AddTransient<IAuthorizationHandler, ConfigBasedHandler>();
 
@@ -44,6 +46,13 @@ namespace NbSites.Web.PermissionChecks
 
         public static IApplicationBuilder UsePermissionChecks(this IApplicationBuilder appBuilder)
         {
+            PermissionCheckLogHelper.Resolve = () => appBuilder.ApplicationServices.GetRequiredService<IPermissionCheckLogHelper>();
+
+            using (var scope = appBuilder.ApplicationServices.CreateScope())
+            {
+                var permissionRuleActionPoolInitService = scope.ServiceProvider.GetRequiredService<IPermissionRuleActionPoolInitService>();
+                permissionRuleActionPoolInitService.Refresh();
+            }
             return appBuilder;
         }
     }
