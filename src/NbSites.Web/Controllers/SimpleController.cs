@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NbSites.Web.Demos;
+using NbSites.Web.PermissionChecks;
 
 namespace NbSites.Web.Controllers
 {
@@ -13,38 +13,51 @@ namespace NbSites.Web.Controllers
             return View("Empty");
         }
 
-        [DynamicCheckFeature(Id = KnownFeatureIds.GuestOp)]
+        [PermissionCheck(PermissionId = KnownPermissionIds.GuestOp)]
         public IActionResult GuestOp()
         {
             ViewBag.Message = "Enter GuestOp";
             return View("Empty");
         }
 
-        [DynamicCheckFeature(Id = KnownFeatureIds.LoginOp)]
+        [PermissionCheck(PermissionId = KnownPermissionIds.LoginOp)]
         public IActionResult LoginOp()
         {
             ViewBag.Message = "Enter LoginOp";
             return View("Empty");
         }
 
-        [DynamicCheckFeature(Id = KnownFeatureIds.VodOp)]
+        [PermissionCheck(PermissionId = KnownPermissionIds.VodOp)]
         public IActionResult VodOp()
         {
             ViewBag.Message = "Enter VodOp";
             return View("Empty");
         }
 
-        [DynamicCheckFeature(Id = KnownFeatureIds.LiveOp)]
+        [PermissionCheck(PermissionId = KnownPermissionIds.LiveOp)]
         public IActionResult LiveOp()
         {
             ViewBag.Message = "Enter LiveOp";
             return View("Empty");
         }
 
-        [DynamicCheckFeature(Id = KnownFeatureIds.PortalEntry)]
+        [PermissionCheck(PermissionId = KnownPermissionIds.PortalEntry)]
         public IActionResult PortalEntry()
         {
             ViewBag.Message = "Enter PortalEntry";
+            return View("Empty");
+        }
+
+
+        public IActionResult Unsure()
+        {
+            ViewBag.Message = "Enter Unsure";
+            return View("Empty");
+        }
+
+        public IActionResult Unsure2()
+        {
+            ViewBag.Message = "Enter Unsure2";
             return View("Empty");
         }
 

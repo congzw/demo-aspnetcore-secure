@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Authentication
-@using NbSites.Web.Demos
+@using NbSites.Web.PermissionChecks
 @inject IAuthenticationSchemeProvider AuthenticationSchemeProvider
-@inject CurrentUserContext UserContext
+@inject ICurrentUserContext UserContext
 @{
     var defaultScheme = await AuthenticationSchemeProvider.GetDefaultAuthenticateSchemeAsync();
     var schemes = await AuthenticationSchemeProvider.GetAllSchemesAsync();
@@ -9,9 +9,9 @@
 <p>User.Identity.IsAuthenticated: @User.Identity.IsAuthenticated</p>
 <p>User.Identity.Name: @User.Identity.Name</p>
 <h2>CurrentUserContext</h2>
-<p>IsLogin: @UserContext.IsLogin</p>
+<p>IsLogin: @UserContext.IsLogin()</p>
 <p>User: @UserContext.User</p>
-<p>Roles: @UserContext.RolesAsString</p>
+<p>Roles: @UserContext.Roles.MyJoin()</p>
 <p>Claims Types: @string.Join(',',UserContext.Claims.Select(x => x.Type))</p>
 <hr />
 @foreach (var scheme in schemes)

@@ -1,8 +1,10 @@
-﻿@using NbSites.Web.Demos
-@inject IDynamicCheckRuleRepository CheckFeatureRuleRepository
+﻿@using Common
+@using NbSites.Web.PermissionChecks
+@using NbSites.Web.PermissionChecks.RoleBased
+@inject IRoleBasedPermissionRuleRepository RuleRepository
 @{
     var checkResults = DynamicCheckDebugHelper.Instance.CheckRuleResults;
-    var checkFeatureRules = CheckFeatureRuleRepository.GetRules();
+    var checkFeatureRules = RuleRepository.GetRules();
 
     DynamicCheckDebugHelper.Instance.CheckRuleResults = new List<MessageResult>();
 }
@@ -28,7 +30,7 @@
                 var id = result.Data as string;
                 if (!string.IsNullOrWhiteSpace(id))
                 {
-                    if (id.Equals(item.CheckFeatureId, StringComparison.OrdinalIgnoreCase))
+                    if (id.Equals(item.PermissionId, StringComparison.OrdinalIgnoreCase))
                     {
                         //^_^ :(
 
@@ -39,7 +41,7 @@
                 }
             }
             <tr style="@style">
-                <td>@item.CheckFeatureId</td>
+                <td>@item.PermissionId</td>
                 <td>@item.AllowedUsers</td>
                 <td>@item.AllowedRoles</td>
                 <td>@success</td>

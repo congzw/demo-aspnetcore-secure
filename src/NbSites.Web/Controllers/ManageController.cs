@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NbSites.Web.Demos;
+using NbSites.Web.PermissionChecks;
 
 namespace NbSites.Web.Controllers
 {
-    [DynamicCheckFeature(Id = KnownFeatureIds.AdminOp)]
+    [PermissionCheck(PermissionId = KnownPermissionIds.AdminOp)]
     public class ManageController : Controller
     {
         [AllowAnonymous]
@@ -20,17 +20,17 @@ namespace NbSites.Web.Controllers
             return View("Empty");
         }
 
-        [DynamicCheckFeature(Id = KnownFeatureIds.SuperOp)]
+        [PermissionCheck(PermissionId = KnownPermissionIds.SuperOp)]
         public IActionResult SuperAndAdminOp()
         {
             ViewBag.Message = "Enter SuperAndAdminOp";
             return View("Empty");
         }
-        
-        [DynamicCheckFeature(Id = KnownFeatureIds.SuperOp, OverrideIds = KnownFeatureIds.AdminOp)]
+
+        [PermissionCheck(PermissionId = KnownPermissionIds.SuperOp, OverridePermissionIds = KnownPermissionIds.AdminOp)]
         public IActionResult SuperOp()
         {
-            ViewBag.Message = "Enter SuperOp";
+            ViewBag.Message = "Enter SuperOp(Override:AdminOp)";
             return View("Empty");
         }
     }

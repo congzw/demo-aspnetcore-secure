@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NbSites.Web.Demos;
+using NbSites.Web.PermissionChecks;
 
 namespace NbSites.Web
 {
@@ -34,32 +33,32 @@ namespace NbSites.Web
                         options.AccessDeniedPath = new PathString("/Account/Forbidden");
                     });
 
-            services.AddAuthorization(options =>
-            {
-                //添加声明策略，主动使用。
-                options.AddPolicy("RequireManageRole", policy => policy.RequireRole("Administrator"));
+            //services.AddAuthorization(options =>
+            //{
+            //    //添加声明策略，主动使用。
+            //    options.AddPolicy("RequireManageRole", policy => policy.RequireRole("Administrator"));
 
-                //var dynamicCheckPolicy = new AuthorizationPolicyBuilder()
-                //    .AddRequirements(new DynamicCheckFeatureRequirement())
-                //    .Build();
+            //    //var dynamicCheckPolicy = new AuthorizationPolicyBuilder()
+            //    //    .AddRequirements(new DynamicCheckFeatureRequirement())
+            //    //    .Build();
 
-                //var defaultPolicy = new AuthorizationPolicyBuilder()
-                //    .AddRequirements(new DynamicCheckFeatureRequirement())
-                //    .RequireAuthenticatedUser()
-                //    .Build();
+            //    //var defaultPolicy = new AuthorizationPolicyBuilder()
+            //    //    .AddRequirements(new DynamicCheckFeatureRequirement())
+            //    //    .RequireAuthenticatedUser()
+            //    //    .Build();
 
-                //options.DefaultPolicy = defaultPolicy;
-                //options.FallbackPolicy = dynamicCheckPolicy;
+            //    //options.DefaultPolicy = defaultPolicy;
+            //    //options.FallbackPolicy = dynamicCheckPolicy;
 
 
-                ////除非显示指定，否则全局都被安全控制（建议采用）
-                ////备用策略：有类似声明则不应用：[AllowAnonymous],[Authorize(PolicyName="MyPolicy")]
-                //options.FallbackPolicy = new AuthorizationPolicyBuilder()
-                //    .RequireAuthenticatedUser()
-                //    .Build();
-            });
+            //    ////除非显示指定，否则全局都被安全控制（建议采用）
+            //    ////备用策略：有类似声明则不应用：[AllowAnonymous],[Authorize(PolicyName="MyPolicy")]
+            //    //options.FallbackPolicy = new AuthorizationPolicyBuilder()
+            //    //    .RequireAuthenticatedUser()
+            //    //    .Build();
+            //});
 
-            services.AddDynamicCheckPolicy(Configuration);
+            services.AddPermissionChecks(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -76,6 +75,8 @@ namespace NbSites.Web
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UsePermissionChecks();
 
             app.UseEndpoints(endpoints =>
             {

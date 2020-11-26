@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{DFA58BA8-088
 		..\readme.md = ..\readme.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NbSites.Web.UnitTest", "NbSites.Web.UnitTest\NbSites.Web.UnitTest.csproj", "{7D9E15F5-A6D9-4D39-9D7C-F46DEF74A3B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{C7A566DD-356A-4371-B1E7-04A61313E926}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7A566DD-356A-4371-B1E7-04A61313E926}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7A566DD-356A-4371-B1E7-04A61313E926}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D9E15F5-A6D9-4D39-9D7C-F46DEF74A3B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D9E15F5-A6D9-4D39-9D7C-F46DEF74A3B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D9E15F5-A6D9-4D39-9D7C-F46DEF74A3B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D9E15F5-A6D9-4D39-9D7C-F46DEF74A3B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
