@@ -7,7 +7,7 @@
 
 关于AuthorizationHandler的判断逻辑，分为几类：
 
-- NoCare：不置可否，参考其他人的意见 => return
+- NotSure：不置可否，参考其他人的意见 => return
 - Allowed：我同意，如果其他人没有明确不同意的话 => Succeed()
 - Forbidden：我不同意，必须失败 => Fail()
 

@@ -14,19 +14,19 @@ namespace NbSites.Web.PermissionChecks
         }
 
         [TestMethod]
-        public void Combine_AllNoCare_Should_NoCare()
+        public void Combine_AllNotSure_Should_NotSure()
         {
             PermissionCheckResult.Combine(
-                PermissionCheckResult.NoCare, 
-                PermissionCheckResult.NoCare)
-                .LogJson().Category.ShouldEqual(PermissionCheckResultCategory.NoCare);
+                PermissionCheckResult.NotSure, 
+                PermissionCheckResult.NotSure)
+                .LogJson().Category.ShouldEqual(PermissionCheckResultCategory.NotSure);
         }
 
         [TestMethod]
         public void Combine_HasAllowed_Should_Allowed()
         {
             PermissionCheckResult.Combine(
-                    PermissionCheckResult.NoCare, 
+                    PermissionCheckResult.NotSure, 
                     PermissionCheckResult.Allowed)
                 .LogJson().Category.ShouldEqual(PermissionCheckResultCategory.Allowed);
         }
@@ -35,7 +35,7 @@ namespace NbSites.Web.PermissionChecks
         public void Combine_HasForbidden_Should_Forbidden()
         {
             PermissionCheckResult.Combine(
-                PermissionCheckResult.NoCare,
+                PermissionCheckResult.NotSure,
                 PermissionCheckResult.Allowed,
                 PermissionCheckResult.Forbidden)
                 .LogJson().Category.ShouldEqual(PermissionCheckResultCategory.Forbidden);

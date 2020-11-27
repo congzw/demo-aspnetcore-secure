@@ -19,14 +19,14 @@ namespace NbSites.Web.PermissionChecks.RoleBased
         }
 
         [TestMethod]
-        public void CheckRule_NoMatchPermissionId_Should_NoCare()
+        public void CheckRule_NoMatchPermissionId_Should_NoSure()
         {
             var logic = new RoleBasedCheckLogic();
             var checkContext = MockHelper.CreatePermissionCheckContext("A, B", "");
             var guestRule = RoleBasedPermissionRule.CreateGuestRule("MockPermission");
 
             var result = logic.Check(guestRule, checkContext);
-            result.LogJson().Category.ShouldEqual(PermissionCheckResultCategory.NoCare);
+            result.LogJson().Category.ShouldEqual(PermissionCheckResultCategory.NotSure);
         }
         
         [TestMethod]

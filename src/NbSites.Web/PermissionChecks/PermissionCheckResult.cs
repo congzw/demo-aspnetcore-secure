@@ -48,7 +48,7 @@ namespace NbSites.Web.PermissionChecks
         /// <summary>
         /// 不置可否
         /// </summary>
-        public static PermissionCheckResult NoCare => new PermissionCheckResult(PermissionCheckResultCategory.NoCare, "不关注");
+        public static PermissionCheckResult NotSure => new PermissionCheckResult(PermissionCheckResultCategory.NotSure, "不置可否");
 
         /// <summary>
         /// 合并多个结果
@@ -68,9 +68,9 @@ namespace NbSites.Web.PermissionChecks
             }
 
             var combineMessage = CombineMessage(checkResults);
-            if (checkResults.All(x => x.Category == PermissionCheckResultCategory.NoCare))
+            if (checkResults.All(x => x.Category == PermissionCheckResultCategory.NotSure))
             {
-                return NoCare.WithMessage(combineMessage).WithData(checkResults);
+                return NotSure.WithMessage(combineMessage).WithData(checkResults);
             }
 
             if (checkResults.Any(x => x.Category == PermissionCheckResultCategory.Forbidden))
@@ -103,9 +103,9 @@ namespace NbSites.Web.PermissionChecks
     public enum PermissionCheckResultCategory
     {
         /// <summary>
-        /// 我不关注，我不懂
+        /// 不置可否
         /// </summary>
-        NoCare = 0,
+        NotSure = 0,
         /// <summary>
         /// 我同意
         /// </summary>

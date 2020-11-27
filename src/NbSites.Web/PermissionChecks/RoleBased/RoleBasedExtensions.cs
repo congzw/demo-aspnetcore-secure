@@ -9,7 +9,7 @@ namespace NbSites.Web.PermissionChecks.RoleBased
         {
             if (rules == null)
             {
-                return new List<PermissionCheckResult>(){ PermissionCheckResult.NoCare };
+                return new List<PermissionCheckResult>(){ PermissionCheckResult.NotSure };
             }
 
             var checkResults = rules.Select(x => logic.Check(x, checkContext)).ToList();

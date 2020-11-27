@@ -42,7 +42,7 @@ namespace NbSites.Web.PermissionChecks.ResourceBased
             }
 
             //return Task.FromResult(PermissionCheckResult.Forbidden.WithMessage($"{userContext.User}删除777的权限 => Forbidden")); //其他LogicHandler允许也没用
-            return Task.FromResult(PermissionCheckResult.NoCare.WithMessage($"{userContext.User}删除777的权限 => NoCare")); //不置可否，由其他LogicHandler决定
+            return Task.FromResult(PermissionCheckResult.NotSure.WithMessage($"{userContext.User}删除777的权限 => NotSure")); //不置可否，由其他LogicHandler决定
         }
     }
 }

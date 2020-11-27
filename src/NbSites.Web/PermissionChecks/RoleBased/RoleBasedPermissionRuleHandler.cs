@@ -84,6 +84,7 @@ namespace NbSites.Web.PermissionChecks.RoleBased
 
             if (checkResult.Category == PermissionCheckResultCategory.Allowed)
             {
+                //RBAC成功后，才有机会执行其他的复杂逻辑
                 //验证逻辑的扩展点
                 var checkLogicProviders = httpContext
                     .RequestServices
@@ -103,7 +104,7 @@ namespace NbSites.Web.PermissionChecks.RoleBased
                         }
                         else
                         {
-                            moreCheckResults.Add(PermissionCheckResult.NoCare);
+                            moreCheckResults.Add(PermissionCheckResult.NotSure);
                         }
                     }
                     var permissionCheckResult = moreCheckResults.Combine();

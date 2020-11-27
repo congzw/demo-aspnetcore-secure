@@ -23,7 +23,7 @@
 
             if (!checkContext.MatchPermissionId(rule.PermissionId))
             {
-                return PermissionCheckResult.NoCare
+                return PermissionCheckResult.NotSure
                     .WithMessage($"规则不匹配 => 无法判断: {rule.PermissionId} ? [{string.Join(',', checkContext.CheckPermissionIds)}]")
                     .WithData(rule.PermissionId);
             }
