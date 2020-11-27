@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.Extensions.Logging;
 
 namespace NbSites.Web.PermissionChecks.RoleBased
 {
@@ -13,16 +14,22 @@ namespace NbSites.Web.PermissionChecks.RoleBased
         private readonly ICurrentUserContext _currentUserContext;
         private readonly IPermissionRuleActionPool _ruleActionPool;
         private readonly IRoleBasedPermissionRuleLogic _roleBasedPermissionRuleLogic;
+        private readonly ILogger<RoleBasedPermissionRuleHandler> _logger;
+        private readonly IPermissionCheckDebugHelper _debugHelper;
 
         public RoleBasedPermissionRuleHandler(IHttpContextAccessor httpContextAccessor, 
             ICurrentUserContext currentUserContext,
             IPermissionRuleActionPool ruleActionPool, 
-            IRoleBasedPermissionRuleLogic roleBasedPermissionRuleLogic)
+            IRoleBasedPermissionRuleLogic roleBasedPermissionRuleLogic,
+            ILogger<RoleBasedPermissionRuleHandler> logger,
+            IPermissionCheckDebugHelper debugHelper)
         {
             _httpContextAccessor = httpContextAccessor;
             _currentUserContext = currentUserContext;
             _ruleActionPool = ruleActionPool;
             _roleBasedPermissionRuleLogic = roleBasedPermissionRuleLogic;
+            _logger = logger;
+            _debugHelper = debugHelper;
         }
 
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionCheckRequirement requirement)
@@ -35,8 +42,7 @@ namespace NbSites.Web.PermissionChecks.RoleBased
                 return;
             }
 
-            var logHelper = PermissionCheckLogHelper.Resolve();
-            logHelper.LogInformation(actionDescriptor.DisplayName);
+            _logger.LogInformation(actionDescriptor.DisplayName);
 
             var actionId = actionDescriptor.DisplayName.Split().FirstOrDefault();
             var permissionIds = _ruleActionPool.TryGetPermissionIdsByActionId(actionId);
@@ -49,22 +55,28 @@ namespace NbSites.Web.PermissionChecks.RoleBased
             var permissionCheckContext = CreatePermissionCheckContext(context, httpContext, actionDescriptor, permissionIds);
             var permissionRules = _ruleActionPool.TryGetRoleBasedPermissionRules(permissionIds.ToArray());
             var checkResults = _roleBasedPermissionRuleLogic.CheckRules(permissionRules, permissionCheckContext);
-
+           _debugHelper.SetPermissionCheckResults(checkResults.ToArray());
+            
             foreach (var permissionCheckResult in checkResults)
             {
-                logHelper.LogInformation(permissionCheckResult.Message);
+                _logger.LogInformation(permissionCheckResult.Message);
             }
 
             var checkResult = checkResults.Combine();
+            if (checkResults.Count > 1)
+            {
+                _logger.LogInformation(checkResult.Message);
+            }
+
             if (checkResult.Category == PermissionCheckResultCategory.Allowed)
             {
                 context.Succeed(requirement);
             }
 
-            if (checkResult.Category == PermissionCheckResultCategory.Forbidden)
-            {
-                context.Fail();
-            }
+            //if (checkResult.Category == PermissionCheckResultCategory.Forbidden)
+            //{
+            //    context.Fail();
+            //}
         }
 
         private PermissionCheckContext CreatePermissionCheckContext(AuthorizationHandlerContext context, 

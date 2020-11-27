@@ -23,6 +23,7 @@ namespace NbSites.Web.PermissionChecks.RoleBased
             Rules.AddOrUpdate(permissionId: KnownPermissionIds.LoginOp, allowedUsers: "", allowedRoles: "*");
             Rules.AddOrUpdate(permissionId: KnownPermissionIds.AdminOp, allowedUsers: "", allowedRoles: "Admin,Super");
             Rules.AddOrUpdate(permissionId: KnownPermissionIds.SuperOp, allowedUsers: "", allowedRoles: "Super");
+            Rules.AddOrUpdate(permissionId: KnownPermissionIds.LeaderOp, allowedUsers: "", allowedRoles: "Leader");
 
             Rules.AddOrUpdate(permissionId: KnownPermissionIds.VodOp, allowedUsers: "", allowedRoles: "*");
             Rules.AddOrUpdate(permissionId: KnownPermissionIds.LiveOp, allowedUsers: "*", allowedRoles: "*");

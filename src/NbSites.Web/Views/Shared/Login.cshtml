@@ -1,9 +1,15 @@
 ﻿<div>
-    <span>Click to --> </span><a asp-controller="Account" asp-action="AutoLogin" asp-route-role="">Auto Login As Simple User</a>
-</div>
-<div>
-    <span>Click to --> </span><a asp-controller="Account" asp-action="AutoLogin" asp-route-role="Leader">Auto Login As Leader</a>
+    <span>Click to --> </span><a asp-controller="Account" asp-action="AutoLogin" asp-route-role="">Auto Login As No Role</a>
 </div>
 <div>
     <span>Click to --> </span><a asp-controller="Account" asp-action="AutoLogin" asp-route-role="Admin">Auto Login As Admin</a>
+</div>
+<div>
+    <span>Click to --> </span><a asp-controller="Account" asp-action="AutoLogin" asp-route-role="Super">Auto Login As Super</a>
+</div>
+<div>
+    <span>Click to --> </span><a asp-controller="Account" asp-action="AutoLogin" asp-route-role="Admin,Super">Auto Login As Admin,Super</a>
+</div>
+<div>
+    <span>Click to --> </span><a asp-controller="Account" asp-action="AutoLogin" asp-route-role="Leader">Auto Login As Leader</a>
 </div>

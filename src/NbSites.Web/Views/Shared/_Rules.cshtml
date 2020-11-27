@@ -1,23 +1,22 @@
-﻿@using Common
-@using NbSites.Web.PermissionChecks
+﻿@using NbSites.Web.PermissionChecks
 @using NbSites.Web.PermissionChecks.RoleBased
 @inject IRoleBasedPermissionRuleRepository RuleRepository
+@inject IPermissionCheckDebugHelper DebugHelper
 @{
-    var checkResults = DynamicCheckDebugHelper.Instance.CheckRuleResults;
+    var checkResults = DebugHelper.GetPermissionCheckResults();
     var checkFeatureRules = RuleRepository.GetRules();
-
-    DynamicCheckDebugHelper.Instance.CheckRuleResults = new List<MessageResult>();
 }
 <div class="row">
+    <p>@checkResults.Combine().Message</p>
     <table class="table-striped table-bordered">
         <thead>
-            <tr>
-                <td>CheckFeatureId</td>
-                <td>AllowedUsers</td>
-                <td>AllowedRoles</td>
-                <td>Success?</td>
-                <td>Tip</td>
-            </tr>
+        <tr>
+            <td>CheckFeatureId</td>
+            <td>AllowedUsers</td>
+            <td>AllowedRoles</td>
+            <td>?Allowed?</td>
+            <td>Tip</td>
+        </tr>
         </thead>
         @foreach (var rule in checkFeatureRules)
         {
@@ -27,15 +26,15 @@
             var item = rule.Value;
             @foreach (var result in checkResults)
             {
-                var id = result.Data as string;
-                if (!string.IsNullOrWhiteSpace(id))
+                if (result.Data is RoleBasedPermissionRule theRule)
                 {
-                    if (id.Equals(item.PermissionId, StringComparison.OrdinalIgnoreCase))
+                    var permissionId = theRule.PermissionId;
+                    if (permissionId.Equals(item.PermissionId, StringComparison.OrdinalIgnoreCase))
                     {
                         //^_^ :(
-
-                        style = result.Success ? "color: green" : "color: red";
-                        success = result.Success ? "^_^" : ":(";
+                        var forbidden = result.Category == PermissionCheckResultCategory.Forbidden;
+                        style = forbidden ? "color: red" : "color: green";
+                        success = forbidden ? ":(" : ":)";
                         tip = result.Message;
                     }
                 }

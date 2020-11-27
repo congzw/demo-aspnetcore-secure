@@ -1,13 +1,59 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Common;
 
 // ReSharper disable once CheckNamespace
 namespace NbSites.Web.PermissionChecks
 {
-    public class DynamicCheckDebugHelper
+    public interface IPermissionCheckDebugHelper
     {
-        public List<MessageResult> CheckRuleResults { get; set; } = new List<MessageResult>();
+        Func<bool> Enabled { get; set; }
+        void SetPermissionCheckResults(params PermissionCheckResult[] results);
+        IList<PermissionCheckResult> GetPermissionCheckResults(bool autoReset = true);
+    }
 
-        public static DynamicCheckDebugHelper Instance = new DynamicCheckDebugHelper();
+    public class PermissionCheckDebugHelper : IPermissionCheckDebugHelper
+    {
+        private IList<PermissionCheckResult> Results { get; set; } = new List<PermissionCheckResult>();
+        
+        public Func<bool> Enabled { get; set; } = () => false;
+
+        public void SetPermissionCheckResults(params PermissionCheckResult[] results)
+        {
+            if (!Enabled())
+            {
+                return;
+            }
+
+            if (results == null || results.Length == 0)
+            {
+                return;
+            }
+
+            foreach (var result in results)
+            {
+                Results.Add(result);
+            }
+        }
+
+        public IList<PermissionCheckResult> GetPermissionCheckResults(bool autoReset = true)
+        {
+            if (!Enabled())
+            {
+                return Results;
+            }
+
+            var copyResults = new List<PermissionCheckResult>();
+            foreach (var result in Results)
+            {
+                copyResults.Add(result);
+            }
+
+            if (autoReset)
+            {
+                Results.Clear();
+            }
+            return copyResults;
+        }
     }
 }

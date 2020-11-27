@@ -9,6 +9,7 @@
         public const string SuperOp = "SuperOp";
         public const string LoginOp = "LoginOp";
         public const string GuestOp = "GuestOp";
+        public const string LeaderOp = "LeaderOp";
         public const string VodOp = "VodOp";
         public const string LiveOp = "LiveOp";
         public const string DemoOp = "DemoOp";

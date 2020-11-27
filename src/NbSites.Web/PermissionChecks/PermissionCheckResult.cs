@@ -73,6 +73,11 @@ namespace NbSites.Web.PermissionChecks
                 return NoCare.WithMessage(combineMessage).WithData(checkResults);
             }
 
+            if (checkResults.Any(x => x.Category == PermissionCheckResultCategory.Forbidden))
+            {
+                return Forbidden.WithMessage(combineMessage).WithData(checkResults);
+            }
+
             if (checkResults.Any(x => x.Category == PermissionCheckResultCategory.Allowed))
             {
                 return Allowed.WithMessage(combineMessage).WithData(checkResults);

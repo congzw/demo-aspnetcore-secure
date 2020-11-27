@@ -21,16 +21,23 @@ namespace NbSites.Web.Controllers
         }
 
         [PermissionCheck(PermissionId = KnownPermissionIds.SuperOp)]
-        public IActionResult SuperAndAdminOp()
+        public IActionResult SuperOp()
         {
             ViewBag.Message = "Enter SuperAndAdminOp";
             return View("Empty");
         }
 
-        [PermissionCheck(PermissionId = KnownPermissionIds.SuperOp, OverridePermissionIds = KnownPermissionIds.AdminOp)]
-        public IActionResult SuperOp()
+        [PermissionCheck(PermissionId = KnownPermissionIds.LeaderOp)]
+        public IActionResult LeaderOp()
         {
-            ViewBag.Message = "Enter SuperOp(Override:AdminOp)";
+            ViewBag.Message = "Enter LeaderOp";
+            return View("Empty");
+        }
+
+        [PermissionCheck(PermissionId = KnownPermissionIds.LeaderOp, OverridePermissionIds = KnownPermissionIds.AdminOp)]
+        public IActionResult LeaderOpOverrideAdminOp()
+        {
+            ViewBag.Message = "Enter LeaderOpOverrideAdminOp";
             return View("Empty");
         }
     }

@@ -35,7 +35,8 @@ namespace NbSites.Web.PermissionChecks
         public void Combine_HasForbidden_Should_Forbidden()
         {
             PermissionCheckResult.Combine(
-                PermissionCheckResult.NoCare, 
+                PermissionCheckResult.NoCare,
+                PermissionCheckResult.Allowed,
                 PermissionCheckResult.Forbidden)
                 .LogJson().Category.ShouldEqual(PermissionCheckResultCategory.Forbidden);
         }

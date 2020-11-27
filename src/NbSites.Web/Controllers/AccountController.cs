@@ -40,7 +40,11 @@ namespace NbSites.Web.Controllers
 
             if (!string.IsNullOrWhiteSpace(role))
             {
-                claims.Add(new Claim(ClaimTypes.Role, role, ClaimValueTypes.String, issuer));
+                var roleItems = role.MySplit();
+                foreach (var roleItem in roleItems)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, roleItem, ClaimValueTypes.String, issuer));
+                }
             }
 
             var userIdentity = new ClaimsIdentity("SuperSecureLogin");
