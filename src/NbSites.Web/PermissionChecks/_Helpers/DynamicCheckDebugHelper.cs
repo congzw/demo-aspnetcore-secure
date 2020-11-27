@@ -8,7 +8,7 @@ namespace NbSites.Web.PermissionChecks
     public interface IPermissionCheckDebugHelper
     {
         Func<bool> Enabled { get; set; }
-        void SetPermissionCheckResults(params PermissionCheckResult[] results);
+        void AppendPermissionCheckResults(params PermissionCheckResult[] results);
         IList<PermissionCheckResult> GetPermissionCheckResults(bool autoReset = true);
     }
 
@@ -18,7 +18,7 @@ namespace NbSites.Web.PermissionChecks
         
         public Func<bool> Enabled { get; set; } = () => false;
 
-        public void SetPermissionCheckResults(params PermissionCheckResult[] results)
+        public void AppendPermissionCheckResults(params PermissionCheckResult[] results)
         {
             if (!Enabled())
             {

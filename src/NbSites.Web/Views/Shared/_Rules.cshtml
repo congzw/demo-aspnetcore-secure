@@ -6,17 +6,17 @@
     var checkResults = DebugHelper.GetPermissionCheckResults();
     var checkFeatureRules = RuleRepository.GetRules();
     var permissionCheckResult = checkResults.Combine();
-    var detailsResults = permissionCheckResult.Data as IList<PermissionCheckResult>;
+    var detailsPermissionIds = permissionCheckResult.Data as IList<string>;
 }
 <div class="row">
     <p>@permissionCheckResult.Message</p>
     @{
-        if (detailsResults != null)
+        if (checkResults.Count > 1)
         {
             <ul>
-                @foreach (var detailsResult in detailsResults)
+                @foreach (var checkResult in checkResults)
                 {
-                    <li>@detailsResult.Message</li>
+                    <li>@checkResult.Message</li>
                 }
             </ul>
         }
@@ -39,9 +39,8 @@
             var item = rule.Value;
             @foreach (var result in checkResults)
             {
-                if (result.Data is RoleBasedPermissionRule theRule)
+                if (result.Data is string permissionId)
                 {
-                    var permissionId = theRule.PermissionId;
                     if (permissionId.Equals(item.PermissionId, StringComparison.OrdinalIgnoreCase))
                     {
                         //^_^ :(

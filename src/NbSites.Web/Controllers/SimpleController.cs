@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NbSites.Web.PermissionChecks;
+using NbSites.Web.PermissionChecks.ResourceBased;
 
 namespace NbSites.Web.Controllers
 {
@@ -47,8 +51,7 @@ namespace NbSites.Web.Controllers
             ViewBag.Message = "Enter PortalEntry";
             return View("Empty");
         }
-
-
+        
         public IActionResult Unsure()
         {
             ViewBag.Message = "Enter Unsure";
@@ -61,16 +64,44 @@ namespace NbSites.Web.Controllers
             return View("Empty");
         }
 
-        public IActionResult SpecialAction([FromQuery] SpecialActionArgs args)
+
+        [PermissionCheck(PermissionId = KnownPermissionIds.DemoOp)]
+        public IActionResult DemoOp()
         {
-            ViewBag.Message = "Enter SpecialAction";
+            ViewBag.Message = "Enter DemoOp";
             return View("Empty");
         }
 
-        public class SpecialActionArgs
+        [PermissionCheck(PermissionId = KnownPermissionIds.DemoOp2)]
+        public IActionResult DemoOp2([FromQuery] DemoOpArgs args)
         {
-            public string OrgId { get; set; }
-            public string Whatever { get; set; }
+            ViewBag.Message = "Enter DemoOp2";
+            return View("Empty");
+        }
+
+        [PermissionCheck(PermissionId = KnownPermissionIds.DemoOp3)]
+        public async Task<IActionResult> DemoOp3([FromServices] IAuthorizationService authorizationService, string orgId = null)
+        {
+            //todo: read from database 
+            var theOrg = new Org();
+            theOrg.OrgId = orgId;
+            theOrg.OrtName = "ABC";
+
+            var authorizationResult = await authorizationService
+                .AuthorizeAsync(User, theOrg, Operations.Delete);
+            
+            if (authorizationResult.Succeeded)
+            {
+                ViewBag.Message = "Enter DemoOp3, Allowed Delete Org: " + theOrg.OrgId;
+                return View("Empty");
+            }
+
+            if (User.Identity.IsAuthenticated)
+            {
+                return new ForbidResult();
+            }
+
+            return new ChallengeResult();
         }
     }
 }

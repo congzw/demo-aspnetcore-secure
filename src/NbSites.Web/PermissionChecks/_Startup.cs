@@ -1,10 +1,13 @@
 ﻿using System;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using NbSites.Web.PermissionChecks.ClaimBased;
 using NbSites.Web.PermissionChecks.ConfigBased;
+using NbSites.Web.PermissionChecks.ResourceBased;
 using NbSites.Web.PermissionChecks.RoleBased;
 
 namespace NbSites.Web.PermissionChecks
@@ -21,7 +24,13 @@ namespace NbSites.Web.PermissionChecks
                 
                 options.DefaultPolicy = dynamicCheckPolicy;
                 options.FallbackPolicy = dynamicCheckPolicy;
+
+                //options.AddPolicy("ResourceBasedPolicy", policy =>
+                //    policy.Requirements.Add(new OperationAuthorizationRequirement()));
             });
+
+
+
             services.AddHttpContextAccessor();
 
             services.AddScoped<ICurrentUserContextProvider, CurrentUserContextProvider>();
@@ -40,8 +49,16 @@ namespace NbSites.Web.PermissionChecks
             services.AddScoped<IPermissionRuleActionPoolInitService, PermissionRuleActionPoolInitService>();
             services.AddScoped<IPermissionRuleActionProvider, PermissionRuleActionProvider>();
             services.AddScoped<IAuthorizationHandler, RoleBasedPermissionRuleHandler>();
+            services.AddScoped<IAuthorizationHandler, ResourceBasedPermissionCheckHandler>();
             services.AddTransient<IRoleBasedCheckLogic, RoleBasedCheckLogic>();
             services.AddSingleton<IRoleBasedPermissionRuleRepository, RoleBasedPermissionRuleRepository>(); //todo: replace with real scope impl
+
+            //claims based
+            services.AddScoped<IPermissionCheckLogicProvider, DemoOpCheckLogicProvider>();
+            services.AddScoped<IPermissionCheckLogicProvider, DemoOp2CheckLogicProvider>();
+
+            //resource based
+            services.AddScoped<IResourceBasedCheckLogicProvider, DemoOp3CheckLogicProvider>();
         }
 
         public static IApplicationBuilder UsePermissionChecks(this IApplicationBuilder appBuilder)

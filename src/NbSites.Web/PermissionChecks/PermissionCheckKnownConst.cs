@@ -12,14 +12,15 @@
         public const string LeaderOp = "LeaderOp";
         public const string VodOp = "VodOp";
         public const string LiveOp = "LiveOp";
-        public const string DemoOp = "DemoOp";
         public const string UnsureActionA = "UnsureActionA";
+        public const string DemoOp = "DemoOp";
+        public const string DemoOp2 = "DemoOp2";
+        public const string DemoOp3 = "DemoOp3";
     }
 
     public class KnownActionIds
     {
         public const string UnsureActionId = "NbSites.Web.Controllers.SimpleController.Unsure";
         public const string UnsureActionId2 = "NbSites.Web.Controllers.SimpleController.Unsure2";
-        public const string SpecialAction = "NbSites.Web.Controllers.SimpleController.SpecialAction";
     }
 }

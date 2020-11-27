@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -64,11 +65,11 @@ namespace NbSites.Web.PermissionChecks.RoleBased
                     permissionIds.Add(KnownPermissionIds.LoginOp);
                 }
             }
-            
-            var permissionCheckContext = CreatePermissionCheckContext(context, httpContext, actionDescriptor, permissionIds);
+
+            var permissionCheckContext = CreatePermissionCheckContext(context, httpContext, actionDescriptor, permissionIds, requirement);
             var permissionRules = _ruleActionPool.TryGetRoleBasedPermissionRules(permissionIds.ToArray());
             var checkResults = _roleBasedPermissionRuleLogic.CheckRules(permissionRules, permissionCheckContext);
-           _debugHelper.SetPermissionCheckResults(checkResults.ToArray());
+           _debugHelper.AppendPermissionCheckResults(checkResults.ToArray());
             
             foreach (var permissionCheckResult in checkResults)
             {
@@ -83,6 +84,35 @@ namespace NbSites.Web.PermissionChecks.RoleBased
 
             if (checkResult.Category == PermissionCheckResultCategory.Allowed)
             {
+                //验证逻辑的扩展点
+                var checkLogicProviders = httpContext
+                    .RequestServices
+                    .GetServices<IPermissionCheckLogicProvider>()
+                    .OrderBy(x => x.Order)
+                    .ToList();
+
+                if (checkLogicProviders.Count > 0)
+                {
+                    var moreCheckResults = new List<PermissionCheckResult>();
+                    foreach (var logicProvider in checkLogicProviders)
+                    {
+                        if (logicProvider.ShouldCare(_currentUserContext, permissionCheckContext))
+                        {
+                            var moreCheckResult = await logicProvider.CheckPermissionAsync(_currentUserContext, permissionCheckContext);
+                            moreCheckResults.Add(moreCheckResult);
+                        }
+                        else
+                        {
+                            moreCheckResults.Add(PermissionCheckResult.NoCare);
+                        }
+                    }
+                    var permissionCheckResult = moreCheckResults.Combine();
+                    if (permissionCheckResult.Category == PermissionCheckResultCategory.Forbidden)
+                    {
+                        return;
+                    }
+                }
+                
                 context.Succeed(requirement);
             }
         }
@@ -90,9 +120,10 @@ namespace NbSites.Web.PermissionChecks.RoleBased
         private PermissionCheckContext CreatePermissionCheckContext(AuthorizationHandlerContext context, 
             HttpContext httpContext, 
             ActionDescriptor actionDescriptor, 
-            IEnumerable<string> permissionIds)
+            IEnumerable<string> permissionIds,
+            PermissionCheckRequirement requirement)
         {
-            var permissionCheckContext = new PermissionCheckContext(actionDescriptor, httpContext, _currentUserContext);
+            var permissionCheckContext = new PermissionCheckContext(actionDescriptor, httpContext, _currentUserContext, requirement);
             permissionCheckContext.AddCheckPermissionIds(permissionIds?.ToArray());
             return permissionCheckContext;
         }

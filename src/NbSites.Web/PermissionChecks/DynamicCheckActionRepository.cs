@@ -14,7 +14,6 @@ namespace NbSites.Web.PermissionChecks
         {
             Actions.Add(DynamicCheckAction.Create(KnownActionIds.UnsureActionId, KnownPermissionIds.UnsureActionA, "某个迟决定的Action"));
             Actions.Add(DynamicCheckAction.Create(KnownActionIds.UnsureActionId2, KnownPermissionIds.UnsureActionA, "某个迟决定的Action2"));
-            Actions.Add(DynamicCheckAction.Create(KnownActionIds.SpecialAction, KnownPermissionIds.DemoOp, "演示用的Action"));
         }
 
         public IList<DynamicCheckAction> Actions { get; set; } = new List<DynamicCheckAction>();

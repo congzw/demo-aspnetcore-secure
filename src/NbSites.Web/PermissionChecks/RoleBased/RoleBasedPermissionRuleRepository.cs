@@ -30,6 +30,8 @@ namespace NbSites.Web.PermissionChecks.RoleBased
 
             Rules.AddOrUpdate(permissionId: KnownPermissionIds.UnsureActionA, allowedUsers: "", allowedRoles: "*");
             Rules.AddOrUpdate(permissionId: KnownPermissionIds.DemoOp, allowedUsers: "", allowedRoles: "Admin,Super");
+            Rules.AddOrUpdate(permissionId: KnownPermissionIds.DemoOp2, allowedUsers: "", allowedRoles: "Admin,Super");
+            Rules.AddOrUpdate(permissionId: KnownPermissionIds.DemoOp3, allowedUsers: "", allowedRoles: "Admin,Super");
         }
 
         public IDictionary<string, RoleBasedPermissionRule> GetRules()

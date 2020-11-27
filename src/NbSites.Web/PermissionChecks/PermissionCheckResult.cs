@@ -46,7 +46,7 @@ namespace NbSites.Web.PermissionChecks
         public static PermissionCheckResult Forbidden => new PermissionCheckResult(PermissionCheckResultCategory.Forbidden, "不允许");
 
         /// <summary>
-        /// 我不关注，我不懂
+        /// 不置可否
         /// </summary>
         public static PermissionCheckResult NoCare => new PermissionCheckResult(PermissionCheckResultCategory.NoCare, "不关注");
 

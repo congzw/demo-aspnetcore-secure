@@ -27,13 +27,13 @@ namespace NbSites.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
         
-        public async Task<IActionResult> AutoLogin(string returnUrl = null, string role = null)
+        public async Task<IActionResult> AutoLogin(string returnUrl = null, string role = null, string permission = null)
         {
             const string issuer = "https://mysites.com";
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, "bob", ClaimValueTypes.String, issuer),
-                new Claim("EmployeeId", "123", ClaimValueTypes.String, issuer),
+                new Claim("OrgId", "123", ClaimValueTypes.String, issuer),
                 new Claim(ClaimTypes.DateOfBirth, "1970-06-08", ClaimValueTypes.Date),
                 new Claim("BadgeNumber", "123456", ClaimValueTypes.String, issuer)
             };
@@ -47,7 +47,17 @@ namespace NbSites.Web.Controllers
                 }
             }
 
-            var userIdentity = new ClaimsIdentity("SuperSecureLogin");
+
+            if (!string.IsNullOrWhiteSpace(permission))
+            {
+                var theItems = permission.MySplit();
+                foreach (var theItem in theItems)
+                {
+                    claims.Add(new Claim("Permission", theItem, ClaimValueTypes.String, issuer));
+                }
+            }
+
+            var userIdentity = new ClaimsIdentity("ForDemoLoginIdentity");
             userIdentity.AddClaims(claims);
             var userPrincipal = new ClaimsPrincipal(userIdentity);
 

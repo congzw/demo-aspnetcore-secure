@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 
@@ -7,13 +8,15 @@ namespace NbSites.Web.PermissionChecks
 {
     public class PermissionCheckContext
     {
-        public PermissionCheckContext(ActionDescriptor actionDescriptor, HttpContext httpContext, ICurrentUserContext currentUserContext)
+        public PermissionCheckContext(ActionDescriptor actionDescriptor, HttpContext httpContext, ICurrentUserContext currentUserContext, IAuthorizationRequirement requirement)
         {
             ActionDescriptor = actionDescriptor;
             HttpContext = httpContext;
             CurrentUserContext = currentUserContext;
+            Requirement = requirement;
         }
 
+        public IAuthorizationRequirement Requirement { get; set; }
         public ActionDescriptor ActionDescriptor { get; set; }
         public HttpContext HttpContext { get; set; }
         public ICurrentUserContext CurrentUserContext { get; set; }
