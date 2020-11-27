@@ -146,5 +146,13 @@ namespace Common
         {
             return string.Format("<{0},{1}>", obj.GetType().Name, obj.GetHashCode());
         }
+
+        public static T ShouldEqual<T>(this T value, T expectedValue)
+        {
+            string message = string.Format("Should {0} equals {1}", value, expectedValue);
+            Assert.AreEqual(expectedValue, value, message.WithKoPrefix());
+            AssertHelper.WriteLineOk(message);
+            return value;
+        }
     }
 }

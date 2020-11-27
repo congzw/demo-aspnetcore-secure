@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace NbSites.Web.PermissionChecks
 {
@@ -10,19 +12,33 @@ namespace NbSites.Web.PermissionChecks
             Message = message;
         }
 
+        /// <summary>
+        /// 授权结果的分类
+        /// </summary>
         public PermissionCheckResultCategory Category { get; set; }
+        /// <summary>
+        /// 授权结果的消息
+        /// </summary>
         public string Message { get; set; }
-
+        /// <summary>
+        /// 授权结果的附加数据
+        /// </summary>
+        public object Data { get; set; }
         public PermissionCheckResult WithMessage(string message)
         {
             Message = message;
+            return this;
+        }
+        public PermissionCheckResult WithData(object data)
+        {
+            Data = data;
             return this;
         }
 
         /// <summary>
         /// 我同意
         /// </summary>
-        public static PermissionCheckResult Allowed => new PermissionCheckResult(PermissionCheckResultCategory.Allowed, "运行");
+        public static PermissionCheckResult Allowed => new PermissionCheckResult(PermissionCheckResultCategory.Allowed, "允许");
 
         /// <summary>
         /// 我不同意
@@ -43,28 +59,42 @@ namespace NbSites.Web.PermissionChecks
         {
             if (permissionCheckResults == null)
             {
-                return PermissionCheckResult.NoCare;
+                return NoCare;
             }
             var checkResults = permissionCheckResults.ToList();
             if (checkResults.Count == 0)
             {
-                return PermissionCheckResult.NoCare;
+                return NoCare;
             }
-            
+
+            var combineMessage = CombineMessage(checkResults);
             if (checkResults.All(x => x.Category == PermissionCheckResultCategory.NoCare))
             {
-                return NoCare.WithMessage(checkResults.Select(x => x.Message).MyJoin());
+                return NoCare.WithMessage(combineMessage).WithData(checkResults);
             }
 
             if (checkResults.Any(x => x.Category == PermissionCheckResultCategory.Allowed))
             {
-                return Allowed.WithMessage(checkResults.Select(x => x.Message).MyJoin());
+                return Allowed.WithMessage(combineMessage).WithData(checkResults);
             }
             
-            return Forbidden.WithMessage(checkResults.Select(x => x.Message).MyJoin());
+            return Forbidden.WithMessage(combineMessage).WithData(checkResults);
+        }
+
+        private static string CombineMessage(IList<PermissionCheckResult> permissionCheckResults)
+        {
+            if (permissionCheckResults == null || permissionCheckResults.Count == 0)
+            {
+                return "不关注";
+            }
+            var resultGroups = permissionCheckResults.GroupBy(x => x.Category).ToList();
+            return resultGroups.Select(x => $"{x.Key}:{x.Count()}").MyJoin();
         }
     }
 
+    /// <summary>
+    /// 授权结果的分类
+    /// </summary>
     public enum PermissionCheckResultCategory
     {
         /// <summary>
