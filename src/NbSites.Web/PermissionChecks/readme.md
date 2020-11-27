@@ -1,14 +1,43 @@
 ﻿# 权限控制的设计思路
 
+## 权限判断逻辑
+
+支持多个权限控制单元共同进行权限检查。
+注册的多个AuthorizationHandler都会被执行到。
+
+关于AuthorizationHandler的判断逻辑，分为几类：
+
+- NoCare：不置可否，参考其他人的意见 => return
+- Allowed：我同意，如果其他人没有明确不同意的话 => Succeed()
+- Forbidden：我不同意，必须失败 => Fail()
+
+## 权限控制的分类
+
 按照控制的精细化粒度，分为三种。各自逻辑独立，可以按需集成
 
-- 基于用户角色
+- 基于用户角色（RBAC）
 - 基于声明
 - 基于资源
 
+### 基于RBAC
 
-权限检测的提供者（Provider），校验结果分为三种
+用户、角色二者是或关系, 它们的值都可以是用','间隔表达多个，也是或关系
+""		=>	NONE 
+"*"		=>	ANY
+"A,B"	=>	A或B
 
-- NoCare： 不关心
-- Allowed： 我同意
-- Forbidden ： 我不同意
+规则对应的PermissionId,		允许的用户,		允许的角色
+PermissionId,				AllowedUsers,	AllowedRoles
+---------------------------------------------------------
+GuestOp						*				*
+LoginOp										*
+LoginOp						*				
+UsersOrRolesOp				bob,alice		Admin,Super		
+
+
+### 基于声明
+
+
+### 基于资源
+
+
