@@ -13,14 +13,14 @@ namespace NbSites.Web.PermissionChecks.RoleBased
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ICurrentUserContext _currentUserContext;
         private readonly IPermissionRuleActionPool _ruleActionPool;
-        private readonly IRoleBasedPermissionRuleLogic _roleBasedPermissionRuleLogic;
+        private readonly IRoleBasedCheckLogic _roleBasedPermissionRuleLogic;
         private readonly ILogger<RoleBasedPermissionRuleHandler> _logger;
         private readonly IPermissionCheckDebugHelper _debugHelper;
 
         public RoleBasedPermissionRuleHandler(IHttpContextAccessor httpContextAccessor, 
             ICurrentUserContext currentUserContext,
             IPermissionRuleActionPool ruleActionPool, 
-            IRoleBasedPermissionRuleLogic roleBasedPermissionRuleLogic,
+            IRoleBasedCheckLogic roleBasedPermissionRuleLogic,
             ILogger<RoleBasedPermissionRuleHandler> logger,
             IPermissionCheckDebugHelper debugHelper)
         {

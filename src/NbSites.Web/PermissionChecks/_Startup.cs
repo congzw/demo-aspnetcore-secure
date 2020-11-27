@@ -40,7 +40,7 @@ namespace NbSites.Web.PermissionChecks
             services.AddScoped<IPermissionRuleActionPoolInitService, PermissionRuleActionPoolInitService>();
             services.AddScoped<IPermissionRuleActionProvider, PermissionRuleActionProvider>();
             services.AddScoped<IAuthorizationHandler, RoleBasedPermissionRuleHandler>();
-            services.AddTransient<IRoleBasedPermissionRuleLogic, RoleBasedPermissionRuleLogic>();
+            services.AddTransient<IRoleBasedCheckLogic, RoleBasedCheckLogic>();
             services.AddSingleton<IRoleBasedPermissionRuleRepository, RoleBasedPermissionRuleRepository>(); //todo: replace with real scope impl
         }
 

@@ -5,18 +5,18 @@ namespace NbSites.Web.PermissionChecks.RoleBased
 {
     public static class RoleBasedExtensions
     {
-        public static IList<PermissionCheckResult> CheckRules(this IRoleBasedPermissionRuleLogic logic, IEnumerable<RoleBasedPermissionRule> rules, PermissionCheckContext checkContext)
+        public static IList<PermissionCheckResult> CheckRules(this IRoleBasedCheckLogic logic, IEnumerable<RoleBasedPermissionRule> rules, PermissionCheckContext checkContext)
         {
             if (rules == null)
             {
                 return new List<PermissionCheckResult>(){ PermissionCheckResult.NoCare };
             }
 
-            var checkResults = rules.Select(x => logic.CheckRule(x, checkContext)).ToList();
+            var checkResults = rules.Select(x => logic.Check(x, checkContext)).ToList();
             return checkResults;
         }
 
-        public static PermissionCheckResult CheckRulesAsOne(this IRoleBasedPermissionRuleLogic logic, IEnumerable<RoleBasedPermissionRule> rules, PermissionCheckContext checkContext)
+        public static PermissionCheckResult CheckRulesAsOne(this IRoleBasedCheckLogic logic, IEnumerable<RoleBasedPermissionRule> rules, PermissionCheckContext checkContext)
         {
             return logic.CheckRules(rules, checkContext).Combine();
         }

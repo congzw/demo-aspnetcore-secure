@@ -1,13 +1,13 @@
 ﻿namespace NbSites.Web.PermissionChecks.RoleBased
 {
-    public interface IRoleBasedPermissionRuleLogic
+    public interface IRoleBasedCheckLogic
     {
-        PermissionCheckResult CheckRule(RoleBasedPermissionRule rule, PermissionCheckContext checkContext);
+        PermissionCheckResult Check(RoleBasedPermissionRule rule, PermissionCheckContext checkContext);
     }
 
-    public class RoleBasedPermissionRuleLogic : IRoleBasedPermissionRuleLogic
+    public class RoleBasedCheckLogic : IRoleBasedCheckLogic
     {
-        public PermissionCheckResult CheckRule(RoleBasedPermissionRule rule, PermissionCheckContext checkContext)
+        public PermissionCheckResult Check(RoleBasedPermissionRule rule, PermissionCheckContext checkContext)
         {
             if (rule == null)
             {
