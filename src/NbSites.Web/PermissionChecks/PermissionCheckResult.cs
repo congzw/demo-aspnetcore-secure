@@ -59,12 +59,12 @@ namespace NbSites.Web.PermissionChecks
         {
             if (permissionCheckResults == null)
             {
-                return NoCare;
+                return Allowed.WithMessage("没有指定任何规则，放行");
             }
             var checkResults = permissionCheckResults.ToList();
             if (checkResults.Count == 0)
             {
-                return NoCare;
+                return Allowed.WithMessage("没有规则，放行");
             }
 
             var combineMessage = CombineMessage(checkResults);
@@ -90,7 +90,7 @@ namespace NbSites.Web.PermissionChecks
         {
             if (permissionCheckResults == null || permissionCheckResults.Count == 0)
             {
-                return "不关注";
+                return "没有规则";
             }
             var resultGroups = permissionCheckResults.GroupBy(x => x.Category).ToList();
             return resultGroups.Select(x => $"{x.Key}:{x.Count()}").MyJoin();

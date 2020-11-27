@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace NbSites.Web.PermissionChecks.RoleBased
 {
@@ -16,13 +17,15 @@ namespace NbSites.Web.PermissionChecks.RoleBased
         private readonly IRoleBasedCheckLogic _roleBasedPermissionRuleLogic;
         private readonly ILogger<RoleBasedPermissionRuleHandler> _logger;
         private readonly IPermissionCheckDebugHelper _debugHelper;
+        private readonly IOptionsSnapshot<DynamicCheckOptions> _snapshot;
 
         public RoleBasedPermissionRuleHandler(IHttpContextAccessor httpContextAccessor, 
             ICurrentUserContext currentUserContext,
             IPermissionRuleActionPool ruleActionPool, 
             IRoleBasedCheckLogic roleBasedPermissionRuleLogic,
             ILogger<RoleBasedPermissionRuleHandler> logger,
-            IPermissionCheckDebugHelper debugHelper)
+            IPermissionCheckDebugHelper debugHelper,
+            IOptionsSnapshot<DynamicCheckOptions> snapshot)
         {
             _httpContextAccessor = httpContextAccessor;
             _currentUserContext = currentUserContext;
@@ -30,6 +33,7 @@ namespace NbSites.Web.PermissionChecks.RoleBased
             _roleBasedPermissionRuleLogic = roleBasedPermissionRuleLogic;
             _logger = logger;
             _debugHelper = debugHelper;
+            _snapshot = snapshot;
         }
 
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionCheckRequirement requirement)
@@ -52,6 +56,15 @@ namespace NbSites.Web.PermissionChecks.RoleBased
                 permissionIds = context.GetPermissionAttributes(httpContext).Select(x => x.PermissionId).ToList();
             }
 
+            if (permissionIds.Count == 0)
+            {
+                if (_snapshot.Value.RequiredLoginForUnknown)
+                {
+                    _logger.LogInformation("没有任何对应规则，根据配置执行登录检测");
+                    permissionIds.Add(KnownPermissionIds.LoginOp);
+                }
+            }
+            
             var permissionCheckContext = CreatePermissionCheckContext(context, httpContext, actionDescriptor, permissionIds);
             var permissionRules = _ruleActionPool.TryGetRoleBasedPermissionRules(permissionIds.ToArray());
             var checkResults = _roleBasedPermissionRuleLogic.CheckRules(permissionRules, permissionCheckContext);
@@ -72,11 +85,6 @@ namespace NbSites.Web.PermissionChecks.RoleBased
             {
                 context.Succeed(requirement);
             }
-
-            //if (checkResult.Category == PermissionCheckResultCategory.Forbidden)
-            //{
-            //    context.Fail();
-            //}
         }
 
         private PermissionCheckContext CreatePermissionCheckContext(AuthorizationHandlerContext context, 

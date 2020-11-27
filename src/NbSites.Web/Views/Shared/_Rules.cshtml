@@ -5,9 +5,22 @@
 @{
     var checkResults = DebugHelper.GetPermissionCheckResults();
     var checkFeatureRules = RuleRepository.GetRules();
+    var permissionCheckResult = checkResults.Combine();
+    var detailsResults = permissionCheckResult.Data as IList<PermissionCheckResult>;
 }
 <div class="row">
-    <p>@checkResults.Combine().Message</p>
+    <p>@permissionCheckResult.Message</p>
+    @{
+        if (detailsResults != null)
+        {
+            <ul>
+                @foreach (var detailsResult in detailsResults)
+                {
+                    <li>@detailsResult.Message</li>
+                }
+            </ul>
+        }
+    }
     <table class="table-striped table-bordered">
         <thead>
         <tr>

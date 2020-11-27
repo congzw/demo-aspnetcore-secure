@@ -18,7 +18,7 @@ namespace NbSites.Web.PermissionChecks
                 var dynamicCheckPolicy = new AuthorizationPolicyBuilder()
                     .AddRequirements(new PermissionCheckRequirement())
                     .Build();
-
+                
                 options.DefaultPolicy = dynamicCheckPolicy;
                 options.FallbackPolicy = dynamicCheckPolicy;
             });

@@ -7,10 +7,10 @@ namespace NbSites.Web.PermissionChecks
     public class PermissionCheckResultSpec
     {
         [TestMethod]
-        public void Combine_NullOrEmpty_Should_NoCare()
+        public void Combine_NullOrEmpty_Should_Allowed()
         {
-            PermissionCheckResult.Combine(null).LogJson().Category.ShouldEqual(PermissionCheckResultCategory.NoCare);
-            PermissionCheckResult.Combine().LogJson().Category.ShouldEqual(PermissionCheckResultCategory.NoCare);
+            PermissionCheckResult.Combine(null).LogJson().Category.ShouldEqual(PermissionCheckResultCategory.Allowed);
+            PermissionCheckResult.Combine().LogJson().Category.ShouldEqual(PermissionCheckResultCategory.Allowed);
         }
 
         [TestMethod]
