@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using NbSites.Web.PermissionChecks.ClaimBased;
+using NbSites.Web.Demos;
+using NbSites.Web.Demos.ClaimBased;
+using NbSites.Web.Demos.ResourceBased;
 using NbSites.Web.PermissionChecks.ConfigBased;
 using NbSites.Web.PermissionChecks.ResourceBased;
 using NbSites.Web.PermissionChecks.RoleBased;
@@ -44,7 +46,7 @@ namespace NbSites.Web.PermissionChecks
 
             //role based
             services.AddSingleton<IPermissionRuleActionPool, PermissionRuleActionPool>();
-            services.AddScoped<IPermissionRuleActionPoolInitService, PermissionRuleActionPoolInitService>();
+            services.AddScoped<IPermissionRuleActionPoolService, PermissionRuleActionPoolService>();
             services.AddScoped<IPermissionRuleActionProvider, PermissionRuleActionProvider>();
             services.AddScoped<IAuthorizationHandler, RoleBasedPermissionRuleHandler>();
             services.AddScoped<IAuthorizationHandler, ResourceBasedPermissionCheckHandler>();
@@ -57,6 +59,9 @@ namespace NbSites.Web.PermissionChecks
 
             //resource based
             services.AddScoped<IResourceBasedCheckLogicProvider, DemoOp3CheckLogicProvider>();
+
+            //demo
+            services.AddScoped<IPermissionRuleActionProvider, DemoPermissionRuleActionProvider>();
         }
 
         public static IApplicationBuilder UsePermissionChecks(this IApplicationBuilder appBuilder)
@@ -68,8 +73,9 @@ namespace NbSites.Web.PermissionChecks
                 var debugHelperEnabled = dynamicCheckOptions.DebugHelperEnabled;
                 permissionCheckDebugHelper.Enabled = () => debugHelperEnabled;
 
-                var permissionRuleActionPoolInitService = scope.ServiceProvider.GetRequiredService<IPermissionRuleActionPoolInitService>();
-                permissionRuleActionPoolInitService.Refresh();
+                var poolService = scope.ServiceProvider.GetRequiredService<IPermissionRuleActionPoolService>();
+                var pool = scope.ServiceProvider.GetRequiredService<IPermissionRuleActionPool>();
+                poolService.RefreshPool(pool);
             }
             return appBuilder;
         }

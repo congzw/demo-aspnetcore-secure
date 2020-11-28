@@ -97,7 +97,7 @@ namespace NbSites.Web.PermissionChecks.RoleBased
                     var moreCheckResults = new List<PermissionCheckResult>();
                     foreach (var logicProvider in checkLogicProviders)
                     {
-                        if (logicProvider.ShouldCare(_currentUserContext, permissionCheckContext))
+                        if (await logicProvider.ShouldCareAsync(_currentUserContext, permissionCheckContext))
                         {
                             var moreCheckResult = await logicProvider.CheckPermissionAsync(_currentUserContext, permissionCheckContext);
                             moreCheckResults.Add(moreCheckResult);

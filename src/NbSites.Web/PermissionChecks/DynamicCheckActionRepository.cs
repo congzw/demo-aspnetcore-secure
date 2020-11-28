@@ -12,8 +12,8 @@ namespace NbSites.Web.PermissionChecks
     {
         public DynamicCheckActionRepository()
         {
-            Actions.Add(DynamicCheckAction.Create(KnownActionIds.UnsureActionId, KnownPermissionIds.UnsureActionA, "某个迟决定的Action"));
-            Actions.Add(DynamicCheckAction.Create(KnownActionIds.UnsureActionId2, KnownPermissionIds.UnsureActionA, "某个迟决定的Action2"));
+            Actions.Add(DynamicCheckAction.Create(KnownActionIds.UnsureActionId, KnownPermissionIds.UnsureOp, "某个迟决定的Action"));
+            Actions.Add(DynamicCheckAction.Create(KnownActionIds.UnsureActionId2, KnownPermissionIds.UnsureOp, "某个迟决定的Action2"));
         }
 
         public IList<DynamicCheckAction> Actions { get; set; } = new List<DynamicCheckAction>();

@@ -1,12 +1,19 @@
 ﻿@using NbSites.Web.PermissionChecks
 @using NbSites.Web.PermissionChecks.RoleBased
-@inject IRoleBasedPermissionRuleRepository RuleRepository
+@inject IPermissionRuleActionPool Pool
 @inject IPermissionCheckDebugHelper DebugHelper
 @{
+    var ruleActionPool = Pool as PermissionRuleActionPool;
+    if (ruleActionPool == null)
+    {
+        <h2>not correct pool</h2>
+        return;
+    }
+
+    var checkFeatureRules = ruleActionPool.RoleBasedPermissionRules.Values.OrderBy(x => x.PermissionId).ToList();
+    //var dynamicCheckActions = ruleActionPool.DynamicCheckActions.OrderBy(x => x.PermissionId).ToList();
     var checkResults = DebugHelper.GetPermissionCheckResults();
-    var checkFeatureRules = RuleRepository.GetRules();
     var permissionCheckResult = checkResults.Combine();
-    var detailsPermissionIds = permissionCheckResult.Data as IList<string>;
 }
 <div class="row">
     <p>@permissionCheckResult.Message</p>
@@ -23,20 +30,19 @@
     }
     <table class="table-striped table-bordered">
         <thead>
-        <tr>
-            <td>CheckFeatureId</td>
-            <td>AllowedUsers</td>
-            <td>AllowedRoles</td>
-            <td>?Allowed?</td>
-            <td>Tip</td>
-        </tr>
+            <tr>
+                <td>CheckFeatureId</td>
+                <td>AllowedUsers</td>
+                <td>AllowedRoles</td>
+                <td>?Allowed?</td>
+                <td>Tip</td>
+            </tr>
         </thead>
-        @foreach (var rule in checkFeatureRules)
+        @foreach (var item in checkFeatureRules)
         {
             var style = "";
             var success = "?";
             var tip = "?";
-            var item = rule.Value;
             @foreach (var result in checkResults)
             {
                 if (result.Data is string permissionId)

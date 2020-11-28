@@ -2,8 +2,10 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.Extensions.Logging;
+using NbSites.Web.PermissionChecks;
+using NbSites.Web.PermissionChecks.ResourceBased;
 
-namespace NbSites.Web.PermissionChecks.ResourceBased
+namespace NbSites.Web.Demos.ResourceBased
 {
     public class DemoOp3CheckLogicProvider : IResourceBasedCheckLogicProvider
     {
@@ -21,7 +23,7 @@ namespace NbSites.Web.PermissionChecks.ResourceBased
         public bool ShouldCare(ICurrentUserContext userContext, OperationAuthorizationRequirement requirement, object resource)
         {
             //根据需要自行添加逻辑
-            return requirement.Name.MyEquals(Operations.Delete.Name) && resource is Org;
+            return requirement.Name.MyEquals(Operations.Delete.Name) && resource is DemoOrg;
         }
 
         public Task<PermissionCheckResult> CheckPermissionAsync(ICurrentUserContext userContext, OperationAuthorizationRequirement requirement, object resource)
@@ -31,7 +33,7 @@ namespace NbSites.Web.PermissionChecks.ResourceBased
             if (requirement == null) throw new ArgumentNullException(nameof(requirement));
             if (resource == null) throw new ArgumentNullException(nameof(resource));
 
-            if (resource is Org theOrg)
+            if (resource is DemoOrg theOrg)
             {
                 //todo: 检测当前用户身份有删除该资源的权限
                 //模拟只有删除777的权限

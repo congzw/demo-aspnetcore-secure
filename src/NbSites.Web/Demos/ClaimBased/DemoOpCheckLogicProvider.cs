@@ -1,7 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NbSites.Web.PermissionChecks;
 
-namespace NbSites.Web.PermissionChecks.ClaimBased
+namespace NbSites.Web.Demos.ClaimBased
 {
     public class DemoOpCheckLogicProvider : IPermissionCheckLogicProvider
     {
@@ -16,10 +17,10 @@ namespace NbSites.Web.PermissionChecks.ClaimBased
 
         public int Order { get; set; }
 
-        public bool ShouldCare(ICurrentUserContext userContext, PermissionCheckContext permissionCheckContext)
+        public Task<bool> ShouldCareAsync(ICurrentUserContext userContext, PermissionCheckContext permissionCheckContext)
         {
-            //Provider按需进行处理
-            return permissionCheckContext.MatchPermissionId(KnownPermissionIds.DemoOp);
+            //按需决定是否需要参与
+            return Task.FromResult(permissionCheckContext.MatchPermissionId(KnownPermissionIds.DemoOp));
         }
 
         public Task<PermissionCheckResult> CheckPermissionAsync(ICurrentUserContext userContext, PermissionCheckContext permissionCheckContext)

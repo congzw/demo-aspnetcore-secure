@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NbSites.Web.Demos;
 using NbSites.Web.PermissionChecks;
 using NbSites.Web.PermissionChecks.ResourceBased;
 
@@ -83,7 +84,7 @@ namespace NbSites.Web.Controllers
         public async Task<IActionResult> DemoOp3([FromServices] IAuthorizationService authorizationService, string orgId = null)
         {
             //todo: read from database 
-            var theOrg = new Org();
+            var theOrg = new DemoOrg();
             theOrg.OrgId = orgId;
             theOrg.OrtName = "ABC";
 
