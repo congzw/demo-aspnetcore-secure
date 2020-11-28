@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Common;
 
 // ReSharper disable once CheckNamespace
 namespace NbSites.Web.PermissionChecks
@@ -12,6 +11,9 @@ namespace NbSites.Web.PermissionChecks
         IList<PermissionCheckResult> GetPermissionCheckResults(bool autoReset = true);
     }
 
+    /// <summary>
+    /// 开发调试用：从Web界面直观的查看调试信息
+    /// </summary>
     public class PermissionCheckDebugHelper : IPermissionCheckDebugHelper
     {
         private IList<PermissionCheckResult> Results { get; set; } = new List<PermissionCheckResult>();

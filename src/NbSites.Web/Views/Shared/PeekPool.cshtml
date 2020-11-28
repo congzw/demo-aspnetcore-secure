@@ -1,0 +1,75 @@
+﻿@using NbSites.Web.PermissionChecks
+@using NbSites.Web.PermissionChecks.RoleBased
+@inject IPermissionRuleActionPool Pool
+@inject IPermissionCheckDebugHelper DebugHelper
+@{
+    this.Layout = null;
+    var ruleActionPool = Pool as PermissionRuleActionPool;
+    if (ruleActionPool == null)
+    {
+        <h2>not correct pool</h2>
+        return;
+    }
+
+    var rules = ruleActionPool.RoleBasedPermissionRules.Values.OrderBy(x => x.PermissionId).ToList();
+    var dynamicCheckActions = ruleActionPool.DynamicCheckActions.OrderBy(x => x.PermissionId).ToList();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/content/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <partial name="_Nav" />
+        <hr />
+        <h2>@ViewBag.Message</h2>
+        <div class="row">
+            <div class="col-sm-6">
+                <p>load rules: @rules.Count</p>
+                <table class="table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <td>PermissionId</td>
+                            <td>AllowedUsers</td>
+                            <td>AllowedRoles</td>
+                        </tr>
+                    </thead>
+                    @foreach (var item in rules)
+                    {
+                        <tr>
+                            <td>@item.PermissionId</td>
+                            <td>@item.AllowedUsers</td>
+                            <td>@item.AllowedRoles</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            <div class="col-sm-6">
+                <p>load dynamic check actions: @dynamicCheckActions.Count</p>
+                <table class="table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <td>PermissionId</td>
+                            <td>ActionId</td>
+                            <td>ActionName</td>
+                        </tr>
+                    </thead>
+                    @foreach (var item in dynamicCheckActions)
+                    {
+                        <tr>
+                            <td>@item.PermissionId</td>
+                            <td>@item.ActionId</td>
+                            <td>@item.ActionName</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+        <hr />
+
+    </div>
+</body>
+</html>

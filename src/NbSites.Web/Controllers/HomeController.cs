@@ -12,6 +12,13 @@ namespace NbSites.Web.Controllers
             return View("Empty");
         }
 
+        [AllowAnonymous]
+        public IActionResult PeekPool()
+        {
+            ViewBag.Message = "Enter PeekPool";
+            return View();
+        }
+
         public IActionResult Default()
         {
             ViewBag.Message = "Enter Default";
