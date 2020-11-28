@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using NbSites.Web.PermissionChecks;
 using NbSites.Web.PermissionChecks.ResourceBased;
 
-namespace NbSites.Web.Demos.ResourceBased
+namespace NbSites.Web.Demos.CheckLogics
 {
     public class DemoOp3CheckLogicProvider : IResourceBasedCheckLogicProvider
     {

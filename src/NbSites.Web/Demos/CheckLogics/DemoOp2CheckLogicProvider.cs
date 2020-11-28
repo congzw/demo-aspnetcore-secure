@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NbSites.Web.PermissionChecks;
 
-namespace NbSites.Web.Demos.ClaimBased
+namespace NbSites.Web.Demos.CheckLogics
 {
     public class DemoOp2CheckLogicProvider : IPermissionCheckLogicProvider
     {
@@ -28,7 +28,7 @@ namespace NbSites.Web.Demos.ClaimBased
 
         public async Task<PermissionCheckResult> CheckPermissionAsync(ICurrentUserContext userContext, PermissionCheckContext permissionCheckContext)
         {
-            //此示例演示基于额外的请求上下文，才能完成判断逻辑的场景，例如Query，Form， Cookie等
+            //此示例演示基于额外的请求上下文，来完成判断逻辑的场景。例如Query，Form， Cookie等
             if (userContext == null) throw new ArgumentNullException(nameof(userContext));
             if (permissionCheckContext == null) throw new ArgumentNullException(nameof(permissionCheckContext));
 

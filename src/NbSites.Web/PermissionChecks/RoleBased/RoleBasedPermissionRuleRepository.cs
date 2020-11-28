@@ -16,7 +16,7 @@ namespace NbSites.Web.PermissionChecks.RoleBased
 
         public RoleBasedPermissionRuleRepository()
         {
-            //todo: read from source
+            //todo: read from real data source
             Rules.AddOrUpdate(permissionId: KnownPermissionIds.PortalEntry, allowedUsers: "*", allowedRoles: "*");
 
             Rules.AddOrUpdate(permissionId: KnownPermissionIds.GuestOp, allowedUsers: "*", allowedRoles: "*");

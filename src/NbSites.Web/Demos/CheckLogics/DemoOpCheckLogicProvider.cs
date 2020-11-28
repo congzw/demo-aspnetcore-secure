@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using NbSites.Web.PermissionChecks;
 
-namespace NbSites.Web.Demos.ClaimBased
+namespace NbSites.Web.Demos.CheckLogics
 {
     public class DemoOpCheckLogicProvider : IPermissionCheckLogicProvider
     {
@@ -25,7 +25,7 @@ namespace NbSites.Web.Demos.ClaimBased
 
         public Task<PermissionCheckResult> CheckPermissionAsync(ICurrentUserContext userContext, PermissionCheckContext permissionCheckContext)
         {
-            //此示例演示基于自身Claims可以完成判断逻辑的场景
+            //此示例演示基于自身Claims，来完成判断逻辑的场景。
             var msg = "需要授权: " + KnownPermissionIds.DemoOp;
             if (userContext.Permissions.MyContains(KnownPermissionIds.DemoOp))
             {
