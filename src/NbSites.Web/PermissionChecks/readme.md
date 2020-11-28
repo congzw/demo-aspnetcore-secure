@@ -43,4 +43,5 @@ UsersOrRolesOp				bob,alice		Admin,Super
 
 ## 支持的扩展点
 
-- IPermissionCheckLogicProvider：实现此接口，来提供权限检测逻辑
+- IPermissionCheckLogicProvider：实现此接口，来提供自定义的逻辑
+- IPermissionRuleActionProvider：实现此接口，来提供自定义的规则

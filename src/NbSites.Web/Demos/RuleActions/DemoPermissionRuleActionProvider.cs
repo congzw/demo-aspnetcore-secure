@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NbSites.Web.PermissionChecks;
 using NbSites.Web.PermissionChecks.RoleBased;
 
-namespace NbSites.Web.Demos
+namespace NbSites.Web.Demos.RuleActions
 {
     public class DemoPermissionRuleActionProvider : IPermissionRuleActionProvider
     {

@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using NbSites.Web.Demos;
 using NbSites.Web.Demos.CheckLogics;
+using NbSites.Web.Demos.RuleActions;
 using NbSites.Web.PermissionChecks.ConfigBased;
 using NbSites.Web.PermissionChecks.ResourceBased;
 using NbSites.Web.PermissionChecks.RoleBased;
