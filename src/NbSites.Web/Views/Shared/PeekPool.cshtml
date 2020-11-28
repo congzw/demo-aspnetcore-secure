@@ -1,7 +1,11 @@
 ﻿@using NbSites.Web.PermissionChecks
+@using NbSites.Web.PermissionChecks.ResourceBased
 @using NbSites.Web.PermissionChecks.RoleBased
 @inject IPermissionRuleActionPool Pool
 @inject IPermissionCheckDebugHelper DebugHelper
+@inject IEnumerable<IPermissionCheckLogicProvider> LogicProviders
+@inject IEnumerable<IPermissionRuleActionProvider> RuleActionProviders
+@inject IEnumerable<IResourceBasedCheckLogicProvider> ResourceCheckLogicProviders
 @{
     this.Layout = null;
     var ruleActionPool = Pool as PermissionRuleActionPool;
@@ -11,6 +15,9 @@
         return;
     }
 
+    var logicProviders = LogicProviders.ToList();
+    var ruleActionProviders = RuleActionProviders.ToList();
+    var resourceCheckLogicProviders = ResourceCheckLogicProviders.ToList();
     var rules = ruleActionPool.RoleBasedPermissionRules.Values.OrderBy(x => x.PermissionId).ToList();
     var dynamicCheckActions = ruleActionPool.DynamicCheckActions.OrderBy(x => x.PermissionId).ToList();
 }
@@ -26,6 +33,37 @@
         <partial name="_Nav" />
         <hr />
         <h2>@ViewBag.Message</h2>
+        
+        <div class="row">
+            <div class="col-sm-12">
+                <p>规则来源</p>
+                <ul>
+                    @foreach (var item in ruleActionProviders)
+                    {
+                        <li>@item.GetType().FullName</li>
+                    }
+                </ul>
+            </div>
+            <div class="col-sm-12">
+                <p>主体权限逻辑来源</p>
+                <ul>
+                    @foreach (var item in logicProviders)
+                    {
+                        <li>@item.GetType().FullName</li>
+                    }
+                </ul>
+            </div>
+            <div class="col-sm-12">
+                <p>客体权限逻辑来源</p>
+                <ul>
+                    @foreach (var item in resourceCheckLogicProviders)
+                    {
+                        <li>@item.GetType().FullName</li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <hr />
         <div class="row">
             <div class="col-sm-6">
                 <p>load rules: @rules.Count</p>
