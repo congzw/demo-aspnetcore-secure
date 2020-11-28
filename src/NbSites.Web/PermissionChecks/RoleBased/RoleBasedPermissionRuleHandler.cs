@@ -17,12 +17,14 @@ namespace NbSites.Web.PermissionChecks.RoleBased
         private readonly IPermissionRuleActionPool _ruleActionPool;
         private readonly IRoleBasedCheckLogic _roleBasedPermissionRuleLogic;
         private readonly ILogger<RoleBasedPermissionRuleHandler> _logger;
+        private readonly SuperPowerCheck _superPowerCheck;
         private readonly IPermissionCheckDebugHelper _debugHelper;
         private readonly IOptionsSnapshot<DynamicCheckOptions> _snapshot;
 
-        public RoleBasedPermissionRuleHandler(IHttpContextAccessor httpContextAccessor, 
+        public RoleBasedPermissionRuleHandler(IHttpContextAccessor httpContextAccessor,
             ICurrentUserContext currentUserContext,
-            IPermissionRuleActionPool ruleActionPool, 
+            IPermissionRuleActionPool ruleActionPool,
+            SuperPowerCheck superPowerCheck,
             IRoleBasedCheckLogic roleBasedPermissionRuleLogic,
             ILogger<RoleBasedPermissionRuleHandler> logger,
             IPermissionCheckDebugHelper debugHelper,
@@ -33,6 +35,7 @@ namespace NbSites.Web.PermissionChecks.RoleBased
             _ruleActionPool = ruleActionPool;
             _roleBasedPermissionRuleLogic = roleBasedPermissionRuleLogic;
             _logger = logger;
+            _superPowerCheck = superPowerCheck;
             _debugHelper = debugHelper;
             _snapshot = snapshot;
         }
@@ -69,8 +72,16 @@ namespace NbSites.Web.PermissionChecks.RoleBased
             var permissionCheckContext = CreatePermissionCheckContext(context, httpContext, actionDescriptor, permissionIds, requirement);
             var permissionRules = _ruleActionPool.TryGetRoleBasedPermissionRules(permissionIds.ToArray());
             var checkResults = _roleBasedPermissionRuleLogic.CheckRules(permissionRules, permissionCheckContext);
-           _debugHelper.AppendPermissionCheckResults(checkResults.ToArray());
-            
+            _debugHelper.AppendPermissionCheckResults(checkResults.ToArray());
+
+            if (await _superPowerCheck.HasSuperPowerAsync(context, httpContext, _currentUserContext))
+            {
+                _debugHelper.AppendPermissionCheckResults(PermissionCheckResult.Allowed.WithMessage("主体权限: SuperPower!!!"));
+                _logger.LogInformation("主体权限: SuperPower!!!");
+                context.Succeed(requirement);
+                return;
+            }
+
             foreach (var permissionCheckResult in checkResults)
             {
                 _logger.LogInformation(permissionCheckResult.Message);
@@ -113,14 +124,14 @@ namespace NbSites.Web.PermissionChecks.RoleBased
                         return;
                     }
                 }
-                
+
                 context.Succeed(requirement);
             }
         }
 
-        private PermissionCheckContext CreatePermissionCheckContext(AuthorizationHandlerContext context, 
-            HttpContext httpContext, 
-            ActionDescriptor actionDescriptor, 
+        private PermissionCheckContext CreatePermissionCheckContext(AuthorizationHandlerContext context,
+            HttpContext httpContext,
+            ActionDescriptor actionDescriptor,
             IEnumerable<string> permissionIds,
             PermissionCheckRequirement requirement)
         {

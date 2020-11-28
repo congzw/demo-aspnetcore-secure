@@ -8,11 +8,11 @@
 <body>
     <div class="container">
         <partial name="_Nav" />
-        <partial name="_AuthenticationInfo" />
         <hr />
         <h2>@ViewBag.Message</h2>
         <p style="color: red">FROM --> @this.ViewContext.ActionDescriptor.DisplayName</p>
         <partial name="_Rules" />
+        <partial name="_AuthenticationInfo" />
         @RenderBody()
     </div>
 </body>

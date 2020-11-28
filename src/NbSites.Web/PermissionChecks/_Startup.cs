@@ -41,6 +41,10 @@ namespace NbSites.Web.PermissionChecks
 
             services.AddSingleton<IPermissionCheckDebugHelper, PermissionCheckDebugHelper>();
 
+            //super power
+            services.AddScoped<SuperPowerCheck>();
+            //services.AddScoped<ISuperPowerProvider, SomeSuperPowerProvider>();
+            
             //config based
             services.AddTransient<IAuthorizationHandler, ConfigBasedHandler>();
 

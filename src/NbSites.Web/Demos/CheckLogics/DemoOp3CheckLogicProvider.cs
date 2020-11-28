@@ -35,16 +35,16 @@ namespace NbSites.Web.Demos.CheckLogics
 
             if (resource is DemoOrg theOrg)
             {
-                //todo: 检测当前用户身份有删除该资源的权限
-                //模拟只有删除777的权限
+                //todo: 检测当前用户身份有删除特定资源的权限
+                //模拟只有删除特定范围内组织的权限
                 if (theOrg.OrgId == "777")
                 {
-                    return Task.FromResult(PermissionCheckResult.Allowed.WithMessage($"{userContext.User}删除777的权限 => Allowed"));
+                    return Task.FromResult(PermissionCheckResult.Allowed.WithMessage($"{userContext.User}删除{theOrg.OrgId}的权限 => Allowed"));
                 }
             }
 
             //return Task.FromResult(PermissionCheckResult.Forbidden.WithMessage($"{userContext.User}删除777的权限 => Forbidden")); //其他LogicHandler允许也没用
-            return Task.FromResult(PermissionCheckResult.NotSure.WithMessage($"{userContext.User}删除777的权限 => NotSure")); //不置可否，由其他LogicHandler决定
+            return Task.FromResult(PermissionCheckResult.NotSure.WithMessage($"{userContext.User}删除Org的权限 => NotSure")); //不置可否，由其他LogicHandler决定
         }
     }
 }

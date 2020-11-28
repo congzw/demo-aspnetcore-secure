@@ -17,7 +17,7 @@ namespace NbSites.Web.PermissionChecks.ConfigBased
         {
             if (_settingSnapshot.Value.Naked)
             {
-                //配置为裸奔模式，直接放行
+                //配置为裸奔模式，主体权限控制直接放行
                 context.Succeed(requirement);
                 return Task.CompletedTask;
             }

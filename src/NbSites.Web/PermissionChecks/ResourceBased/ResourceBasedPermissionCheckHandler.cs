@@ -78,6 +78,19 @@ namespace NbSites.Web.PermissionChecks.ResourceBased
             if (permissionCheckResult.Category == PermissionCheckResultCategory.Allowed)
             {
                 context.Succeed(requirement);
+                return;
+            }
+
+            //apply super power
+            var superPowerCheck = httpContext
+                .RequestServices
+                .GetService<SuperPowerCheck>();
+            
+            if (await superPowerCheck.HasSuperPowerAsync(context, httpContext, _currentUserContext))
+            {
+                _debugHelper.AppendPermissionCheckResults(PermissionCheckResult.Allowed.WithMessage("客体权限：SuperPower!!!"));
+                _logger.LogInformation("客体权限：SuperPower!!!");
+                context.Succeed(requirement);
             }
         }
     }
