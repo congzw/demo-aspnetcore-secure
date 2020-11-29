@@ -29,13 +29,20 @@ namespace NbSites.Web.Controllers
         
         public async Task<IActionResult> AutoLogin(string returnUrl = null, string role = null, string permission = null)
         {
+            //授权部分自己控制，认证部分可参考集成：默认实现，自己实现，第三方系统均可。详细参照： https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-3.1&tabs=visual-studio
+            //- ASP.NET Core Identity。
+            //- 自己的演示用实现（假定用户是bob，密码检测都ok，claims随意造）。
+            //- Azure Active Directory
+            //- Azure Active Directory B2C(Azure AD B2C)
+            //- IdentityServer4
+
             const string issuer = "https://mysites.com";
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, "bob", ClaimValueTypes.String, issuer),
-                new Claim("OrgId", "123", ClaimValueTypes.String, issuer),
                 new Claim(ClaimTypes.DateOfBirth, "1970-06-08", ClaimValueTypes.Date),
-                new Claim("BadgeNumber", "123456", ClaimValueTypes.String, issuer)
+                new Claim("OrgId", "123", ClaimValueTypes.String, issuer),
+                new Claim("AddAsYouLike", "123456", ClaimValueTypes.String, issuer)
             };
 
             if (!string.IsNullOrWhiteSpace(role))
@@ -57,7 +64,7 @@ namespace NbSites.Web.Controllers
                 }
             }
 
-            var userIdentity = new ClaimsIdentity("ForDemoLoginIdentity");
+            var userIdentity = new ClaimsIdentity("ForDemo");
             userIdentity.AddClaims(claims);
             var userPrincipal = new ClaimsPrincipal(userIdentity);
 
