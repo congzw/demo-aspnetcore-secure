@@ -1,6 +1,6 @@
 ﻿namespace NbSites.Web.PermissionChecks
 {
-    public class DynamicCheckOptions
+    public class PermissionCheckOptions
     {
         public const string SectionName = "PermissionCheck";
         /// <summary>
@@ -12,7 +12,7 @@
         /// </summary>
         public bool DebugHelperEnabled { get; set; } = true;
         /// <summary>
-        /// 没有显示设置权限的请求，是否应用强制登录。默认true
+        /// 对于没有显示设置权限的Action请求，是否应用强制登录。默认true
         /// </summary>
         public bool RequiredLoginForUnknown { get; set; } = true;
     }

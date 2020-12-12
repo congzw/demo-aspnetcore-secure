@@ -3,16 +3,16 @@ using Microsoft.AspNetCore.Http;
 
 namespace NbSites.Web.PermissionChecks
 {
-    public interface ICurrentUserContextProvider
+    public interface ICurrentUserContextService
     {
         ICurrentUserContext GetCurrentUserContext();
     }
 
-    public class CurrentUserContextProvider : ICurrentUserContextProvider
+    public class CurrentUserContextService : ICurrentUserContextService
     {
         private readonly IHttpContextAccessor _accessor;
 
-        public CurrentUserContextProvider(IHttpContextAccessor accessor)
+        public CurrentUserContextService(IHttpContextAccessor accessor)
         {
             _accessor = accessor;
         }

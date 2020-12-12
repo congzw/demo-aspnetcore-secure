@@ -6,9 +6,5 @@
         {
             return !string.IsNullOrWhiteSpace(userContext.User);
         }
-        public static bool HasSuperPower(this ICurrentUserContext userContext)
-        {
-            return !string.IsNullOrWhiteSpace(userContext.User);
-        }
     }
 }

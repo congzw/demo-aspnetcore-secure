@@ -12,7 +12,7 @@ namespace NbSites.Web.PermissionChecks
     }
 
     /// <summary>
-    /// 开发调试用：从Web界面直观的查看调试信息
+    /// 开发调试：用于从Web界面直接查看调试信息
     /// </summary>
     public class PermissionCheckDebugHelper : IPermissionCheckDebugHelper
     {

@@ -20,6 +20,7 @@ namespace NbSites.Web.PermissionChecks
 
         public IList<DynamicCheckAction> GetActions()
         {
+            //todo: read from real data source
             return Actions;
         }
 

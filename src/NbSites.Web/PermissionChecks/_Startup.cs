@@ -33,11 +33,11 @@ namespace NbSites.Web.PermissionChecks
 
             services.AddHttpContextAccessor();
 
-            services.AddScoped<ICurrentUserContextProvider, CurrentUserContextProvider>();
-            services.AddScoped(sp => sp.GetRequiredService<ICurrentUserContextProvider>().GetCurrentUserContext());
+            services.AddScoped<ICurrentUserContextService, CurrentUserContextService>();
+            services.AddScoped(sp => sp.GetRequiredService<ICurrentUserContextService>().GetCurrentUserContext());
             services.AddSingleton<IDynamicCheckActionRepository, DynamicCheckActionRepository>(); //todo: replace with real scope impl
-            services.Configure<DynamicCheckOptions>(configuration.GetSection(DynamicCheckOptions.SectionName));
-            services.AddTransient(sp => sp.GetService<IOptionsSnapshot<DynamicCheckOptions>>().Value); //ok => use "IOptionsSnapshot<>" instead of "IOptions<>" will auto load after changed
+            services.Configure<PermissionCheckOptions>(configuration.GetSection(PermissionCheckOptions.SectionName));
+            services.AddTransient(sp => sp.GetService<IOptionsSnapshot<PermissionCheckOptions>>().Value); //ok => use "IOptionsSnapshot<>" instead of "IOptions<>" will auto load after changed
 
             services.AddSingleton<IPermissionCheckDebugHelper, PermissionCheckDebugHelper>();
 
@@ -73,7 +73,7 @@ namespace NbSites.Web.PermissionChecks
             using (var scope = appBuilder.ApplicationServices.CreateScope())
             {
                 var permissionCheckDebugHelper = scope.ServiceProvider.GetRequiredService<IPermissionCheckDebugHelper>();
-                var dynamicCheckOptions = scope.ServiceProvider.GetRequiredService<DynamicCheckOptions>();
+                var dynamicCheckOptions = scope.ServiceProvider.GetRequiredService<PermissionCheckOptions>();
                 var debugHelperEnabled = dynamicCheckOptions.DebugHelperEnabled;
                 permissionCheckDebugHelper.Enabled = () => debugHelperEnabled;
 

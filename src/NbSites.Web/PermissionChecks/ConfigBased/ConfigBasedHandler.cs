@@ -6,9 +6,9 @@ namespace NbSites.Web.PermissionChecks.ConfigBased
 {
     public class ConfigBasedHandler : AuthorizationHandler<PermissionCheckRequirement>
     {
-        private readonly IOptionsSnapshot<DynamicCheckOptions> _settingSnapshot;
+        private readonly IOptionsSnapshot<PermissionCheckOptions> _settingSnapshot;
 
-        public ConfigBasedHandler(IOptionsSnapshot<DynamicCheckOptions> settingSnapshot)
+        public ConfigBasedHandler(IOptionsSnapshot<PermissionCheckOptions> settingSnapshot)
         {
             _settingSnapshot = settingSnapshot;
         }

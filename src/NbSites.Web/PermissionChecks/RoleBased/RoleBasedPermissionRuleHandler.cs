@@ -19,7 +19,7 @@ namespace NbSites.Web.PermissionChecks.RoleBased
         private readonly ILogger<RoleBasedPermissionRuleHandler> _logger;
         private readonly SuperPowerCheck _superPowerCheck;
         private readonly IPermissionCheckDebugHelper _debugHelper;
-        private readonly IOptionsSnapshot<DynamicCheckOptions> _snapshot;
+        private readonly IOptionsSnapshot<PermissionCheckOptions> _snapshot;
 
         public RoleBasedPermissionRuleHandler(IHttpContextAccessor httpContextAccessor,
             ICurrentUserContext currentUserContext,
@@ -28,7 +28,7 @@ namespace NbSites.Web.PermissionChecks.RoleBased
             IRoleBasedCheckLogic roleBasedPermissionRuleLogic,
             ILogger<RoleBasedPermissionRuleHandler> logger,
             IPermissionCheckDebugHelper debugHelper,
-            IOptionsSnapshot<DynamicCheckOptions> snapshot)
+            IOptionsSnapshot<PermissionCheckOptions> snapshot)
         {
             _httpContextAccessor = httpContextAccessor;
             _currentUserContext = currentUserContext;
