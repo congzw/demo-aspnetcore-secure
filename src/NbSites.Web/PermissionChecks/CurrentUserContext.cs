@@ -21,25 +21,30 @@ namespace NbSites.Web.PermissionChecks
         private string _user;
         public string User
         {
-            get => _user ??= Claims.Where(x => x.Type == UserKey).Select(x => x.Value).FirstOrDefault();
+            get => _user ??= GetClaimsValues(UserKey).FirstOrDefault();
             set => _user = value;
         }
 
         private List<string> _roles = null;
         public List<string> Roles
         {
-            get => _roles ??= Claims.Where(x => x.Type == RoleKey).Select(x => x.Value).ToList();
+            get => _roles ??= GetClaimsValues(RoleKey);
             set => _roles = value;
         }
 
         private List<string> _permissions = null;
         public List<string> Permissions
         {
-            get => _permissions ??= Claims.Where(x => x.Type == PermissionKey).Select(x => x.Value).ToList();
+            get => _permissions ??= GetClaimsValues(PermissionKey);
             set => _permissions = value;
         }
 
         public List<Claim> Claims { get; set; } = new List<Claim>();
+
+        public List<string> GetClaimsValues(string claimType)
+        {
+            return Claims.Where(x => x.Type == claimType).Select(x => x.Value).ToList();
+        }
 
         public static CurrentUserContext Empty = new CurrentUserContext();
     }
