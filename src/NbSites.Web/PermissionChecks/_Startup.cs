@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -28,10 +30,12 @@ namespace NbSites.Web.PermissionChecks
                 //options.AddPolicy("ResourceBasedPolicy", policy =>
                 //    policy.Requirements.Add(new OperationAuthorizationRequirement()));
             });
-
-
-
-            services.AddHttpContextAccessor();
+            
+            var httpContextAccessorDescriptor = services.LastOrDefault(d => d.ServiceType == typeof(IHttpContextAccessor));
+            if (httpContextAccessorDescriptor == null)
+            {
+                services.AddHttpContextAccessor();
+            }
 
             services.AddScoped<ICurrentUserContextService, CurrentUserContextService>();
             services.AddScoped(sp => sp.GetRequiredService<ICurrentUserContextService>().GetCurrentUserContext());
