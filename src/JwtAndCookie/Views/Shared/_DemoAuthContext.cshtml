@@ -1,0 +1,54 @@
+﻿@using JwtAndCookie.Libs
+@using Microsoft.AspNetCore.Authentication
+@using Newtonsoft.Json
+@inject IAuthenticationSchemeProvider AuthenticationSchemeProvider
+@inject ICurrentUserContext UserContext
+@{
+    var defaultScheme = await AuthenticationSchemeProvider.GetDefaultAuthenticateSchemeAsync();
+    var schemes = (await AuthenticationSchemeProvider.GetAllSchemesAsync()).ToList();
+}
+
+<hr />
+<div class="row">
+    <div class="col-sm-3">
+        <h2>CurrentUserContext</h2>
+        <p>IsLogin: @UserContext.IsLogin()</p>
+        <p>User: @UserContext.User</p>
+        <p>Roles: @UserContext.Roles.JoinToOneValue()</p>
+        <p>Context: @UserContext.ToString()</p>
+        @*<code>
+            <pre>@JsonConvert.SerializeObject(UserContext, Formatting.Indented)</pre>
+        </code>*@
+        <ul>
+            @foreach (var item in UserContext.Claims)
+            {
+                <li>@item.GetShortTypeName() : <span>@item.Value</span></li>
+            }
+        </ul>
+    </div>
+    <div class="col-sm-9">
+        <div class="row">
+            <h2>Schemes: @schemes.Select(x => x.Name).JoinToOneValue()</h2>
+
+            @foreach (var scheme in schemes)
+            {
+                var authenticateResult = await this.Context.AuthenticateAsync(scheme.Name);
+                var style = scheme.Name == defaultScheme.Name ? "color:red" : "";
+                <div class="col-sm-3">
+                    <div style="@style">
+                        <h4>
+                            @scheme.Name @(string.IsNullOrWhiteSpace(style) ? "" : " <-- Default Scheme!")
+                        </h4>
+                        <p>HandlerType: @scheme.HandlerType.Name</p>
+                    </div>
+                    <div>
+                        <p>Succeeded: @authenticateResult.Succeeded</p>
+                        <p>IsAuthenticated: @authenticateResult.Ticket?.Principal.Identity.IsAuthenticated</p>
+                        <p>Identity.Name: @authenticateResult.Ticket?.Principal.Identity.Name</p>
+                        <p>Identity.AuthenticationType: @authenticateResult.Ticket?.Principal.Identity.AuthenticationType</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

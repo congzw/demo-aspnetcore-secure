@@ -1,0 +1,16 @@
+﻿@{
+    var failed = false;
+    if (ViewBag.Message != null)
+    {
+        string testKO = ViewBag.Message.ToString();
+        failed = testKO.Contains("K.O.");
+    }
+}
+@if (failed)
+{
+    <h2 style="color: red">@DateTime.Now : @ViewBag.Message</h2>
+}
+else
+{
+    <h2 style="color: green">@DateTime.Now : @ViewBag.Message</h2>
+}
