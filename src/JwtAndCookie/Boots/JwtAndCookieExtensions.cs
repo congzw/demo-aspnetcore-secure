@@ -80,9 +80,9 @@ namespace JwtAndCookie.Boots
                         : null;
 
                     options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // optional
-                    options.LoginPath = new PathString("/Account/Login");
-                    options.LogoutPath = new PathString("/Account/Logout");
-                    options.AccessDeniedPath = new PathString("/Account/Forbidden");
+                    options.LoginPath = new PathString("/DemoAccount/Login");
+                    options.LogoutPath = new PathString("/DemoAccount/Logout");
+                    options.AccessDeniedPath = new PathString("/DemoAccount/Forbidden");
                 });
 
             //var multiSchemePolicy = new AuthorizationPolicyBuilder(

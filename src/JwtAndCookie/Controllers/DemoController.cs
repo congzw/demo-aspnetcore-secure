@@ -10,15 +10,15 @@ namespace JwtAndCookie.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-            ViewBag.Message = "Index";
-            return View();
+            ViewBag.Message = "Demo Index";
+            return View("Empty");
         }
 
         [AllowAnonymous]
         public IActionResult Anonymous()
         {
             ViewBag.Message = "Anonymous => OK";
-            return View("Empty");
+            return View($"Empty");
         }
 
         [Authorize]

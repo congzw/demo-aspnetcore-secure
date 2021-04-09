@@ -12,15 +12,14 @@ using Microsoft.AspNetCore.Mvc;
 namespace JwtAndCookie.Controllers
 {
     [AllowAnonymous]
-    public class AccountController : Controller
+    public class DemoAccountController : Controller
     {
         private readonly IJwtTokenService _jwtTokenService;
 
-        public AccountController(IJwtTokenService jwtTokenService)
+        public DemoAccountController(IJwtTokenService jwtTokenService)
         {
             _jwtTokenService = jwtTokenService;
         }
-
         
         public async Task<IActionResult> Logout()
         {
@@ -88,7 +87,7 @@ namespace JwtAndCookie.Controllers
         public IActionResult Login(bool redirected = true)
         {
             ViewBag.Message = redirected ? "Enter Login 401" : "Enter Login";
-            return View();
+            return View("Empty");
         }
 
         //For 403
