@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using JwtAndCookie.Libs;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
@@ -84,7 +85,11 @@ namespace JwtAndCookie.Boots
                     options.LogoutPath = new PathString("/DemoAccount/Logout");
                     options.AccessDeniedPath = new PathString("/DemoAccount/Forbidden");
                 });
-
+            
+            //DEMO: 自定义的Claims转换
+            //claims transformation is run after every Authenticate call
+            services.AddTransient<IClaimsTransformation, ClaimsTransformer>();
+            
             //var multiSchemePolicy = new AuthorizationPolicyBuilder(
             //        JwtBearerDefaults.AuthenticationScheme,
             //        CookieAuthenticationDefaults.AuthenticationScheme)
