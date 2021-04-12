@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Http;
 
-namespace JwtAndCookie.Libs
+namespace Common.Auth
 {
     public class CurrentUserContextService : ICurrentUserContextService
     {

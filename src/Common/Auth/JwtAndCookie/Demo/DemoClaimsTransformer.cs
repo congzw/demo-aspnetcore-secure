@@ -4,9 +4,9 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 
-namespace JwtAndCookie.Boots
+namespace Common.Auth.JwtAndCookie.Demo
 {
-    public class ClaimsTransformer : IClaimsTransformation
+    public class DemoClaimsTransformer : IClaimsTransformation
     {
         public Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
         {

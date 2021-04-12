@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Common;
+using Common.Auth.JwtAndCookie;
+using Common.Auth.JwtAndCookie.Demo;
 using Common.Auth.PermissionChecks.DemoBased;
-using JwtAndCookie.Boots;
-using JwtAndCookie.Libs;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;

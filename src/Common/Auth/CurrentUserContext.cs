@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Security.Claims;
 
-namespace JwtAndCookie.Libs
+namespace Common.Auth
 {
     public interface ICurrentUserContext
     {

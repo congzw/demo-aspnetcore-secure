@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using JwtAndCookie.Boots;
 using Microsoft.IdentityModel.Tokens;
 
-namespace JwtAndCookie.Libs
+namespace Common.Auth.JwtAndCookie
 {
     public interface IJwtTokenService
     {
@@ -33,5 +32,18 @@ namespace JwtAndCookie.Libs
 
             return jwtToken;
         }
+    }
+
+    public class JwtSetting
+    {
+        public string Key { get; set; }
+        public string Issuer { get; set; }
+
+        //todo: read from config
+        public static JwtSetting Instance = new JwtSetting()
+        {
+            Issuer = "TheIssuer",
+            Key = "TheKey1234567890"
+        };
     }
 }

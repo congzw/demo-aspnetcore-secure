@@ -1,4 +1,4 @@
-﻿namespace JwtAndCookie.Libs
+﻿namespace Common
 {
     /// <summary>
     /// 自定义返回结果

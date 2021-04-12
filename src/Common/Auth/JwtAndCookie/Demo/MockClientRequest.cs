@@ -1,4 +1,4 @@
-﻿namespace JwtAndCookie.Libs
+﻿namespace Common.Auth.JwtAndCookie.Demo
 {
     public class MockClientRequest
     {

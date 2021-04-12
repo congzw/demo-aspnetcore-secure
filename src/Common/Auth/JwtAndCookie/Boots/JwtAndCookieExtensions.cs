@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common.Auth.JwtAndCookie.Demo;
 using Common.Auth.PermissionChecks.Boots;
-using JwtAndCookie.Libs;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
-namespace JwtAndCookie.Boots
+namespace Common.Auth.JwtAndCookie.Boots
 {
     public static class JwtAndCookieExtensions
     {
@@ -95,25 +95,12 @@ namespace JwtAndCookie.Boots
         {
             //DEMO: 自定义的Claims转换
             //claims transformation is run after every Authenticate call
-            services.AddTransient<IClaimsTransformation, ClaimsTransformer>();
+            services.AddTransient<IClaimsTransformation, DemoClaimsTransformer>();
         }
 
         private static void AddAuthorization(IServiceCollection services)
         {
             services.AddPermissionChecks();
         }
-    }
-
-    public class JwtSetting
-    {
-        public string Key { get; set; }
-        public string Issuer { get; set; }
-
-        //todo: read from config
-        public static JwtSetting Instance = new JwtSetting()
-        {
-            Issuer = "TheIssuer",
-            Key = "TheKey1234567890"
-        };
     }
 }

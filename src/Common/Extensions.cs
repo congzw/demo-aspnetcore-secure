@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace JwtAndCookie.Libs
+namespace Common
 {
     public static partial class Extensions
     {

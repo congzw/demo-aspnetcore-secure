@@ -1,2 +1,10 @@
-﻿# Markdown File
+﻿# Common.Auth
+
+## Authentication
+
+JwtAndCookie
+
+## Authorization 
+
+PermissionChecks
 

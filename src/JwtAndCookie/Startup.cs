@@ -1,5 +1,6 @@
-using JwtAndCookie.Boots;
-using JwtAndCookie.Libs;
+using Common.Auth;
+using Common.Auth.JwtAndCookie;
+using Common.Auth.JwtAndCookie.Boots;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
