@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JwtAndCookie.Controllers
 {
-    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class DemoController : Controller
     {
         [AllowAnonymous]
@@ -46,6 +46,12 @@ namespace JwtAndCookie.Controllers
         public IActionResult NeedAdminSuper()
         {
             ViewBag.Message = "NeedAdmin,Super => OK";
+            return View("Empty");
+        }
+
+        public IActionResult Fallback()
+        {
+            ViewBag.Message = "Fallback => OK";
             return View("Empty");
         }
     }

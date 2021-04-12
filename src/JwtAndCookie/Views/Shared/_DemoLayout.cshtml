@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="~/lib/bootstrap/bootstrap.css" rel="stylesheet" />
     <title>@ViewBag.Title</title>
+    <script src="~/lib/jquery/jquery.min.js"></script>
 </head>
 <body>
     <partial name="_DemoMessage" />
@@ -14,5 +15,6 @@
     <partial name="_DemoAuthContext" />
     <hr />
     @RenderBody()
+    <script src="~/App/DemoApi.js"></script>
 </body>
 </html>

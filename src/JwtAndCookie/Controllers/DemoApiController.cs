@@ -1,13 +1,12 @@
 ﻿using System.Threading.Tasks;
 using JwtAndCookie.Libs;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JwtAndCookie.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("~/Api/Demo/[action]")]
     public class DemoApiController : ControllerBase
     {
@@ -52,6 +51,12 @@ namespace JwtAndCookie.Controllers
         public MessageResult NeedLeader()
         {
             return MessageResult.CreateSuccess("NeedLeader", _currentUser.ToString());
+        }
+
+        [HttpGet]
+        public MessageResult Fallback()
+        {
+            return MessageResult.CreateSuccess("Fallback", _currentUser.ToString());
         }
     }
 }

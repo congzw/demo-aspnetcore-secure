@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Common.Auth.PermissionChecks.DemoBased;
 using JwtAndCookie.Boots;
 using JwtAndCookie.Libs;
 using Microsoft.AspNetCore.Authentication;
@@ -25,6 +26,11 @@ namespace JwtAndCookie.Controllers
         {
             ViewBag.Message = "Enter Logout";
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            
+            //todo: remove this line!
+            //为了测试方便，自动补齐Token
+            MockClientRequest.Instance.Token = null;
+
             return RedirectToAction("Index", "Demo");
         }
         
@@ -79,6 +85,11 @@ namespace JwtAndCookie.Controllers
             //应该返回给客户端，自行处理
             var token = _jwtTokenService.GenerateJsonWebToken(userPrincipal.Claims);
             ViewBag.Token = token;
+            
+            //todo: remove this line!
+            //为了测试方便，自动补齐Token
+            //return token to http request client, and set header by client!
+            MockClientRequest.Instance.Token = token;
 
             return RedirectToLocal(returnUrl);
         }
@@ -106,6 +117,13 @@ namespace JwtAndCookie.Controllers
             }
 
             return RedirectToAction("Index", "Demo");
+        }
+
+        public IActionResult SetDemoBased(bool allowed)
+        {
+            DemoBasedHandler.Allowed = allowed;
+            ViewBag.Message = "DemoBasedHandler.Allowed => " + DemoBasedHandler.Allowed;
+            return View("Empty");
         }
     }
 }

@@ -30,11 +30,6 @@ namespace JwtAndCookie.Libs
 
             var jwtToken
                 = new JwtSecurityTokenHandler().WriteToken(token);
-            
-            //todo: remove this line!
-            //为了测试方便，自动补齐Token
-            //return token to http request client, and set header by client!
-            MockClientRequest.Instance.Token = jwtToken;
 
             return jwtToken;
         }
