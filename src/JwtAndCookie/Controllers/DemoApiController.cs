@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JwtAndCookie.Controllers
 {
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("~/Api/Demo/[action]")]
     public class DemoApiController : ControllerBase
     {
