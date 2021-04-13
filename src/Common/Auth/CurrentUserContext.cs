@@ -44,6 +44,7 @@ namespace Common.Auth
             set => _permissions = value;
         }
 
+        [System.Text.Json.Serialization.JsonIgnore, Newtonsoft.Json.JsonIgnore]
         public List<Claim> Claims { get; set; } = new List<Claim>();
 
         public List<string> GetClaimsValues(string claimType)
@@ -63,7 +64,12 @@ namespace Common.Auth
             return new CurrentUserContext(){ Claims = claims.ToList()};
         }
     }
-    
+
+    public interface ICurrentUserContextService
+    {
+        CurrentUserContext GetCurrentUserContext();
+    }
+
     public static class CurrentUserContextExtensions
     {
         public static bool IsLogin(this CurrentUserContext userContext)
@@ -87,10 +93,10 @@ namespace Common.Auth
         
         public static CurrentUserContext GetCurrentUserContext(this HttpContext httpContext)
         {
-            var userContext = httpContext.RequestServices.GetService<CurrentUserContext>();
-            if (userContext != null)
+            var userContextService = httpContext.RequestServices.GetService<ICurrentUserContextService>();
+            if (userContextService != null)
             {
-                return userContext;
+                return userContextService.GetCurrentUserContext();
             }
             return CurrentUserContext.Create(httpContext.User.Claims);
         }

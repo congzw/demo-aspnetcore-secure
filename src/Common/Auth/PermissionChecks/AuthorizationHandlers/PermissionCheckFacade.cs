@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace Common.Auth.PermissionChecks.AuthorizationHandlers
@@ -9,69 +10,42 @@ namespace Common.Auth.PermissionChecks.AuthorizationHandlers
     public class PermissionCheckFacade : AuthorizationHandler<PermissionCheckRequirement>
     {
         private readonly ILogger<PermissionCheckFacade> _logger;
-        private readonly CurrentUserContext _userContext;
-        private readonly IList<IPermissionCheckLogicProvider> _providers;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IPermissionCheckService _permissionCheckService;
 
         public PermissionCheckFacade(ILogger<PermissionCheckFacade> logger, 
-            IEnumerable<IPermissionCheckLogicProvider> providers, 
-            CurrentUserContext userContext)
+            IHttpContextAccessor httpContextAccessor,
+            IPermissionCheckService permissionCheckService)
         {
             _logger = logger;
-            _userContext = userContext;
-            _providers = providers.OrderBy(x => x.Order).ToList();
+            _httpContextAccessor = httpContextAccessor;
+            _permissionCheckService = permissionCheckService;
         }
 
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionCheckRequirement requirement)
+        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionCheckRequirement requirement)
         {
-            _logger.LogInformation("should success?");
-            
-            //var httpContext = _httpContextAccessor.HttpContext;
-            //var actionDescriptor = context.GetControllerActionDescriptor(httpContext);
-            //if (actionDescriptor == null)
-            //{
-            //    await Task.CompletedTask;
-            //    return;
-            //}
-
-            //_logger.LogInformation(actionDescriptor.DisplayName);
-
-            //var actionId = actionDescriptor.DisplayName.Split().FirstOrDefault();
-            //var permissionIds = _ruleActionPool.TryGetPermissionIdsByActionId(actionId);
-            //if (permissionIds.Count == 0)
-            //{
-            //    //如果找到ActionId的配置，以此为准，否则以Attribute为准
-            //    permissionIds = context.GetPermissionAttributes(httpContext).Select(x => x.PermissionId).ToList();
-            //}
-
-            //if (permissionIds.Count == 0)
-            //{
-            //    if (_snapshot.Value.RequiredLoginForUnknown)
-            //    {
-            //        _logger.LogInformation("没有任何对应规则，根据配置执行登录检测");
-            //        permissionIds.Add(KnownPermissionIds.LoginOp);
-            //    }
-            //}
-
-            //var permissionCheckContext = CreatePermissionCheckContext(context, httpContext, actionDescriptor, permissionIds, requirement);
-
-
-            foreach (var logicProvider in _providers)
+            var httpContext = _httpContextAccessor.HttpContext;
+            var currentActionId = httpContext.GetCurrentActionId();
+            if (currentActionId == null)
             {
+                return;
             }
+            _logger.LogInformation(currentActionId);
 
-            return Task.CompletedTask;
+            var userContext = httpContext.GetCurrentUserContext();
+            var checkAttributes = httpContext.GetPermissionAttributes();
+            var permissionIds = checkAttributes.Select(x => x.PermissionId).ToArray();
+            var checkContext = PermissionCheckContext.Create(userContext, requirement, permissionIds);
+            var checkResult = await _permissionCheckService.CheckAsync(checkContext);
+            switch (checkResult.Category)
+            {
+                case PermissionCheckResultCategory.Allowed:
+                    context.Succeed(requirement);
+                    return;
+                case PermissionCheckResultCategory.Forbidden:
+                    context.Fail();
+                    break;
+            }
         }
-
-        //private PermissionCheckContext CreatePermissionCheckContext(
-        //    AuthorizationHandlerContext context,
-        //    HttpContext httpContext,
-        //    ActionDescriptor actionDescriptor,
-        //    IEnumerable<string> permissionIds,
-        //    PermissionCheckRequirement requirement)
-        //{
-        //    var permissionCheckContext = new PermissionCheckContext(actionDescriptor, httpContext, _userContext, requirement);
-        //    permissionCheckContext.AddCheckPermissionIds(permissionIds?.ToArray());
-        //    return permissionCheckContext;
-        //}
     }
 }

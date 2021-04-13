@@ -10,9 +10,9 @@ namespace JwtAndCookie.Controllers
     [Route("~/Api/Demo/[action]")]
     public class DemoApiController : ControllerBase
     {
-        private readonly ICurrentUserContext _currentUser;
+        private readonly CurrentUserContext _currentUser;
 
-        public DemoApiController(ICurrentUserContext currentUser)
+        public DemoApiController(CurrentUserContext currentUser)
         {
             _currentUser = currentUser;
         }

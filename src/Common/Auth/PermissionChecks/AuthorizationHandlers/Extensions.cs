@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Controllers;
@@ -10,7 +9,7 @@ namespace Common.Auth.PermissionChecks.AuthorizationHandlers
 {
     public static class AuthorizationHandlerExtensions
     {
-        internal static IList<PermissionCheckAttribute> GetPermissionAttributes(this AuthorizationHandlerContext context, HttpContext httpContext)
+        internal static IList<PermissionCheckAttribute> GetPermissionAttributes(this HttpContext httpContext)
         {
             var endpoint = httpContext.GetEndpoint();
             var permissionAttributes = endpoint.Metadata.Where(x => x is PermissionCheckAttribute).Cast<PermissionCheckAttribute>().ToList();
@@ -30,11 +29,19 @@ namespace Common.Auth.PermissionChecks.AuthorizationHandlers
 
             return result;
         }
-        
-        internal static ActionDescriptor GetControllerActionDescriptor(this AuthorizationHandlerContext context, HttpContext httpContext)
+
+        internal static ActionDescriptor GetControllerActionDescriptor(this HttpContext httpContext)
         {
             var endpoint = httpContext.GetEndpoint();
             return endpoint?.Metadata.GetMetadata<ControllerActionDescriptor>();
+        }
+
+        internal static string GetCurrentActionId(this HttpContext httpContext)
+        {
+            var actionDescriptor = httpContext.GetControllerActionDescriptor();
+            //JwtAndCookie.Controllers.DemoController.Fallback (JwtAndCookie) => JwtAndCookie.Controllers.DemoController.Fallback
+            var actionId = actionDescriptor?.DisplayName.Split().FirstOrDefault();
+            return actionId;
         }
     }
 }

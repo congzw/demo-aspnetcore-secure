@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.Authentication
 @using Newtonsoft.Json
 @inject IAuthenticationSchemeProvider AuthenticationSchemeProvider
-@inject ICurrentUserContext UserContext
+@inject CurrentUserContext UserContext
 @{
     var defaultScheme = await AuthenticationSchemeProvider.GetDefaultAuthenticateSchemeAsync();
     var schemes = (await AuthenticationSchemeProvider.GetAllSchemesAsync()).ToList();

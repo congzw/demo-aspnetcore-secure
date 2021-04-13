@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Common.Auth.PermissionChecks
 {
     public class PermissionCheckContext
     {
-        public IAuthorizationRequirement Requirement { get; set; }
-        public List<string> CheckPermissionIds { get; set; } = new List<string>();
+        public PermissionCheckRequirement Requirement { get; set; }
+        public List<string> NeedCheckPermissionIds { get; set; } = new List<string>();
+        public CurrentUserContext UserContext { get; set; } = CurrentUserContext.Empty;
 
         public bool MatchPermissionId(string permissionId)
         {
-            if (CheckPermissionIds == null || CheckPermissionIds.Count == 0)
+            if (NeedCheckPermissionIds == null || NeedCheckPermissionIds.Count == 0)
             {
                 return false;
             }
@@ -21,8 +21,9 @@ namespace Common.Auth.PermissionChecks
                 return false;
             }
 
-            return CheckPermissionIds.MyContains(permissionId);
+            return NeedCheckPermissionIds.MyContains(permissionId);
         }
+
         public PermissionCheckContext AddCheckPermissionIds(params string[] permissionIds)
         {
             if (permissionIds == null || permissionIds.Length == 0)
@@ -32,25 +33,30 @@ namespace Common.Auth.PermissionChecks
 
             foreach (var permissionId in permissionIds)
             {
-                if (!CheckPermissionIds.MyContains(permissionId))
+                if (!NeedCheckPermissionIds.MyContains(permissionId))
                 {
                     if (!string.IsNullOrWhiteSpace(permissionId))
                     {
-                        CheckPermissionIds.Add(permissionId);
+                        var splitIds = permissionId.SplitToValues().Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+                        foreach (var splitId in splitIds)
+                        {
+                            NeedCheckPermissionIds.Add(splitId);
+                        }
                     }
                 }
             }
             return this;
         }
-        public PermissionCheckContext AddCheckPermissionIdsValue(string permissionIdsValue)
-        {
-            if (string.IsNullOrWhiteSpace(permissionIdsValue))
-            {
-                return this;
-            }
 
-            var permissionIds = permissionIdsValue.SplitToValues().ToArray();
-            return AddCheckPermissionIds(permissionIds);
+        public static PermissionCheckContext Create(CurrentUserContext userContext, PermissionCheckRequirement requirement, params string[] permissionIds)
+        {
+            var context = new PermissionCheckContext
+            {
+                Requirement = requirement,
+                UserContext = userContext
+            };
+            context.AddCheckPermissionIds(permissionIds);
+            return context;
         }
     }
 }
