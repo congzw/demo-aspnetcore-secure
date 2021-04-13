@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Common.Auth.PermissionChecks.Actions;
 using Common.Auth.PermissionChecks.AuthorizationHandlers;
+using Common.Auth.PermissionChecks.AuthorizationHandlers.RoleBased;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -36,6 +37,8 @@ namespace Common.Auth.PermissionChecks
             services.AddScoped<IAuthorizationHandler, PermissionCheckFacade>();
             services.AddTransient<IPermissionCheckService, PermissionCheckService>();
             
+            services.AddTransient<IPermissionCheckLogicProvider, RoleBasedCheckLogic>();
+
             //services.AddTransient<IAuthorizationHandler, ConfigBasedHandler>();
 
             //services.AddAuthorization(options =>

@@ -2,7 +2,7 @@
 
 namespace Common.Auth.PermissionChecks.Demo
 {
-    public class DemoPermissionCheckLogicProvider : IPermissionCheckLogicProvider
+    public class DemoCheckLogic : IPermissionCheckLogicProvider
     {
         public static bool Allowed = false;
 

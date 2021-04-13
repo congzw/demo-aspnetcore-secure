@@ -52,5 +52,11 @@ namespace JwtAndCookie.Controllers
             ViewBag.Message = "Fallback => OK";
             return View("Empty");
         }
+
+        public IActionResult NeedDemoAllowed()
+        {
+            ViewBag.Message = "NeedDemoAllowed => OK";
+            return View("Empty");
+        }
     }
 }

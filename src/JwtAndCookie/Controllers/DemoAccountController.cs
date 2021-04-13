@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Common;
 using Common.Auth.JwtAndCookie;
 using Common.Auth.JwtAndCookie.Demo;
+using Common.Auth.PermissionChecks.AuthorizationHandlers.RoleBased;
 using Common.Auth.PermissionChecks.Demo;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -122,8 +123,8 @@ namespace JwtAndCookie.Controllers
 
         public IActionResult SetDemoBased(bool allowed)
         {
-            DemoPermissionCheckLogicProvider.Allowed = allowed;
-            ViewBag.Message = "DemoPermissionCheckLogicProvider.Allowed => " + DemoPermissionCheckLogicProvider.Allowed;
+            DemoCheckLogic.Allowed = allowed;
+            ViewBag.Message = "DemoPermissionCheckLogicProvider.Allowed => " + DemoCheckLogic.Allowed;
             return View("Empty");
         }
     }
