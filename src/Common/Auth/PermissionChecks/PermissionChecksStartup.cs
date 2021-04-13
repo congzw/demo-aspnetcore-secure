@@ -1,11 +1,11 @@
 ﻿using System.Linq;
-using Common.Auth.PermissionChecks.DemoBased;
+using Common.Auth.PermissionChecks.AuthorizationHandlers.Demo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Common.Auth.PermissionChecks.Boots
+namespace Common.Auth.PermissionChecks
 {
     public static class PermissionChecksStartup
     {

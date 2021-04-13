@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Common;
 using Common.Auth.JwtAndCookie;
 using Common.Auth.JwtAndCookie.Demo;
-using Common.Auth.PermissionChecks.DemoBased;
+using Common.Auth.PermissionChecks.AuthorizationHandlers.Demo;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;

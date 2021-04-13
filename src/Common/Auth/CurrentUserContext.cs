@@ -6,6 +6,10 @@ namespace Common.Auth
 {
     public interface ICurrentUserContext
     {
+        /// <summary>
+        /// 可以用来区分请求上下文是User,System等
+        /// </summary>
+        string ClientType { get; set; }
         string User { get; set; }
         List<string> Roles { get; set; }
         List<string> Permissions { get; set; }
@@ -18,7 +22,16 @@ namespace Common.Auth
     {
         public static string UserKey = ClaimTypes.Name;
         public static string RoleKey = ClaimTypes.Role;
+        public static string ClientTypeKey = "ClientType";
         public static string PermissionKey = "Permission";
+
+
+        private string _clientType = "";
+        public string ClientType
+        {
+            get => _clientType ??= GetClaimsValues(ClientTypeKey).FirstOrDefault();
+            set => _clientType = value;
+        }
 
         private string _user;
         public string User

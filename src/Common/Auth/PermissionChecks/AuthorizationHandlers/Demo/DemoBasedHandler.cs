@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Common.Auth.PermissionChecks.DemoBased
+namespace Common.Auth.PermissionChecks.AuthorizationHandlers.Demo
 {
     public class DemoBasedHandler : AuthorizationHandler<PermissionCheckRequirement>
     {
