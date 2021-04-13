@@ -9,12 +9,12 @@ namespace Common.Auth.PermissionChecks.AuthorizationHandlers
     public class PermissionCheckFacade : AuthorizationHandler<PermissionCheckRequirement>
     {
         private readonly ILogger<PermissionCheckFacade> _logger;
-        private readonly ICurrentUserContext _userContext;
+        private readonly CurrentUserContext _userContext;
         private readonly IList<IPermissionCheckLogicProvider> _providers;
 
         public PermissionCheckFacade(ILogger<PermissionCheckFacade> logger, 
             IEnumerable<IPermissionCheckLogicProvider> providers, 
-            ICurrentUserContext userContext)
+            CurrentUserContext userContext)
         {
             _logger = logger;
             _userContext = userContext;

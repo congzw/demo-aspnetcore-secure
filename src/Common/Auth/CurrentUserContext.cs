@@ -1,24 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Common.Auth
 {
-    public interface ICurrentUserContext
-    {
-        /// <summary>
-        /// 可以用来区分请求上下文是User,System等
-        /// </summary>
-        string ClientType { get; set; }
-        string User { get; set; }
-        List<string> Roles { get; set; }
-        List<string> Permissions { get; set; }
-
-        [System.Text.Json.Serialization.JsonIgnore, Newtonsoft.Json.JsonIgnore]
-        List<Claim> Claims { get; set; }
-    }
-
-    public class CurrentUserContext : ICurrentUserContext
+    public class CurrentUserContext
     {
         public static string UserKey = ClaimTypes.Name;
         public static string RoleKey = ClaimTypes.Role;
@@ -68,16 +57,16 @@ namespace Common.Auth
         }
 
         public static CurrentUserContext Empty = new CurrentUserContext();
+        public static CurrentUserContext Create(IEnumerable<Claim> claims)
+        {
+            if (claims == null) throw new ArgumentNullException(nameof(claims));
+            return new CurrentUserContext(){ Claims = claims.ToList()};
+        }
     }
-
-    public interface ICurrentUserContextService
-    {
-        ICurrentUserContext GetCurrentUserContext();
-    }
-
+    
     public static class CurrentUserContextExtensions
     {
-        public static bool IsLogin(this ICurrentUserContext userContext)
+        public static bool IsLogin(this CurrentUserContext userContext)
         {
             return !string.IsNullOrWhiteSpace(userContext.User);
         }
@@ -94,6 +83,16 @@ namespace Common.Auth
                 return claim.Type;
             }
             return claim.Type.Split('/').LastOrDefault();
+        }
+        
+        public static CurrentUserContext GetCurrentUserContext(this HttpContext httpContext)
+        {
+            var userContext = httpContext.RequestServices.GetService<CurrentUserContext>();
+            if (userContext != null)
+            {
+                return userContext;
+            }
+            return CurrentUserContext.Create(httpContext.User.Claims);
         }
     }
 }
