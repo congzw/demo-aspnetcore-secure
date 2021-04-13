@@ -32,8 +32,6 @@ namespace Common.Auth.PermissionChecks
                     results.Add(permissionCheckResult);
                 }
             }
-            ////todo
-            //return PermissionCheckResult.NotSure;
             return results.Combine();
 
         }

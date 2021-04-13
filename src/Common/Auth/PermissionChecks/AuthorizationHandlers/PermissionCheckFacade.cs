@@ -36,8 +36,11 @@ namespace Common.Auth.PermissionChecks.AuthorizationHandlers
             var permissionIds = checkAttributes.Select(x => x.PermissionId).ToArray();
             var checkContext = PermissionCheckContext.Create(userContext, requirement, permissionIds);
             var checkResult = await _permissionCheckService.CheckAsync(checkContext);
-            
-            _logger.LogInformation(checkResult.GetVoteDescription());
+
+            var logMsg = $"{currentActionId} => {checkResult.GetVoteDescription()}";
+            _logger.LogInformation(logMsg);
+            PermissionCheckDebugHelper.Instance.SetLastResultDescription(currentActionId + checkResult.GetVoteDescription());
+            PermissionCheckDebugHelper.Instance.AppendPermissionCheckResults(checkResult);
 
             switch (checkResult.Category)
             {

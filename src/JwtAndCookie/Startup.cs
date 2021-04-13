@@ -24,6 +24,7 @@ namespace JwtAndCookie
             services.AddTransient<CurrentUserContext>(sp =>
                 sp.GetService<IHttpContextAccessor>()?.HttpContext?.GetCurrentUserContext() ?? CurrentUserContext.Empty);
 
+            PermissionCheckDebugHelper.Instance.Enabled = () => true;
             services.AddJwtAndCookie();
             services.AddPermissionChecks();
             services.AddPermissionCheckDemos();

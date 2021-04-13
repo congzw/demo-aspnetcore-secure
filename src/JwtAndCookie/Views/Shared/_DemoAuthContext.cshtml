@@ -1,15 +1,27 @@
 ﻿@using Common
 @using Common.Auth
+@using Common.Auth.PermissionChecks.AuthorizationHandlers
 @using Microsoft.AspNetCore.Authentication
-@using Newtonsoft.Json
 @inject IAuthenticationSchemeProvider AuthenticationSchemeProvider
 @inject CurrentUserContext UserContext
 @{
     var defaultScheme = await AuthenticationSchemeProvider.GetDefaultAuthenticateSchemeAsync();
     var schemes = (await AuthenticationSchemeProvider.GetAllSchemesAsync()).ToList();
+    var permissionCheckDebugHelper = PermissionCheckDebugHelper.Instance;
+    var lastResultDescription = permissionCheckDebugHelper.GetLastResultDescription();
+    var checkResults = permissionCheckDebugHelper.GetPermissionCheckResults();
 }
 
-<hr />
+<div class="row">
+    <p>Last PermissionCheck: @lastResultDescription</p>
+    @foreach (var checkResult in checkResults)
+    {
+        <div class="col-sm-3">
+            <h4>@checkResult.GetVoteDescription()</h4>
+        </div>
+    }
+    <hr />
+</div>
 <div class="row">
     <div class="col-sm-3">
         <h2>CurrentUserContext</h2>
