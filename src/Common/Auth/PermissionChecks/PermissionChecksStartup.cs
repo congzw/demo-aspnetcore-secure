@@ -1,5 +1,6 @@
 ﻿using System.Linq;
-using Common.Auth.PermissionChecks.Demo;
+using Common.Auth.PermissionChecks.Actions;
+using Common.Auth.PermissionChecks.AuthorizationHandlers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -17,6 +18,8 @@ namespace Common.Auth.PermissionChecks
                 services.AddHttpContextAccessor();
             }
 
+            services.AddPermissionCheckActions();
+
             services.AddAuthorization(options =>
             {
                 //DefaultPolicy:    针对空的[Authorize]（attribute without any PolicyName.）的Endpoints
@@ -29,10 +32,12 @@ namespace Common.Auth.PermissionChecks
 
                 options.FallbackPolicy = dynamicCheckPolicy;
             });
-
-            services.AddTransient<IAuthorizationHandler, DemoBasedAuthorizationHandler>();
-            //services.AddTransient<IAuthorizationHandler, ConfigBasedHandler>();
             
+            services.AddScoped<IAuthorizationHandler, PermissionCheckFacade>();
+            services.AddTransient<IPermissionCheckService, PermissionCheckService>();
+            
+            //services.AddTransient<IAuthorizationHandler, ConfigBasedHandler>();
+
             //services.AddAuthorization(options =>
             //{
             //    ////DefaultPolicy:    针对空的[Authorize]（attribute without any PolicyName.）的Endpoints

@@ -122,8 +122,8 @@ namespace JwtAndCookie.Controllers
 
         public IActionResult SetDemoBased(bool allowed)
         {
-            DemoBasedAuthorizationHandler.Allowed = allowed;
-            ViewBag.Message = "DemoBasedHandler.Allowed => " + DemoBasedAuthorizationHandler.Allowed;
+            DemoPermissionCheckLogicProvider.Allowed = allowed;
+            ViewBag.Message = "DemoPermissionCheckLogicProvider.Allowed => " + DemoPermissionCheckLogicProvider.Allowed;
             return View("Empty");
         }
     }

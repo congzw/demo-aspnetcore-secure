@@ -24,8 +24,6 @@ namespace Common.Auth.JwtAndCookie.Boots
             AddAuthenticate(services);
             //扩展Claims
             AddClaimsTransformation(services);
-            //授权
-            AddAuthorization(services);
         }
 
         private static void AddAuthenticate(IServiceCollection services)
@@ -96,11 +94,6 @@ namespace Common.Auth.JwtAndCookie.Boots
             //DEMO: 自定义的Claims转换
             //claims transformation is run after every Authenticate call
             services.AddTransient<IClaimsTransformation, DemoClaimsTransformer>();
-        }
-
-        private static void AddAuthorization(IServiceCollection services)
-        {
-            services.AddPermissionChecks();
         }
     }
 }

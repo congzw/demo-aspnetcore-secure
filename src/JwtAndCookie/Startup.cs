@@ -3,6 +3,7 @@ using Common.Auth.JwtAndCookie;
 using Common.Auth.JwtAndCookie.Boots;
 using Common.Auth.PermissionChecks;
 using Common.Auth.PermissionChecks.AuthorizationHandlers;
+using Common.Auth.PermissionChecks.Demo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -18,15 +19,14 @@ namespace JwtAndCookie
         {
             services.AddMvc();
 
-            services.AddJwtAndCookie();
-
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IJwtTokenService, JwtTokenService>();
-            services.AddTransient<CurrentUserContext>(sp => 
+            services.AddTransient<CurrentUserContext>(sp =>
                 sp.GetService<IHttpContextAccessor>()?.HttpContext?.GetCurrentUserContext() ?? CurrentUserContext.Empty);
 
-            services.AddScoped<IAuthorizationHandler, PermissionCheckFacade>();
-            services.AddTransient<IPermissionCheckService, PermissionCheckService>();
+            services.AddJwtAndCookie();
+            services.AddPermissionChecks();
+            services.AddPermissionCheckDemos();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -30,13 +30,15 @@ namespace Common.Auth.PermissionChecks.AuthorizationHandlers
             {
                 return;
             }
-            _logger.LogInformation(currentActionId);
 
             var userContext = httpContext.GetCurrentUserContext();
             var checkAttributes = httpContext.GetPermissionAttributes();
             var permissionIds = checkAttributes.Select(x => x.PermissionId).ToArray();
             var checkContext = PermissionCheckContext.Create(userContext, requirement, permissionIds);
             var checkResult = await _permissionCheckService.CheckAsync(checkContext);
+            
+            _logger.LogInformation(checkResult.GetVoteDescription());
+
             switch (checkResult.Category)
             {
                 case PermissionCheckResultCategory.Allowed:
@@ -45,6 +47,10 @@ namespace Common.Auth.PermissionChecks.AuthorizationHandlers
                 case PermissionCheckResultCategory.Forbidden:
                     context.Fail();
                     break;
+                case PermissionCheckResultCategory.NotSure:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }

@@ -1,25 +1,22 @@
-﻿using System.Collections.Generic;
-using Common.Auth.PermissionChecks.Actions;
+﻿using Common.Auth.PermissionChecks.Actions;
 
 namespace Common.Auth.PermissionChecks.Demo
 {
-    public class DemoPermissionCheckActionRepository : IPermissionCheckActionRepository
+    public class DemoPermissionCheckActionRepository : IPermissionCheckActionRegistryRepository
     {
-        public DemoPermissionCheckActionRepository()
+        private static readonly PermissionCheckActionRegistry Registry = new PermissionCheckActionRegistry();
+
+        public PermissionCheckActionRegistry GetRegistry()
         {
-            Actions.Add(PermissionCheckAction.Create(KnownActionIds.UnsureActionId, KnownPermissionIds.UnsureOp, "某个迟决定的Action"));
-            Actions.Add(PermissionCheckAction.Create(KnownActionIds.UnsureActionId2, KnownPermissionIds.UnsureOp, "某个迟决定的Action2"));
+            if (Registry.Actions.Count == 0)
+            {
+                Registry.Actions.Add(PermissionCheckAction.Create(KnownActionIds.UnsureActionId, KnownPermissionIds.UnsureOp, "某个迟决定的Action"));
+                Registry.Actions.Add(PermissionCheckAction.Create(KnownActionIds.UnsureActionId2, KnownPermissionIds.UnsureOp, "某个迟决定的Action2"));
+            }
+            return Registry;
         }
 
-        public IList<PermissionCheckAction> Actions { get; set; } = new List<PermissionCheckAction>();
-
-        public IList<PermissionCheckAction> GetActions()
-        {
-            //todo: read from real data source
-            return Actions;
-        }
-
-        public void SaveAll(IList<PermissionCheckAction> actions)
+        public void SaveRegistry(PermissionCheckActionRegistry registry)
         {
         }
     }

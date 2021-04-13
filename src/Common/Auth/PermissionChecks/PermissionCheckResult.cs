@@ -35,6 +35,15 @@ namespace Common.Auth.PermissionChecks
         }
 
         /// <summary>
+        /// 描述信息
+        /// </summary>
+        /// <returns></returns>
+        public string GetVoteDescription()
+        {
+            return $"{Category} => votes:[{Message}]";
+        }
+
+        /// <summary>
         /// 我同意
         /// </summary>
         public static PermissionCheckResult Allowed => new PermissionCheckResult(PermissionCheckResultCategory.Allowed, "允许");
@@ -113,5 +122,22 @@ namespace Common.Auth.PermissionChecks
         /// 我不同意
         /// </summary>
         Forbidden = 2
+    }
+
+    public static class PermissionCheckResultExtensions
+    {
+        /// <summary>
+        /// 合并多个结果
+        /// </summary>
+        /// <param name="permissionCheckResults"></param>
+        /// <returns></returns>
+        public static PermissionCheckResult Combine(this IEnumerable<PermissionCheckResult> permissionCheckResults)
+        {
+            if (permissionCheckResults == null)
+            {
+                return PermissionCheckResult.NotSure;
+            }
+            return PermissionCheckResult.Combine(permissionCheckResults.ToArray());
+        }
     }
 }
