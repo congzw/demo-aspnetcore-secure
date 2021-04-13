@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Common.Auth.PermissionChecks.AuthorizationHandlers.Demo;
+using Common.Auth.PermissionChecks.Demo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -30,7 +30,7 @@ namespace Common.Auth.PermissionChecks
                 options.FallbackPolicy = dynamicCheckPolicy;
             });
 
-            services.AddTransient<IAuthorizationHandler, DemoBasedHandler>();
+            services.AddTransient<IAuthorizationHandler, DemoBasedAuthorizationHandler>();
             //services.AddTransient<IAuthorizationHandler, ConfigBasedHandler>();
             
             //services.AddAuthorization(options =>

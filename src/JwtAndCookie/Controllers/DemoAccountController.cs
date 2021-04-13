@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Common;
 using Common.Auth.JwtAndCookie;
 using Common.Auth.JwtAndCookie.Demo;
-using Common.Auth.PermissionChecks.AuthorizationHandlers.Demo;
+using Common.Auth.PermissionChecks.Demo;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -122,8 +122,8 @@ namespace JwtAndCookie.Controllers
 
         public IActionResult SetDemoBased(bool allowed)
         {
-            DemoBasedHandler.Allowed = allowed;
-            ViewBag.Message = "DemoBasedHandler.Allowed => " + DemoBasedHandler.Allowed;
+            DemoBasedAuthorizationHandler.Allowed = allowed;
+            ViewBag.Message = "DemoBasedHandler.Allowed => " + DemoBasedAuthorizationHandler.Allowed;
             return View("Empty");
         }
     }

@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Common.Auth.PermissionChecks.AuthorizationHandlers.Demo
+namespace Common.Auth.PermissionChecks.Demo
 {
-    public class DemoBasedHandler : AuthorizationHandler<PermissionCheckRequirement>
+    public class DemoBasedAuthorizationHandler : AuthorizationHandler<PermissionCheckRequirement>
     {
         public static bool Allowed = false;
 
