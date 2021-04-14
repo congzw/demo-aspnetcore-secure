@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Common.Auth.PermissionChecks.Rules
 {
@@ -14,6 +16,17 @@ namespace Common.Auth.PermissionChecks.Rules
         }
 
         public string Value { get; }
+
+        public static List<string> Split(string theValue)
+        {
+            var items = new List<string>();
+            if (string.IsNullOrWhiteSpace(theValue))
+            {
+                return items;
+            }
+            items = theValue.Split(Separators, StringSplitOptions.RemoveEmptyEntries).ToList();
+            return items;
+        }
 
         public bool DenyAll()
         {
@@ -44,6 +57,12 @@ namespace Common.Auth.PermissionChecks.Rules
             }
 
             return ofValues.Any(checkValue => ruleValues.MyContains(checkValue));
+        }
+
+        public bool AllowAnyOfValue(string ofValue)
+        {
+            var theItems = Split(ofValue).ToArray();
+            return AllowAnyOf(theItems);
         }
 
         public static PermissionRuleExpression None => new PermissionRuleExpression(RuleNone);

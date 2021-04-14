@@ -1,4 +1,5 @@
-﻿using Common.Auth.PermissionChecks.ControlPoints;
+﻿using Common.Auth.PermissionChecks.AuthorizationHandlers.RoleBased;
+using Common.Auth.PermissionChecks.ControlPoints;
 
 namespace Common.Auth.PermissionChecks.Demo
 {
@@ -83,6 +84,9 @@ namespace Common.Auth.PermissionChecks.Demo
 
             registry.SetEndPointPermission(EndPointPermission.Create(PageIds.SmartOp, PermissionIds.SmartOp));
             registry.SetEndPointPermission(EndPointPermission.Create(ApiIds.SmartOp, PermissionIds.SmartOp));
+
+            registry.SetPermissionRule(PermissionRule.Create(PageIds.SmartOp, ))
+            RoleBasedPermissionRule.Create(PageIds.SmartOp, null, null);
         }
     }
 

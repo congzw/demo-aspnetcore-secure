@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Common.Auth.PermissionChecks.AuthorizationHandlers.RoleBased;
 
 namespace Common.Auth.PermissionChecks.ControlPoints
 {
@@ -104,6 +105,11 @@ namespace Common.Auth.PermissionChecks.ControlPoints
     public class PermissionRule
     {
         public string PermissionId { get; set; }
-        public string Rule { get; set; }
+        public string Expression { get; set; }
+
+        public static PermissionRule Create(RoleBasedRuleExpression expression)
+        {
+            return new PermissionRule(){PermissionId = expression.PermissionId, Expression = expression.ToExpression()};
+        }
     }
 }
