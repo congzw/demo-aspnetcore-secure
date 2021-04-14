@@ -9,7 +9,12 @@ namespace Common.Auth.PermissionChecks.AuthorizationHandlers
 {
     public static class AuthorizationHandlerExtensions
     {
-        internal static IList<PermissionCheckAttribute> GetPermissionAttributes(this HttpContext httpContext)
+        internal static List<string> GetPermissionIdsFromAttribute(this HttpContext httpContext)
+        {
+            return httpContext.GetPermissionAttributes().Select(x => x.PermissionId).ToList();
+        }
+
+        internal static List<PermissionCheckAttribute> GetPermissionAttributes(this HttpContext httpContext)
         {
             var endpoint = httpContext.GetEndpoint();
             var permissionAttributes = endpoint.Metadata.Where(x => x is PermissionCheckAttribute).Cast<PermissionCheckAttribute>().ToList();

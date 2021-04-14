@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Common.Auth.PermissionChecks.ControlPoints;
 
 namespace Common.Auth.PermissionChecks
 {
@@ -8,6 +9,7 @@ namespace Common.Auth.PermissionChecks
         public PermissionCheckRequirement Requirement { get; set; }
         public List<string> NeedCheckPermissionIds { get; set; } = new List<string>();
         public CurrentUserContext UserContext { get; set; } = CurrentUserContext.Empty;
+        public ControlPointRegistry ControlPointRegistry { get; set; }
 
         public bool MatchPermissionId(string permissionId)
         {
@@ -48,10 +50,11 @@ namespace Common.Auth.PermissionChecks
             return this;
         }
 
-        public static PermissionCheckContext Create(CurrentUserContext userContext, PermissionCheckRequirement requirement, params string[] permissionIds)
+        public static PermissionCheckContext Create(ControlPointRegistry registry, CurrentUserContext userContext, PermissionCheckRequirement requirement, params string[] permissionIds)
         {
             var context = new PermissionCheckContext
             {
+                ControlPointRegistry =  registry,
                 Requirement = requirement,
                 UserContext = userContext
             };

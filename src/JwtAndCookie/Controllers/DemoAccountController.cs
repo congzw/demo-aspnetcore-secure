@@ -6,6 +6,7 @@ using Common;
 using Common.Auth.JwtAndCookie;
 using Common.Auth.JwtAndCookie.Demo;
 using Common.Auth.PermissionChecks.AuthorizationHandlers.RoleBased;
+using Common.Auth.PermissionChecks.ControlPoints;
 using Common.Auth.PermissionChecks.Demo;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -123,8 +124,23 @@ namespace JwtAndCookie.Controllers
 
         public IActionResult SetDemoBased(bool allowed)
         {
-            DemoCheckLogic.Allowed = allowed;
-            ViewBag.Message = "DemoPermissionCheckLogicProvider.Allowed => " + DemoCheckLogic.Allowed;
+            DemoBasedLogic.Allowed = allowed;
+            ViewBag.Message = "DemoBasedLogic.Allowed => " + DemoBasedLogic.Allowed;
+            return View("Empty");
+        }
+        
+        public IActionResult SetSmartOp([FromServices] ControlPointRegistry registry ,bool allowed)
+        {
+            var relation = EndPointPermission.Create(DemoConst.PageIds.SmartOp, DemoConst.PermissionIds.GuestOp);
+            if (allowed)
+            {
+                registry.SetEndPointPermission(relation);
+            }
+            else
+            {
+                registry.RemoveEndPointPermission(relation);
+            }
+            ViewBag.Message = "SetSmartOp Allowed => " + allowed;
             return View("Empty");
         }
     }

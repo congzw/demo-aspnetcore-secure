@@ -43,6 +43,8 @@ namespace Common.Auth.PermissionChecks
             services.AddSingleton<IControlPointRegistryRepository, ControlPointRegistryRepository>();
             services.AddTransient(sp => sp.GetService<IControlPointRegistryRepository>().GetControlPointRegistry());
 
+            services.AddTransient<IControlPointService, ControlPointService>();
+
             //services.AddTransient<IAuthorizationHandler, ConfigBasedHandler>();
 
             //services.AddAuthorization(options =>

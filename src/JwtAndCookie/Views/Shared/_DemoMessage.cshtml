@@ -1,12 +1,23 @@
 ﻿@{
-    var failed = false;
+    var success = true;
     if (ViewBag.Message != null)
     {
-        string testKO = ViewBag.Message.ToString();
-        failed = testKO.Contains("K.O.");
+        string theMsg = ViewBag.Message.ToString();
+        if (theMsg.Contains("401"))
+        {
+            success = false;
+        }
+        if (theMsg.Contains("403"))
+        {
+            success = false;
+        }
+        if (theMsg.Contains("K.O."))
+        {
+            success = false;
+        }
     }
 }
-@if (failed)
+@if (!success)
 {
     <h2 style="color: red">@DateTime.Now : @ViewBag.Message</h2>
 }

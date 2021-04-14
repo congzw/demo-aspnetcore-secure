@@ -8,7 +8,7 @@ namespace Common.Auth.PermissionChecks.Demo
     {
         public static void AddPermissionCheckDemos(this IServiceCollection services)
         {
-            services.AddSingleton<IPermissionCheckLogicProvider, DemoCheckLogic>();
+            services.AddSingleton<IPermissionCheckLogicProvider, DemoBasedLogic>();
             services.Replace(ServiceDescriptor.Singleton<IControlPointRegistryRepository, DemoControlPointRegistryRepository>());
         }
     }

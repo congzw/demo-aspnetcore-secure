@@ -8,11 +8,6 @@ namespace Common.Auth.PermissionChecks.Demo
 
         public PermissionCheckActionRegistry GetRegistry()
         {
-            if (Registry.Actions.Count == 0)
-            {
-                Registry.Actions.Add(PermissionCheckAction.Create(KnownActionIds.UnsureActionId, KnownPermissionIds.UnsureOp, "某个迟决定的Action"));
-                Registry.Actions.Add(PermissionCheckAction.Create(KnownActionIds.UnsureActionId2, KnownPermissionIds.UnsureOp, "某个迟决定的Action2"));
-            }
             return Registry;
         }
 

@@ -23,6 +23,9 @@ namespace Common.Auth.PermissionChecks
         /// 授权结果的附加数据
         /// </summary>
         public object Data { get; set; }
+        public string Source { get; set; }
+        public string Target { get; set; }
+
         public PermissionCheckResult WithMessage(string message)
         {
             Message = message;
@@ -31,6 +34,16 @@ namespace Common.Auth.PermissionChecks
         public PermissionCheckResult WithData(object data)
         {
             Data = data;
+            return this;
+        }
+        public PermissionCheckResult WithSource(string source)
+        {
+            Source = source;
+            return this;
+        }
+        public PermissionCheckResult WithTarget(string target)
+        {
+            Target = target;
             return this;
         }
 

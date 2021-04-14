@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Common.Auth.PermissionChecks;
+using Common.Auth.PermissionChecks.Demo;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JwtAndCookie.Controllers
@@ -8,7 +10,7 @@ namespace JwtAndCookie.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-            ViewBag.Message = "Demo Index";
+            ViewBag.Message = "Index => OK";
             return View("Empty");
         }
 
@@ -46,16 +48,52 @@ namespace JwtAndCookie.Controllers
             ViewBag.Message = "NeedAdmin,Super => OK";
             return View("Empty");
         }
-
-        public IActionResult Fallback()
+        
+        //未注册过的控制点
+        public IActionResult NotRegistered()
         {
-            ViewBag.Message = "Fallback => OK";
+            ViewBag.Message = "NotRegistered => OK";
+            return View("Empty");
+        }
+        
+        [PermissionCheck(PermissionId = DemoConst.PermissionIds.DemoBasedOp)]
+        public IActionResult DemoBasedOp()
+        {
+            ViewBag.Message = "DemoCheckOp => OK";
+            return View("Empty");
+        }
+        
+        [PermissionCheck(PermissionId = DemoConst.PermissionIds.GuestOp)]
+        public IActionResult GuestOp()
+        {
+            ViewBag.Message = "GuestOp => OK";
             return View("Empty");
         }
 
-        public IActionResult NeedDemoAllowed()
+        [PermissionCheck(PermissionId = DemoConst.PermissionIds.LoginOp)]
+        public IActionResult LoginOp()
         {
-            ViewBag.Message = "NeedDemoAllowed => OK";
+            ViewBag.Message = "LoginOp => OK";
+            return View("Empty");
+        }
+
+        [PermissionCheck(PermissionId = DemoConst.PermissionIds.AdminOp)]
+        public IActionResult AdminOp()
+        {
+            ViewBag.Message = "AdminOp => OK";
+            return View("Empty");
+        }
+
+        [PermissionCheck(PermissionId = DemoConst.PermissionIds.SuperOp)]
+        public IActionResult SuperOp()
+        {
+            ViewBag.Message = "SuperOp => OK";
+            return View("Empty");
+        }
+
+        public IActionResult SmartOp()
+        {
+            ViewBag.Message = "SmartOp => OK";
             return View("Empty");
         }
     }

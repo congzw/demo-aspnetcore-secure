@@ -8,8 +8,6 @@ namespace Common.Auth.PermissionChecks.AuthorizationHandlers
         Func<bool> Enabled { get; set; }
         void AppendPermissionCheckResults(params PermissionCheckResult[] results);
         IList<PermissionCheckResult> GetPermissionCheckResults(bool autoReset = true);
-        void SetLastResultDescription(string description);
-        string GetLastResultDescription();
     }
 
     /// <summary>
@@ -58,20 +56,7 @@ namespace Common.Auth.PermissionChecks.AuthorizationHandlers
             }
             return copyResults;
         }
-
-        private string _description = null;
-        public void SetLastResultDescription(string description)
-        {
-            _description = description;
-        }
-
-        public string GetLastResultDescription()
-        {
-            var description = _description;
-            _description = null;
-            return description;
-        }
-
+        
         public static IPermissionCheckDebugHelper Instance = new PermissionCheckDebugHelper();
     }
 }

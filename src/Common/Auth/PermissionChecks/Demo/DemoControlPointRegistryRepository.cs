@@ -12,7 +12,7 @@ namespace Common.Auth.PermissionChecks.Demo
         public DemoControlPointRegistryRepository()
         {
             //增加演示用的数据
-            _registry.Permissions.Add("Permission001", new Permission(){Id = "Permission001", Name = "演示用"});
+            DemoConst.Init(_registry);
         }
         
         public ControlPointRegistry GetControlPointRegistry()

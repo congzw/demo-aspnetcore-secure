@@ -8,7 +8,7 @@ namespace Common.Auth.PermissionChecks
     public interface IPermissionCheckLogicProvider
     {
         int Order { get; set; }
-        Task<bool> ShouldCareAsync(CurrentUserContext userContext, PermissionCheckContext permissionCheckContext);
-        Task<PermissionCheckResult> CheckPermissionAsync(CurrentUserContext userContext, PermissionCheckContext permissionCheckContext);
+        Task<bool> ShouldCareAsync(PermissionCheckContext permissionCheckContext);
+        Task<PermissionCheckResult> CheckPermissionAsync(PermissionCheckContext permissionCheckContext);
     }
 }

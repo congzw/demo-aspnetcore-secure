@@ -6,16 +6,15 @@ namespace Common.Auth.PermissionChecks.AuthorizationHandlers.RoleBased
     {
         public int Order { get; set; }
 
-        public Task<bool> ShouldCareAsync(CurrentUserContext userContext, PermissionCheckContext permissionCheckContext)
+        public Task<bool> ShouldCareAsync(PermissionCheckContext permissionCheckContext)
         {
-            //todo
-            return false.AsTask();
+            return true.AsTask();
         }
 
-        public Task<PermissionCheckResult> CheckPermissionAsync(CurrentUserContext userContext, PermissionCheckContext permissionCheckContext)
+        public Task<PermissionCheckResult> CheckPermissionAsync(PermissionCheckContext permissionCheckContext)
         {
             //todo
-            return PermissionCheckResult.NotSure.AsTask();
+            return PermissionCheckResult.NotSure.WithSource(nameof(RoleBasedCheckLogic)).AsTask();
         }
     }
 }
