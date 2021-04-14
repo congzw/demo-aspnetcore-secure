@@ -1,0 +1,12 @@
+﻿@using Common.Auth.PermissionChecks.ControlPoints
+@inject ControlPointRegistry ControlPointRegistry
+<div class="row">
+    <div class="col-sm-12">
+        <p>PermissionsCount: @ControlPointRegistry.Permissions.Count</p>
+        @*<p>
+            <code>
+                <pre>@Newtonsoft.Json.JsonConvert.SerializeObject(ControlPointRegistry, Formatting.Indented)</pre>
+            </code>
+        </p>*@
+    </div>
+</div>

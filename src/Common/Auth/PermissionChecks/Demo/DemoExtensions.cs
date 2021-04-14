@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Common.Auth.PermissionChecks.ControlPoints;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Common.Auth.PermissionChecks.Demo
 {
@@ -7,6 +9,7 @@ namespace Common.Auth.PermissionChecks.Demo
         public static void AddPermissionCheckDemos(this IServiceCollection services)
         {
             services.AddSingleton<IPermissionCheckLogicProvider, DemoCheckLogic>();
+            services.Replace(ServiceDescriptor.Singleton<IControlPointRegistryRepository, DemoControlPointRegistryRepository>());
         }
     }
 }

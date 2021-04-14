@@ -2,6 +2,7 @@
 using Common.Auth.PermissionChecks.Actions;
 using Common.Auth.PermissionChecks.AuthorizationHandlers;
 using Common.Auth.PermissionChecks.AuthorizationHandlers.RoleBased;
+using Common.Auth.PermissionChecks.ControlPoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -34,10 +35,13 @@ namespace Common.Auth.PermissionChecks
                 options.FallbackPolicy = dynamicCheckPolicy;
             });
             
-            services.AddScoped<IAuthorizationHandler, PermissionCheckFacade>();
-            services.AddTransient<IPermissionCheckService, PermissionCheckService>();
-            
+            services.AddScoped<IAuthorizationHandler, PermissionCheckVoteHandler>();
+            services.AddTransient<IPermissionCheckVoteService, PermissionCheckVoteService>();
+
             services.AddTransient<IPermissionCheckLogicProvider, RoleBasedCheckLogic>();
+            
+            services.AddSingleton<IControlPointRegistryRepository, ControlPointRegistryRepository>();
+            services.AddTransient(sp => sp.GetService<IControlPointRegistryRepository>().GetControlPointRegistry());
 
             //services.AddTransient<IAuthorizationHandler, ConfigBasedHandler>();
 

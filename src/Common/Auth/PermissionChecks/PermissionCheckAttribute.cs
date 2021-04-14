@@ -8,6 +8,4 @@ namespace Common.Auth.PermissionChecks
         public string PermissionId { get; set; }
         public string OverridePermissionIds { get; set; }
     }
-
-
 }

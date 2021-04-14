@@ -7,15 +7,15 @@ using Microsoft.Extensions.Logging;
 
 namespace Common.Auth.PermissionChecks.AuthorizationHandlers
 {
-    public class PermissionCheckFacade : AuthorizationHandler<PermissionCheckRequirement>
+    public class PermissionCheckVoteHandler : AuthorizationHandler<PermissionCheckRequirement>
     {
-        private readonly ILogger<PermissionCheckFacade> _logger;
+        private readonly ILogger<PermissionCheckVoteHandler> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IPermissionCheckService _permissionCheckService;
+        private readonly IPermissionCheckVoteService _permissionCheckService;
 
-        public PermissionCheckFacade(ILogger<PermissionCheckFacade> logger, 
+        public PermissionCheckVoteHandler(ILogger<PermissionCheckVoteHandler> logger, 
             IHttpContextAccessor httpContextAccessor,
-            IPermissionCheckService permissionCheckService)
+            IPermissionCheckVoteService permissionCheckService)
         {
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;

@@ -4,16 +4,16 @@ using System.Threading.Tasks;
 
 namespace Common.Auth.PermissionChecks
 {
-    public interface IPermissionCheckService
+    public interface IPermissionCheckVoteService
     {
         Task<PermissionCheckResult> CheckAsync(PermissionCheckContext checkContext);
     }
 
-    public class PermissionCheckService : IPermissionCheckService
+    public class PermissionCheckVoteService : IPermissionCheckVoteService
     {
         private readonly CurrentUserContext _userContext;
         private readonly IList<IPermissionCheckLogicProvider> _providers;
-        public PermissionCheckService(IEnumerable<IPermissionCheckLogicProvider> providers, CurrentUserContext userContext)
+        public PermissionCheckVoteService(IEnumerable<IPermissionCheckLogicProvider> providers, CurrentUserContext userContext)
         {
             _userContext = userContext;
             _providers = providers.OrderBy(x => x.Order).ToList();
