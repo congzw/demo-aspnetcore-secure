@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Common.Auth.PermissionChecks.Rules
+namespace Common.Auth.PermissionChecks
 {
-    public class SimpleRuleExpression
+    public class AllowedRuleExpression
     {
         private static readonly char[] Separators = { ',' };
         private static readonly string RuleAny = "*";
-        private static readonly string RuleEmpty = "";
+        private static readonly string RuleExist = "?";
 
-        public SimpleRuleExpression(string expressionValue)
+        public AllowedRuleExpression(string expressionValue)
         {
             Value = expressionValue;
         }
@@ -28,14 +28,14 @@ namespace Common.Auth.PermissionChecks.Rules
             return items;
         }
 
-        public bool DenyAll()
+        public bool AllowExist()
         {
-            return string.IsNullOrWhiteSpace(Value);
+            return Value == RuleExist;
         }
 
         public bool AllowAny()
         {
-            return !string.IsNullOrWhiteSpace(Value) && Value.Contains(Any.Value);
+            return Value.Contains(RuleAny);
         }
 
         public bool AllowAnyOf(params string[] ofValues)
@@ -65,13 +65,13 @@ namespace Common.Auth.PermissionChecks.Rules
             return AllowAnyOf(theItems);
         }
 
-        public static SimpleRuleExpression Empty => new SimpleRuleExpression(RuleEmpty);
+        public static AllowedRuleExpression Empty => new AllowedRuleExpression(RuleExist);
 
-        public static SimpleRuleExpression Any => new SimpleRuleExpression(RuleAny);
+        public static AllowedRuleExpression Any => new AllowedRuleExpression(RuleAny);
 
-        public static SimpleRuleExpression Create(string values)
+        public static AllowedRuleExpression Create(string values)
         {
-            return new SimpleRuleExpression(values);
+            return new AllowedRuleExpression(values);
         }
     }
 }

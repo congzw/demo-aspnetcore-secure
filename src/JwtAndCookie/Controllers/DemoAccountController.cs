@@ -129,18 +129,11 @@ namespace JwtAndCookie.Controllers
             return View("Empty");
         }
         
-        public IActionResult SetSmartOp([FromServices] ControlPointRegistry registry ,bool allowed)
+        public IActionResult SetSmartOpRule([FromServices] ControlPointRegistry registry ,[FromQuery] RoleBasedRule theRule)
         {
-            var relation = EndPointPermission.Create(DemoConst.PageIds.SmartOp, DemoConst.PermissionIds.GuestOp);
-            if (allowed)
-            {
-                registry.SetEndPointPermission(relation);
-            }
-            else
-            {
-                registry.RemoveEndPointPermission(relation);
-            }
-            ViewBag.Message = "SetSmartOp Allowed => " + allowed;
+            theRule.PermissionId = DemoConst.PermissionIds.SmartOp;
+            registry.RoleBasedRules.SetRoleBasedRule(theRule);
+            ViewBag.Message = "SetSmartOpRule => " + theRule.Rule;
             return View("Empty");
         }
     }

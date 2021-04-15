@@ -40,6 +40,11 @@ namespace Common.Auth.PermissionChecks.AuthorizationHandlers.RoleBased
             return list;
         }
 
+        public static void SetRoleBasedRule(this IDictionary<string, RoleBasedRule> rules, RoleBasedRule theRule)
+        {
+            rules[theRule.PermissionId] = theRule;
+        }
+
         public static PermissionCheckResult CheckRoleBasedRules(this PermissionCheckContext checkContext, params RoleBasedRule[] roleBasedRules)
         {
             var result = roleBasedRules.Select(checkContext.CheckRoleBasedRule).Combine();
