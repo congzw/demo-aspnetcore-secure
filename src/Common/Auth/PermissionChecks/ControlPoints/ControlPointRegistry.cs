@@ -101,16 +101,4 @@ namespace Common.Auth.PermissionChecks.ControlPoints
             return new EndPointPermission() {EndPointId = endPointId, PermissionId = permissionId, OverridePermissionIds = overridePermissionIds};
         }
     }
-
-    //todo: bags and extends to sub catalogs
-    public class RoleBasedRule
-    {
-        public string PermissionId { get; set; }
-        public string Rule { get; set; }
-
-        public static RoleBasedRule Create(string permissionId, RoleBasedRuleExpression expression)
-        {
-            return new RoleBasedRule {PermissionId = permissionId, Rule = expression.ToRule()};
-        }
-    }
 }

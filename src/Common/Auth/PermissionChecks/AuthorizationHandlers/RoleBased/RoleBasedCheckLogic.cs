@@ -7,23 +7,21 @@ namespace Common.Auth.PermissionChecks.AuthorizationHandlers.RoleBased
     {
         public int Order { get; set; }
 
-        protected List<string> MatchedNeedCheckPermissionIds = new List<string>();
-
-        public Task<bool> ShouldCareAsync(PermissionCheckContext permissionCheckContext)
+        protected List<RoleBasedRule> MatchedRules = new List<RoleBasedRule>();
+        
+        public Task<bool> ShouldCareAsync(PermissionCheckContext checkContext)
         {
-            var registry = permissionCheckContext.ControlPointRegistry;
-            var roleBasedRules = registry.RoleBasedRules;
-            var permissionIds = roleBasedRules.Keys;
-            
-            MatchedNeedCheckPermissionIds = permissionCheckContext.MatchedNeedCheckPermissionIds(permissionIds);
-            var hasIt = MatchedNeedCheckPermissionIds.Count > 0;
+            var needCheckPermissionIds = checkContext.NeedCheckPermissionIds.ToArray();
+            var roleBasedRules = checkContext.ControlPointRegistry.RoleBasedRules;
+            MatchedRules = roleBasedRules.GetRoleBasedRules(needCheckPermissionIds);
+            var hasIt = MatchedRules.Count > 0;
             return hasIt.AsTask();
         }
 
         public Task<PermissionCheckResult> CheckPermissionAsync(PermissionCheckContext permissionCheckContext)
         {
-            //todo
-            return PermissionCheckResult.NotSure.WithSource(nameof(RoleBasedCheckLogic)).AsTask();
+            var checkResult = permissionCheckContext.CheckRoleBasedRules(MatchedRules.ToArray());
+            return checkResult.AsTask();
         }
     }
 }

@@ -111,7 +111,7 @@ namespace Common.Auth.PermissionChecks.AuthorizationHandlers.RoleBased
         }
         
         public static RoleBasedRuleExpression NeedGuest = new RoleBasedRuleExpression(SimpleRuleExpression.Any, SimpleRuleExpression.Any);
-        public static RoleBasedRuleExpression NeedLogin = new RoleBasedRuleExpression(SimpleRuleExpression.Any, SimpleRuleExpression.None);
+        public static RoleBasedRuleExpression NeedLogin = new RoleBasedRuleExpression(SimpleRuleExpression.Empty, SimpleRuleExpression.Any);
         public static RoleBasedRuleExpression NeedUsersOrRoles(string needUsers, string needRoles)
         {
             return new RoleBasedRuleExpression(SimpleRuleExpression.Create(needUsers), SimpleRuleExpression.Create(needRoles));
@@ -140,13 +140,47 @@ namespace Common.Auth.PermissionChecks.AuthorizationHandlers.RoleBased
         }
 
         #region validate helpers
+        
+        /// <summary>
+        /// 任何访客都可以
+        /// </summary>
+        /// <returns></returns>
+        public bool ValidateNeedGuest()
+        {
+            //"*", "*"  => allowed any visitor, include guest
+            if (NeedUsers.AllowAny() && NeedRoles.AllowAny())
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 只要登录就可以
+        /// </summary>
+        /// <returns></returns>
+        public bool ValidateNeedLogin()
+        {
+            //"*", ""  => allowed any Login user    
+            //"", "*"  => allowed any Login user
+            if (NeedUsers.DenyAll() && NeedRoles.AllowAny())
+            {
+                return true;
+            }
+            if (NeedUsers.AllowAny() && NeedRoles.DenyAll())
+            {
+                return true;
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// 满足其中的某个用户
         /// </summary>
         /// <param name="users"></param>
         /// <returns></returns>
-        public bool ValidateUsers(string users)
+        public bool ValidateNeedAnyOfUsers(string users)
         {
             return NeedUsers.AllowAnyOfValue(users);
         }
@@ -156,9 +190,20 @@ namespace Common.Auth.PermissionChecks.AuthorizationHandlers.RoleBased
         /// </summary>
         /// <param name="roles"></param>
         /// <returns></returns>
-        public bool ValidateRoles(string roles)
+        public bool ValidateNeedAnyOfRoles(string roles)
         {
             return NeedRoles.AllowAnyOfValue(roles);
+        }
+        
+        /// <summary>
+        /// 满足其中的某个用户或角色
+        /// </summary>
+        /// <param name="usersValue"></param>
+        /// <param name="rolesValue"></param>
+        /// <returns></returns>
+        public bool ValidateNeedAnyOfUsersOrRoles(string usersValue, string rolesValue)
+        {
+            return ValidateNeedAnyOfUsers(usersValue) || ValidateNeedAnyOfRoles(rolesValue);
         }
 
         #endregion

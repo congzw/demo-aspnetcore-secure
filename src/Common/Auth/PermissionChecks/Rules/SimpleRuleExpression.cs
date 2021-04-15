@@ -8,7 +8,7 @@ namespace Common.Auth.PermissionChecks.Rules
     {
         private static readonly char[] Separators = { ',' };
         private static readonly string RuleAny = "*";
-        private static readonly string RuleNone = "";
+        private static readonly string RuleEmpty = "";
 
         public SimpleRuleExpression(string expressionValue)
         {
@@ -65,7 +65,7 @@ namespace Common.Auth.PermissionChecks.Rules
             return AllowAnyOf(theItems);
         }
 
-        public static SimpleRuleExpression None => new SimpleRuleExpression(RuleNone);
+        public static SimpleRuleExpression Empty => new SimpleRuleExpression(RuleEmpty);
 
         public static SimpleRuleExpression Any => new SimpleRuleExpression(RuleAny);
 

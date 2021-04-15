@@ -94,8 +94,8 @@ namespace Common.Auth.PermissionChecks.Demo
 
             registry.SetRoleBasedRule(RoleBasedRule.Create(PermissionIds.GuestOp, RoleBasedRuleExpression.NeedGuest));
             registry.SetRoleBasedRule(RoleBasedRule.Create(PermissionIds.LoginOp, RoleBasedRuleExpression.NeedLogin));
-            registry.SetRoleBasedRule(RoleBasedRule.Create(PermissionIds.AdminOp, RoleBasedRuleExpression.NeedGuest.SetNeedRoles(Roles.Admin)));
-            registry.SetRoleBasedRule(RoleBasedRule.Create(PermissionIds.SuperOp, RoleBasedRuleExpression.NeedGuest.SetNeedRoles(Roles.Super)));
+            registry.SetRoleBasedRule(RoleBasedRule.Create(PermissionIds.AdminOp, RoleBasedRuleExpression.NeedLogin.SetNeedRoles(Roles.Admin)));
+            registry.SetRoleBasedRule(RoleBasedRule.Create(PermissionIds.SuperOp, RoleBasedRuleExpression.NeedLogin.SetNeedRoles(Roles.Super)));
         }
     }
 

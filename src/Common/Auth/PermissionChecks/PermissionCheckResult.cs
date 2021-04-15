@@ -78,14 +78,25 @@ namespace Common.Auth.PermissionChecks
         /// <returns></returns>
         public static PermissionCheckResult Combine(params PermissionCheckResult[] permissionCheckResults)
         {
-            if (permissionCheckResults == null)
+            //if (permissionCheckResults == null)
+            //{
+            //    return Allowed.WithMessage("没有指定任何规则，放行");
+            //}
+            //var checkResults = permissionCheckResults.ToList();
+            //if (checkResults.Count == 0)
+            //{
+            //    return Allowed.WithMessage("没有规则，放行");
+            //}
+
+            if (permissionCheckResults == null || permissionCheckResults.Length == 0)
             {
-                return Allowed.WithMessage("没有指定任何规则，放行");
+                return PermissionCheckResult.NotSure.WithMessage("没有发现任何规则"); ;
             }
+
             var checkResults = permissionCheckResults.ToList();
-            if (checkResults.Count == 0)
+            if (checkResults.Count == 1)
             {
-                return Allowed.WithMessage("没有规则，放行");
+                return checkResults[0];
             }
 
             var combineMessage = CombineMessage(checkResults);
@@ -146,10 +157,10 @@ namespace Common.Auth.PermissionChecks
         /// <returns></returns>
         public static PermissionCheckResult Combine(this IEnumerable<PermissionCheckResult> permissionCheckResults)
         {
-            if (permissionCheckResults == null)
-            {
-                return PermissionCheckResult.NotSure;
-            }
+            //if (permissionCheckResults == null)
+            //{
+            //    return PermissionCheckResult.NotSure;
+            //}
             return PermissionCheckResult.Combine(permissionCheckResults.ToArray());
         }
     }
