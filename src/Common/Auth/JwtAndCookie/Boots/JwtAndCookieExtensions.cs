@@ -1,9 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Auth.JwtAndCookie.Demo;
-using Common.Auth.PermissionChecks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -20,6 +18,9 @@ namespace Common.Auth.JwtAndCookie.Boots
 
         public static void AddJwtAndCookie(this IServiceCollection services)
         {
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IJwtTokenService, JwtTokenService>();
+
             //认证
             AddAuthenticate(services);
             //扩展Claims
@@ -41,6 +42,7 @@ namespace Common.Auth.JwtAndCookie.Boots
                     ? null
                     : cookieScheme;
 
+                //todo: use configurations
                 var jwtSetting = JwtSetting.Instance;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -81,11 +83,12 @@ namespace Common.Auth.JwtAndCookie.Boots
                     ? jwtBearerScheme
                     : null;
 
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // optional
-                options.LoginPath = new PathString("/DemoAccount/Login");
-                options.LogoutPath = new PathString("/DemoAccount/Logout");
-                options.AccessDeniedPath = new PathString("/DemoAccount/Forbidden");
-
+                //todo: use configurations
+                var cookieSetting = CookieSetting.Instance;
+                options.ExpireTimeSpan = cookieSetting.ExpireTimeSpan;
+                options.LoginPath = cookieSetting.LoginPath;
+                options.LogoutPath = cookieSetting.LogoutPath;
+                options.AccessDeniedPath = cookieSetting.AccessDeniedPath;
             });
         }
 

@@ -100,5 +100,12 @@ namespace Common.Auth
             }
             return CurrentUserContext.Create(httpContext.User.Claims);
         }
+        
+        public static void AddCurrentUserContext(this IServiceCollection services)
+        {
+            services.AddTransient<CurrentUserContext>(sp => sp
+                .GetService<IHttpContextAccessor>()
+                ?.HttpContext?.GetCurrentUserContext() ?? CurrentUserContext.Empty);
+        }
     }
 }

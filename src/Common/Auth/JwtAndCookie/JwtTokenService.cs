@@ -46,4 +46,22 @@ namespace Common.Auth.JwtAndCookie
             Key = "TheKey1234567890"
         };
     }
+
+    public class CookieSetting
+    {
+        public string LoginPath { get; set; }
+        public string LogoutPath { get; set; }
+        public string AccessDeniedPath { get; set; }
+        public TimeSpan ExpireTimeSpan { get; set; }
+
+
+        //todo: read from config
+        public static CookieSetting Instance = new CookieSetting()
+        {
+            LoginPath = "/DemoAccount/Login",
+            LogoutPath = "/DemoAccount/Logout",
+            AccessDeniedPath = "/DemoAccount/Forbidden",
+            ExpireTimeSpan = TimeSpan.FromMinutes(30)
+    };
+    }
 }
