@@ -33,18 +33,6 @@ namespace Common.Auth.PermissionChecks.ControlPoints
             EndPointPermissions.Remove(relation.GetLocateKey());
             return this;
         }
-
-        public ControlPointRegistry SetRoleBasedRule(RoleBasedRule rule)
-        {
-            RoleBasedRules[rule.PermissionId] = rule;
-            return this;
-        }
-        public ControlPointRegistry RemoveRoleBasedRule(RoleBasedRule rule)
-        {
-            RoleBasedRules.Remove(rule.PermissionId);
-            return this;
-        }
-
         public List<EndPointPermission> GetEndPointPermissions(string endPointId)
         {
             var pointPermissions = EndPointPermissions

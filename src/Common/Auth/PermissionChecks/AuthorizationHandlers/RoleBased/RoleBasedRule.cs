@@ -45,6 +45,11 @@ namespace Common.Auth.PermissionChecks.AuthorizationHandlers.RoleBased
             rules[theRule.PermissionId] = theRule;
         }
 
+        public static void RemoveRoleBasedRule(this IDictionary<string, RoleBasedRule> rules, string permissionId)
+        {
+            rules.Remove(permissionId);
+        }
+
         public static PermissionCheckResult CheckRoleBasedRules(this PermissionCheckContext checkContext, params RoleBasedRule[] roleBasedRules)
         {
             var result = roleBasedRules.Select(checkContext.CheckRoleBasedRule).Combine();

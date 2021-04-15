@@ -92,11 +92,10 @@ namespace Common.Auth.PermissionChecks.Demo
             registry.SetEndPointPermission(EndPointPermission.Create(PageIds.SmartOp, PermissionIds.SmartOp));
             registry.SetEndPointPermission(EndPointPermission.Create(ApiIds.SmartOp, PermissionIds.SmartOp));
 
-            registry.SetRoleBasedRule(RoleBasedRule.Create(PermissionIds.GuestOp, RoleBasedRuleExpression.NeedGuest));
-            registry.SetRoleBasedRule(RoleBasedRule.Create(PermissionIds.LoginOp, RoleBasedRuleExpression.NeedLogin));
-            registry.SetRoleBasedRule(RoleBasedRule.Create(PermissionIds.AdminOp, RoleBasedRuleExpression.NeedLogin.SetNeedRoles(Roles.Admin)));
-            registry.SetRoleBasedRule(RoleBasedRule.Create(PermissionIds.SuperOp, RoleBasedRuleExpression.NeedLogin.SetNeedRoles(Roles.Super)));
+            registry.RoleBasedRules.SetRoleBasedRule(RoleBasedRule.Create(PermissionIds.GuestOp, RoleBasedRuleExpression.NeedGuest));
+            registry.RoleBasedRules.SetRoleBasedRule(RoleBasedRule.Create(PermissionIds.LoginOp, RoleBasedRuleExpression.NeedLogin));
+            registry.RoleBasedRules.SetRoleBasedRule(RoleBasedRule.Create(PermissionIds.AdminOp, RoleBasedRuleExpression.NeedLogin.SetNeedRoles(Roles.Admin)));
+            registry.RoleBasedRules.SetRoleBasedRule(RoleBasedRule.Create(PermissionIds.SuperOp, RoleBasedRuleExpression.NeedLogin.SetNeedRoles(Roles.Super)));
         }
     }
-
 }
