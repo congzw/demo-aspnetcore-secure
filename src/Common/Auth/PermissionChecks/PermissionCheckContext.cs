@@ -25,6 +25,10 @@ namespace Common.Auth.PermissionChecks
 
             return NeedCheckPermissionIds.MyContains(permissionId);
         }
+        public List<string> MatchedNeedCheckPermissionIds(IEnumerable<string> permissionIds)
+        {
+            return permissionIds.Where(MatchPermissionId).ToList();
+        }
 
         public PermissionCheckContext AddCheckPermissionIds(params string[] permissionIds)
         {

@@ -4,13 +4,13 @@ using System.Linq;
 
 namespace Common.Auth.PermissionChecks.Rules
 {
-    public class PermissionRuleExpression
+    public class SimpleRuleExpression
     {
         private static readonly char[] Separators = { ',' };
         private static readonly string RuleAny = "*";
         private static readonly string RuleNone = "";
 
-        public PermissionRuleExpression(string expressionValue)
+        public SimpleRuleExpression(string expressionValue)
         {
             Value = expressionValue;
         }
@@ -65,13 +65,13 @@ namespace Common.Auth.PermissionChecks.Rules
             return AllowAnyOf(theItems);
         }
 
-        public static PermissionRuleExpression None => new PermissionRuleExpression(RuleNone);
+        public static SimpleRuleExpression None => new SimpleRuleExpression(RuleNone);
 
-        public static PermissionRuleExpression Any => new PermissionRuleExpression(RuleAny);
+        public static SimpleRuleExpression Any => new SimpleRuleExpression(RuleAny);
 
-        public static PermissionRuleExpression Create(string values)
+        public static SimpleRuleExpression Create(string values)
         {
-            return new PermissionRuleExpression(values);
+            return new SimpleRuleExpression(values);
         }
     }
 }

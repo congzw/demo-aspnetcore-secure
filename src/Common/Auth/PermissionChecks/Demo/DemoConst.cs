@@ -9,6 +9,13 @@ namespace Common.Auth.PermissionChecks.Demo
         public const string PageController = "Controllers.DemoController.";
         public const string ApiController = "Controllers.DemoApiController.";
 
+        public class Roles
+        {
+            public const string Admin = "Admin";
+            public const string Super = "Super";
+            public const string Leader = "Leader";
+        }
+
         public class PermissionIds
         {
             //演示用的Permission列表
@@ -85,8 +92,10 @@ namespace Common.Auth.PermissionChecks.Demo
             registry.SetEndPointPermission(EndPointPermission.Create(PageIds.SmartOp, PermissionIds.SmartOp));
             registry.SetEndPointPermission(EndPointPermission.Create(ApiIds.SmartOp, PermissionIds.SmartOp));
 
-            registry.SetPermissionRule(PermissionRule.Create(PageIds.SmartOp, ))
-            RoleBasedPermissionRule.Create(PageIds.SmartOp, null, null);
+            registry.SetRoleBasedRule(RoleBasedRule.Create(PermissionIds.GuestOp, RoleBasedRuleExpression.NeedGuest));
+            registry.SetRoleBasedRule(RoleBasedRule.Create(PermissionIds.LoginOp, RoleBasedRuleExpression.NeedLogin));
+            registry.SetRoleBasedRule(RoleBasedRule.Create(PermissionIds.AdminOp, RoleBasedRuleExpression.NeedGuest.SetNeedRoles(Roles.Admin)));
+            registry.SetRoleBasedRule(RoleBasedRule.Create(PermissionIds.SuperOp, RoleBasedRuleExpression.NeedGuest.SetNeedRoles(Roles.Super)));
         }
     }
 

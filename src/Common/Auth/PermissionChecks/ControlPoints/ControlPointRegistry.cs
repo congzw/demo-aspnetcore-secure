@@ -11,7 +11,7 @@ namespace Common.Auth.PermissionChecks.ControlPoints
         public IDictionary<string, Permission> Permissions { get; set; } = new ConcurrentDictionary<string, Permission>(StringComparer.OrdinalIgnoreCase);
         public IDictionary<string, EndPoint> EndPoints { get; set; } = new ConcurrentDictionary<string, EndPoint>(StringComparer.OrdinalIgnoreCase);
         public IDictionary<string, EndPointPermission> EndPointPermissions { get; set; } = new ConcurrentDictionary<string, EndPointPermission>(StringComparer.OrdinalIgnoreCase);
-        public IDictionary<string, PermissionRule> PermissionRules { get; set; } = new ConcurrentDictionary<string, PermissionRule>(StringComparer.OrdinalIgnoreCase);
+        public IDictionary<string, RoleBasedRule> RoleBasedRules { get; set; } = new ConcurrentDictionary<string, RoleBasedRule>(StringComparer.OrdinalIgnoreCase);
         
         public ControlPointRegistry SetPermission(Permission permission)
         {
@@ -34,14 +34,14 @@ namespace Common.Auth.PermissionChecks.ControlPoints
             return this;
         }
 
-        public ControlPointRegistry SetPermissionRule(PermissionRule rule)
+        public ControlPointRegistry SetRoleBasedRule(RoleBasedRule rule)
         {
-            PermissionRules[rule.PermissionId] = rule;
+            RoleBasedRules[rule.PermissionId] = rule;
             return this;
         }
-        public ControlPointRegistry RemovePermissionRule(PermissionRule rule)
+        public ControlPointRegistry RemoveRoleBasedRule(RoleBasedRule rule)
         {
-            PermissionRules.Remove(rule.PermissionId);
+            RoleBasedRules.Remove(rule.PermissionId);
             return this;
         }
 
@@ -102,14 +102,15 @@ namespace Common.Auth.PermissionChecks.ControlPoints
         }
     }
 
-    public class PermissionRule
+    //todo: bags and extends to sub catalogs
+    public class RoleBasedRule
     {
         public string PermissionId { get; set; }
-        public string Expression { get; set; }
+        public string Rule { get; set; }
 
-        public static PermissionRule Create(RoleBasedRuleExpression expression)
+        public static RoleBasedRule Create(string permissionId, RoleBasedRuleExpression expression)
         {
-            return new PermissionRule(){PermissionId = expression.PermissionId, Expression = expression.ToExpression()};
+            return new RoleBasedRule {PermissionId = permissionId, Rule = expression.ToRule()};
         }
     }
 }

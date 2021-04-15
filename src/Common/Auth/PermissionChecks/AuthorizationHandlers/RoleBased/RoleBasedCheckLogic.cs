@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Common.Auth.PermissionChecks.AuthorizationHandlers.RoleBased
 {
@@ -6,9 +7,17 @@ namespace Common.Auth.PermissionChecks.AuthorizationHandlers.RoleBased
     {
         public int Order { get; set; }
 
+        protected List<string> MatchedNeedCheckPermissionIds = new List<string>();
+
         public Task<bool> ShouldCareAsync(PermissionCheckContext permissionCheckContext)
         {
-            return true.AsTask();
+            var registry = permissionCheckContext.ControlPointRegistry;
+            var roleBasedRules = registry.RoleBasedRules;
+            var permissionIds = roleBasedRules.Keys;
+            
+            MatchedNeedCheckPermissionIds = permissionCheckContext.MatchedNeedCheckPermissionIds(permissionIds);
+            var hasIt = MatchedNeedCheckPermissionIds.Count > 0;
+            return hasIt.AsTask();
         }
 
         public Task<PermissionCheckResult> CheckPermissionAsync(PermissionCheckContext permissionCheckContext)
