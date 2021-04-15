@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Common.Auth.PermissionChecks.Actions;
 using Common.Auth.PermissionChecks.AuthorizationHandlers;
 using Common.Auth.PermissionChecks.AuthorizationHandlers.RoleBased;
 using Common.Auth.PermissionChecks.ControlPoints;
@@ -19,9 +18,7 @@ namespace Common.Auth.PermissionChecks
             {
                 services.AddHttpContextAccessor();
             }
-
-            services.AddPermissionCheckActions();
-
+            
             services.AddAuthorization(options =>
             {
                 //DefaultPolicy:    针对空的[Authorize]（attribute without any PolicyName.）的Endpoints

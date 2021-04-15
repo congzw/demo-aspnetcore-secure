@@ -56,10 +56,11 @@ namespace Common.Auth.PermissionChecks.ControlPoints
     {
         public string Id { get; set; }
         public string Name { get; set; }
+        public bool IsSystem { get; set; }
 
-        public static Permission Create(string id, string name)
+        public static Permission Create(string id, string name, bool isSystem = false)
         {
-            return new Permission() {Id = id, Name = id};
+            return new Permission() {Id = id, Name = id, IsSystem = isSystem};
         }
     }
 
@@ -67,10 +68,11 @@ namespace Common.Auth.PermissionChecks.ControlPoints
     {
         public string Id { get; set; }
         public string Name { get; set; }
+        public bool IsSystem { get; set; }
 
-        public static EndPoint Create(string id, string name)
+        public static EndPoint Create(string id, string name, bool isSystem = false)
         {
-            return new EndPoint() { Id = id, Name = id };
+            return new EndPoint() { Id = id, Name = id , IsSystem = isSystem};
         }
     }
 
