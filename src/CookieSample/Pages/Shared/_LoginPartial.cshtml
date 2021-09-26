@@ -1,0 +1,38 @@
+@{
+    var identity = this.Context.User.Identity;
+    if (identity == null)
+    {
+        return;
+    }
+    var userName = identity.Name;
+    var isAuthenticated = !string.IsNullOrWhiteSpace(userName);
+}
+
+@if (identity.IsAuthenticated)
+{
+    <form asp-controller="Account" asp-action="Logout" method="post" id="logoutForm">
+        <ul>
+            <li>
+                <button type="submit">注销</button>
+            </li>
+        </ul>
+    </form>
+    <div class="row">
+        <div class="col-md-12">
+            <p>欢迎, @userName</p>
+        </div>
+    </div>
+}
+else
+{
+    <ul>
+        <li><a asp-page="/Account/Login">登录</a></li>
+    </ul>
+
+    <div class="row">
+        <div class="col-md-12">
+            <p>欢迎, GUEST</p>
+        </div>
+    </div>
+}
+
