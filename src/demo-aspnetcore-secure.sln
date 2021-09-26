@@ -18,6 +18,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CookieSample", "CookieSample\CookieSample.csproj", "{3C58ED11-B8F2-4773-8954-8B2C1B6123F5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthSample", "OAuthSample\OAuthSample.csproj", "{BF3943F6-7EEB-4CAC-AFB7-ACDEC6338FD1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{332429EF-EF49-465C-87DF-5885E40EE7D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,9 +48,18 @@ Global
 		{3C58ED11-B8F2-4773-8954-8B2C1B6123F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C58ED11-B8F2-4773-8954-8B2C1B6123F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C58ED11-B8F2-4773-8954-8B2C1B6123F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF3943F6-7EEB-4CAC-AFB7-ACDEC6338FD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF3943F6-7EEB-4CAC-AFB7-ACDEC6338FD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF3943F6-7EEB-4CAC-AFB7-ACDEC6338FD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF3943F6-7EEB-4CAC-AFB7-ACDEC6338FD1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9EAF68B5-D7E9-467F-9BDF-4B532CDB34DC} = {332429EF-EF49-465C-87DF-5885E40EE7D2}
+		{3C58ED11-B8F2-4773-8954-8B2C1B6123F5} = {332429EF-EF49-465C-87DF-5885E40EE7D2}
+		{BF3943F6-7EEB-4CAC-AFB7-ACDEC6338FD1} = {332429EF-EF49-465C-87DF-5885E40EE7D2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {27FBA4EE-4F74-4E91-BD9C-7C13B151923A}

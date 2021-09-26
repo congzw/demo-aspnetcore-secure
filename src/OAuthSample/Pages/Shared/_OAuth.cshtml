@@ -1,0 +1,12 @@
+﻿@using OAuthSample.Demo
+@{
+    var bags = OAuthHelper.Instance.Bags;
+}
+
+<div>
+    <h2>OAuth INFO: @bags.Count</h2>
+    @foreach (var item in bags)
+    {
+        <p>@item.Key = @item.Value</p>
+    }
+</div>
