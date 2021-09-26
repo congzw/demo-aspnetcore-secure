@@ -1,3 +1,4 @@
+using CookieSample.Demo;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,8 +16,17 @@ namespace CookieSample
             {
                 options.Conventions.AuthorizePage("/Contact");
             });
+
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.EventsType = typeof(CustomCookieAuthenticationEvents);
+                });
             
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+            services.AddScoped<CustomCookieAuthenticationEvents>();
+            services.AddSingleton<ILockUserManager, LockUserManager>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -25,11 +35,11 @@ namespace CookieSample
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
 

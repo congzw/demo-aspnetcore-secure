@@ -11,9 +11,13 @@
         <ul>
             <li><a asp-page="/Index">Home</a></li>
             <li><a asp-page="/Contact">Contact</a></li>
+            <li><a asp-page="/UserLock">UserLock</a></li>
+            <li><a asp-page="/UserUnlock">UserUnlock</a></li>
         </ul>
         <hr />
-        <partial name="_LoginPartial"/>
+        <partial name="_LoginPartial" />
+        <hr />
+        <partial name="_LockPartial" />
         <hr />
         @RenderBody()
     </div>

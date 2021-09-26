@@ -1,0 +1,6 @@
+@using CookieSample.Demo
+@inject ILockUserManager LockUserManager
+@{
+    var lockUsersValue = string.Join(',', LockUserManager.GetLockUsers());
+}
+<h1>Locked Users:[@lockUsersValue]</h1>

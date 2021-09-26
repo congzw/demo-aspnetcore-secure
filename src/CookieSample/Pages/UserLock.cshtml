@@ -1,0 +1,11 @@
+﻿@page
+@using CookieSample.Demo
+@inject ILockUserManager LockUserManager
+@{
+    var userName = "admin@demo.com";
+    if (!string.IsNullOrWhiteSpace(userName))
+    {
+        LockUserManager.SetLock(userName, true);
+    }
+}
+<h1>Locked for: @userName</h1>
