@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30523.141
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NbSites.Web", "NbSites.Web\NbSites.Web.csproj", "{C7A566DD-356A-4371-B1E7-04A61313E926}"
 EndProject
@@ -16,11 +16,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JwtAndCookie", "JwtAndCooki
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{699FA434-14D2-4F72-A3E1-06C70901A5D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CookieSample", "CookieSample\CookieSample.csproj", "{3C58ED11-B8F2-4773-8954-8B2C1B6123F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CookieSample", "CookieSample\CookieSample.csproj", "{3C58ED11-B8F2-4773-8954-8B2C1B6123F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthSample", "OAuthSample\OAuthSample.csproj", "{BF3943F6-7EEB-4CAC-AFB7-ACDEC6338FD1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthSample", "OAuthSample\OAuthSample.csproj", "{BF3943F6-7EEB-4CAC-AFB7-ACDEC6338FD1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{332429EF-EF49-465C-87DF-5885E40EE7D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JwtSample", "JwtSample\JwtSample.csproj", "{D36DF90D-3C0D-4144-AFB2-3423F50A51A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +54,10 @@ Global
 		{BF3943F6-7EEB-4CAC-AFB7-ACDEC6338FD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF3943F6-7EEB-4CAC-AFB7-ACDEC6338FD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF3943F6-7EEB-4CAC-AFB7-ACDEC6338FD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D36DF90D-3C0D-4144-AFB2-3423F50A51A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D36DF90D-3C0D-4144-AFB2-3423F50A51A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D36DF90D-3C0D-4144-AFB2-3423F50A51A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D36DF90D-3C0D-4144-AFB2-3423F50A51A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +66,7 @@ Global
 		{9EAF68B5-D7E9-467F-9BDF-4B532CDB34DC} = {332429EF-EF49-465C-87DF-5885E40EE7D2}
 		{3C58ED11-B8F2-4773-8954-8B2C1B6123F5} = {332429EF-EF49-465C-87DF-5885E40EE7D2}
 		{BF3943F6-7EEB-4CAC-AFB7-ACDEC6338FD1} = {332429EF-EF49-465C-87DF-5885E40EE7D2}
+		{D36DF90D-3C0D-4144-AFB2-3423F50A51A0} = {332429EF-EF49-465C-87DF-5885E40EE7D2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {27FBA4EE-4F74-4E91-BD9C-7C13B151923A}
